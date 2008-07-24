@@ -130,7 +130,7 @@ padding: 1em;
 }
 
 .story_todo {
-  background-color:red;
+  background-color: #f44;
   color: white;
 }
 
@@ -160,7 +160,6 @@ table.story_info td {
 }
 
 .task_incomplete {
-  font-weight: bold;
 }
 
 
