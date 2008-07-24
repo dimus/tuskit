@@ -9,6 +9,7 @@
 .loadpath
 config/database.yml
 db/schema.rb
+db/*.sql
 tmp/cache/*
 tmp/pids/*
 tmp/sessions/*
