@@ -159,6 +159,15 @@ table.story_info td {
   padding-left: 2em;
 }
 
+.task_incomplete {
+  font-weight: bold;
+}
+
+
+.task_complete {
+  text-decoration: line-through;
+}
+
 .help_info {
   color: #999;
   margin: 0;

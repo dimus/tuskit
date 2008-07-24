@@ -48,8 +48,9 @@
 
         - story.agile_tasks_sorted.each do |task|
         - td_style = (!task.completion_date? && task.task_owners.size > 0) ? "background-color: #efd7b5" : ""
+        - td_class = task.completion_date? ? "task_complete" : "task_incomplete"
         %tr
-          %td{:style => "width:20em; " + td_style}= link_to_task task.name, task
+          %td{:style => "width:20em; " + td_style, :class => td_class}= link_to_task task.name, task
           %td{:style => td_style}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
           %td{:style => td_style}= link_to_task((task.completion_date ? 'yes' : '-'), task)
           %td{:style => td_style}= link_to_task task_owners(task), task
