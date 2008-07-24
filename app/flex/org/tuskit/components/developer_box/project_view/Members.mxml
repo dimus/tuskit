@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	creationComplete="init()">
+	<mx:Script source="MembersScript.as"/>
+    <mx:Panel title = "Members" width="100%" height="100%" styleName="projectPanel">
+        <mx:HBox width="100%" height="100%"
+        	paddingTop="10"
+        	paddingBottom="10"
+        	paddingRight="10"
+        	paddingLeft="10"
+        	>
+        	<mx:Panel title="Project Memebers ({project.projectMembers.length})" 
+        		width="100%" height="100%"
+        		styleName="projectPanel">
+	            <mx:DataGrid id="projectMembers" width="100%" height="100%" dataProvider="{project.projectMembers}">
+		            <mx:columns>
+						<mx:DataGridColumn id="memberName" labelFunction="getUserName" headerText="Name" sortCompareFunction="sortByUserName"/>		   
+						<mx:DataGridColumn id="memberRoles" labelFunction="getProjectMemberRoles" headerText="Roles" sortable="false"/>
+						<mx:DataGridColumn id="active" width="80" dataField="id" headerText="Active" sortable="false">
+							<mx:itemRenderer>
+								<mx:Component>
+									<mx:HBox width="100%" paddingLeft="6">
+										<mx:Script>
+					            			<![CDATA[
+					            				import org.tuskit.model.ProjectMember;
+					            				import org.tuskit.util.CairngormUtils;
+					            				import org.tuskit.control.EventNames;
+					            				import org.tuskit.model.TuskitModelLocator;
+		            			
+		            							private var _model:TuskitModelLocator = TuskitModelLocator.getInstance();
+					            				private function getProjectMember(data:Object):ProjectMember {
+					            					return data.project.getProjectMember(data.id);
+					            				}
+					            				
+					            				private function toggleValue(data:Object):void {
+					            					var pm:ProjectMember = data.project.getProjectMember(data.id);
+					            					pm.active = !pm.active;
+					            					CairngormUtils.dispatchEvent(EventNames.UPDATE_PROJECT_MEMBER, pm);
+					            				}
+					            			]]>
+					            		</mx:Script>
+										<mx:CheckBox selected="{getProjectMember(data).active}"
+											label="{getProjectMember(data).active?'yes':'no'}" 
+											click="toggleValue(data)"/>
+									</mx:HBox>
+								</mx:Component>
+							</mx:itemRenderer>
+						</mx:DataGridColumn>
+						<mx:DataGridColumn id="sendIterationReport" 
+							width="100" dataField="id" headerText="Send Reports" textAlign="center" sortable="false">
+							<mx:itemRenderer>
+								<mx:Component>
+									<mx:HBox width="100%" paddingLeft="6">
+										<mx:Script>
+					            			<![CDATA[
+					            				import org.tuskit.model.ProjectMember;
+					            				import org.tuskit.util.CairngormUtils;
+					            				import org.tuskit.control.EventNames;
+					            				import org.tuskit.model.TuskitModelLocator;
+					            				
+					            				private function getProjectMember(data:Object):ProjectMember {
+					            					return data.project.getProjectMember(data.id);
+					            				}
+
+					            				private function toggleValue(data:Object):void {
+					            					var pm:ProjectMember = data as ProjectMember;
+					            					pm.sendIterationReport = !pm.sendIterationReport;
+					            					CairngormUtils.dispatchEvent(EventNames.UPDATE_PROJECT_MEMBER, pm);
+					            				}
+
+					            			]]>
+					            		</mx:Script>
+										<mx:CheckBox selected="{getProjectMember(data).sendIterationReport}" 
+											label="{getProjectMember(data).sendIterationReport ?'yes':'no'}"
+											click="{toggleValue(data)}"/>
+									</mx:HBox>
+								</mx:Component>
+							</mx:itemRenderer>
+						</mx:DataGridColumn>         	
+		            </mx:columns>
+	            </mx:DataGrid>
+        	</mx:Panel>
+        	<mx:Panel title="Other Users ({setOtherUsers(project.projectMembers.length)})" 
+        		width="100%" height="100%"
+        		styleName="projectPanel">
+	            <mx:DataGrid id="users" 
+	            	width="100%" height="100%" 
+	            	dataProvider="{_otherUsers}">
+	            	<mx:columns>
+	            		<mx:DataGridColumn id="addMember" dataField="id" headerText="Add">
+	            			<mx:itemRenderer>
+	            				<mx:Component>
+	            					<mx:Button icon="{addIcon}" label="Add Member" click="outerDocument.addProjectMember(data as User)">
+	            					<mx:Script>
+	            						<![CDATA[
+	            							import org.tuskit.model.User;
+	            							include "../../../as/assets.as"
+	            						]]>
+	            					</mx:Script>
+	            					</mx:Button>
+	            				</mx:Component>
+	            			</mx:itemRenderer>
+	            		</mx:DataGridColumn>
+	            		<mx:DataGridColumn id="userName" dataField="full_name" headerText="Name"/>
+						<mx:DataGridColumn id="userRoles" labelFunction="getUserRoles" headerText="Roles" sortable="false"/>
+	            		<mx:DataGridColumn id="email" dataField="email"/>
+	            	</mx:columns>
+	            </mx:DataGrid>
+        	</mx:Panel>
+        </mx:HBox>
+    </mx:Panel>
+</mx:VBox>

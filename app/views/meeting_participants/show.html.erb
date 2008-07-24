@@ -1,0 +1,23 @@
+<p>
+  <b>Meeting:</b>
+  <%=h @meeting_participant.meeting_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%=h @meeting_participant.user_id %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%=h @meeting_participant.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%=h @meeting_participant.updated_by %>
+</p>
+
+
+<%= link_to 'Edit', edit_meeting_participant_path(@meeting_participant) %> |
+<%= link_to 'Back', meeting_participants_path %>

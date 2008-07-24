@@ -1,0 +1,21 @@
+admin:
+    id: 1
+    name: admin
+    created_at: 2007-06-13 19:45:17
+    updated_at: 2007-06-13 19:45:17
+    created_by: system
+    updated_by: system
+developer:
+    id: 2
+    name: developer
+    created_at: 2007-06-13 19:45:17
+    updated_at: 2007-06-13 19:45:17
+    created_by: system
+    updated_by: system
+customer:
+    id: 3
+    name: customer
+    created_at: 2007-06-13 19:45:17
+    updated_at: 2007-06-13 19:45:17
+    created_by: system
+    updated_by: system

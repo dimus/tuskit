@@ -1,0 +1,38 @@
+<p>
+  <b>Iteration:</b>
+  <%=h @story.iteration_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @story.name %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @story.description %>
+</p>
+
+<p>
+  <b>Work units est:</b>
+  <%=h @story.work_units_est %>
+</p>
+
+<p>
+  <b>Completed:</b>
+  <%=h @story.completed %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%=h @story.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%=h @story.updated_by %>
+</p>
+
+
+<%= link_to 'Edit', edit_story_path(@story) %> |
+<%= link_to 'Back', stories_path %>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>				
+<mx:DataGrid 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%" 
+	doubleClickEnabled="true" 
+	doubleClick="_adminState.userInput = User(this.selectedItem)"
+	dataProvider="{_model.users}" 		
+	selectedIndex="{getUsersGridSelectedIndex(_model.isInTransitionState)}">
+		<mx:Script source="UserGridScript.as"/>
+	<mx:columns>
+		<mx:DataGridColumn headerText="Username" dataField="login" sortable="true"/>						
+	    <mx:DataGridColumn headerText="Name" dataField="full_name" sortable="true"/>
+		<mx:DataGridColumn headerText="Phone" dataField="phone" sortable="true"/>
+		<mx:DataGridColumn headerText="Email" dataField="email" sortable="true"/>
+	    <mx:DataGridColumn headerText="Groups" dataField="memberships.length" sortable="false">
+			<mx:itemRenderer>
+            	<mx:Component>
+            		<mx:Label text="{getGroups(data.id,_modell.isInTransitionState)}" >
+            			<mx:Script>
+            				<![CDATA[
+            					import org.tuskit.components.AdminBox;
+            					import mx.collections.ListCollectionView;
+            					import org.tuskit.model.Membership;
+            					import org.tuskit.model.User;
+            					import org.tuskit.model.TuskitModelLocator;
+
+            					[Bindable]
+            					private var _modell:TuskitModelLocator = TuskitModelLocator.getInstance()
+            					
+            					private function getGroups(user_id:int,bindMemberships:Boolean):String {
+									if ( !_modell.isInTransitionState){
+										var m:Membership;
+										var retval:Array = [];
+										for each (m in _modell.userIDMap[user_id].memberships){
+											retval.push(m.group.name);
+										}
+										return retval.sort().toString();
+									}
+									else {
+										return 'Loading...'
+									}
+            					}
+            				]]>
+            			</mx:Script>
+            		</mx:Label>
+            	</mx:Component>
+            </mx:itemRenderer>
+		</mx:DataGridColumn>
+		<mx:DataGridColumn headerText="Actions" dataField="id" sortable="false">
+			<mx:itemRenderer>
+            	<mx:Component>
+                	<mx:HBox paddingLeft="6" paddingRight="6">
+            			<mx:Script>
+            				<![CDATA[
+            					import org.tuskit.components.admin_box.AdminState;
+            					import org.tuskit.model.User;
+            					
+            					include "../../as/assets.as";
+            					
+            					private var _state:AdminState = AdminState.getInstance();
+            				]]>
+            			</mx:Script>
+						<mx:Button label="Edit"
+                			icon="{editIcon}" 
+                			click = "_state.userInput = User(data)"
+                			>
+                		</mx:Button>
+                		<mx:Button label="Delete" 
+                			icon="{deleteIcon}"
+                			click="outerDocument.deleteUser(User(data))">
+                			<mx:Script>
+                				<![CDATA[
+                					import org.tuskit.model.User;
+                				]]>
+                			</mx:Script>
+                		</mx:Button>
+                	</mx:HBox>
+            	</mx:Component>
+            </mx:itemRenderer>				
+		</mx:DataGridColumn>
+	</mx:columns> 
+</mx:DataGrid>
+

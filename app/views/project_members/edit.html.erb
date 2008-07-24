@@ -1,0 +1,42 @@
+<h1>Editing project_member</h1>
+
+<%= error_messages_for :project_member %>
+
+<% form_for(@project_member) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>Project</b><br />
+    <%= f.text_field :project_id %>
+  </p>
+
+  <p>
+    <b>Active</b><br />
+    <%= f.check_box :active %>
+  </p>
+
+  <p>
+    <b>Send iteration report</b><br />
+    <%= f.check_box :send_iteration_report %>
+  </p>
+
+  <p>
+    <b>Created by</b><br />
+    <%= f.text_field :created_by %>
+  </p>
+
+  <p>
+    <b>Updated by</b><br />
+    <%= f.text_field :updated_by %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @project_member %> |
+<%= link_to 'Back', project_members_path %>

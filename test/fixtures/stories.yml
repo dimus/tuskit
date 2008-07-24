@@ -1,0 +1,30 @@
+add_filters:
+  id: 1
+  iteration_id: 1
+  name: "Add filters to users"
+  completed: 1
+  work_units_est: 8
+  created_by: system
+  updated_by: system
+  created_at: 2007-07-15 23:14:33
+  updated_at: 2007-07-15 23:14:33
+fix_problems:
+  id: 2
+  iteration_id: 1
+  completed: 0
+  name: "Fix problems"
+  work_units_est: 10
+  created_by: system
+  updated_by: system
+  created_at: 2007-07-15 23:14:33
+  updated_at: 2007-07-15 23:14:33
+lonely_story:
+  id: 3
+  iteration_id: 1
+  completed: 0
+  name: "Lonely story"
+  work_units_est: 2
+  created_by: system
+  updated_by: system
+  created_at: 2007-07-15 23:14:33
+  updated_at: 2007-07-15 23:14:33

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<mx:Application 
+    xmlns:mx="http://www.adobe.com/2006/mxml" 
+    xmlns:tc="org.tuskit.components.*" 
+    xmlns:control="org.tuskit.control.*"
+    layout = "absolute" 
+    fontSize = "12"
+    width = "100%"
+   	height = "100%"
+    backgroundColor = "#ffffff"
+	creationComplete="init()"> 
+	
+    <!--<mx:TraceTarget/> -->
+<mx:Script> 
+<![CDATA[
+	import mx.core.Container;
+	import org.tuskit.control.EventNames;
+    import org.tuskit.util.CairngormUtils;
+    import org.tuskit.model.TuskitModelLocator;
+    
+    import org.tuskit.components.DebugPanel;
+    import org.tuskit.util.DebugMessage;
+    import mx.controls.Alert;
+    
+    [Bindable]
+    private var _model:TuskitModelLocator =
+        TuskitModelLocator.getInstance();
+  
+    /*public static function debug(str:String):void {
+        application.debugPanel.addMessage(new DebugMessage(str));
+    } */
+    
+    private function init():void {
+    	CairngormUtils.dispatchEvent(
+            EventNames.CHECK_ADMIN_EXISTS);
+        TuskitModelLocator.popupWorld = popupWorld;
+    }
+    	
+    private function getLocation(location:int):Container {
+	    var locatorMap:Object={}; 
+        locatorMap[TuskitModelLocator.LOCATOR_INIT] = applicationInitBox;
+    	locatorMap[TuskitModelLocator.LOCATOR_LOGIN] = startBox;
+    	locatorMap[TuskitModelLocator.LOCATOR_MAIN] = mainBox;
+	    return locatorMap[location];
+    }
+    
+    private function setEnabled(editDisabled:Boolean):Boolean{
+    	if (editDisabled) {
+    		return false;
+    	}
+    	else {
+    		return true;
+    	}
+    }
+        
+    ]]> 
+</mx:Script>
+    <mx:Style source="/org/tuskit/styles/tuskit.css"/>
+    <!-- the FrontController, containing Commands specific to this app -->
+    <control:TuskitController id="controller" />
+	<mx:VBox id="applicationBox" width="100%" height="100%" 
+		minWidth="1000" minHeight="680"
+		paddingLeft="0" paddingRight="0" paddingTop="0" paddingBottom="0"
+		enabled="{setEnabled(_model.hasPopupWindow || _model.isInTransitionState)}">
+		<mx:ViewStack id="mainStack" width="100%" height="100%" selectedChild = "{getLocation(_model.currentLocation)}"> 
+       		<tc:StartBox 			id="startBox"			/> 
+        	<tc:MainBox 			id="mainBox" 			/> 
+			<tc:ApplicationInitBox id="applicationInitBox" />
+    	</mx:ViewStack>
+    	<!--<tc:DebugPanel id="debugPanel" width="100%" height="0%"/>-->    
+    </mx:VBox> 
+    <mx:Canvas id="popupWorld" width="100%" height="100%" x="0" y="0"/>
+</mx:Application>

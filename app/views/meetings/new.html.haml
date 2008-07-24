@@ -1,0 +1,6 @@
+%h1== Project '#{@project.name}': New Meeting
+
+= error_messages_for :meeting
+
+= render :partial => 'meeting', :locals => {:iteration => @iteration, :meeting => @meeting, :button => "Create" }
+

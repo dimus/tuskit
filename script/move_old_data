@@ -1,0 +1,215 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+OPTIONS = {
+  :database => '',
+  :username => '',
+  :password => '',
+  :socket => '/private/var/mysql/mysql.sock'
+}
+
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: ruby #{script_name} [options]"
+
+  opts.separator ""
+
+  opts.on("-d", "--database=dbname", String,
+          "Tasks database name") { |OPTIONS[:database]| }
+
+  opts.separator ""
+  
+  opts.on("-u", "--username=name",String, "Valid database user") {|OPTIONS[:username]|}
+  
+  opts.separator ""
+  
+  opts.on("-p", "--password=password", String, "User's password") {|OPTIONS[:password]|}
+  
+  opts.separator ""
+  
+  opts.on("-s", "--socket=socket_path", String, "Path to socket") {|OPTIONS[:socket]|}
+  
+  opts.on("-h", "--help",
+          "Show this help message.") { puts opts; exit }
+
+  opts.parse!
+end
+
+if (ARGV.length == 0) 
+  puts "Use -h to see help"
+end
+
+require File.dirname(__FILE__) + "/../config/environment"
+require 'mysql'
+require 'iteration'
+require 'project'
+require 'story'
+require 'task'
+
+system('rake  environment RAILS_ENV=production db:reset ')
+
+db = Mysql.real_connect("localhost", OPTIONS[:username], OPTIONS[:password],OPTIONS[:database],3306,OPTIONS[:socket])
+
+#dbnew = Mysql.real_connect("localhost", OPTIONS[:username],
+#OPTIONS[:password],'tuskit', 3306, OPTIONS[:socket])
+
+db.query("
+insert into tuskit.projects (
+  id, start_date, name, description, 
+  progress_reports, iteration_length, 
+  created_by, updated_by, created_at, updated_at)
+
+select 
+  id, start_date, name, description,
+  generate_iteration_reports, iterations_length,
+  created_by, updated_by, created_at, updated_at
+  from projects
+")
+
+db.query("delete from tuskit.groups")
+
+db.query("
+insert into tuskit.groups (
+  id, name, description,
+  created_by, updated_by,
+  created_at, updated_at)
+  
+select
+  id, name, description,
+  created_by, updated_by,
+  created_at, updated_at
+  from roles
+")
+
+db.query("
+insert into tuskit.users (
+  `id`, `login`, `crypted_password`,
+  `first_name`, `last_name`, 
+  `email`, `phone`,
+  `created_by`, `updated_by`,
+  `created_at`, `updated_at`)
+  
+select
+  id, username, password,
+  first_name, last_name,
+  email, work_phone,
+  created_by, updated_by,
+  created_at, updated_at
+  from users
+")
+
+db.query("
+insert into tuskit.memberships (
+  user_id, group_id,
+  created_by, updated_by,
+  created_at, updated_at)
+
+select
+  user_id, role_id,
+  created_by, updated_by,
+  created_at, updated_at
+  from roles_users
+")
+
+db.query("
+insert into tuskit.iterations (
+  id, project_id, name,
+  objectives, start_date, end_date,
+  work_units, report_sent,
+  created_by, updated_by,
+  created_at, updated_at)
+  
+select 
+  id, project_id, name,
+  objectives, start_date, end_date,
+  work_units, report_sent,
+  created_by, updated_by,
+  created_at, updated_at
+  from iterations
+")
+
+db.query("
+insert into tuskit.meetings (
+  id, iteration_id, meeting_date,
+  length, name, notes,
+  created_by, updated_by,
+  created_at, updated_at)
+  
+select 
+  id, iteration_id, meeting_date,
+  work_units, name, notes,
+  created_by, updated_by,
+  created_at, updated_at
+  from meetings
+    where iteration_id in
+    (select id from tuskit.iterations)
+")
+
+db.query("
+insert into tuskit.meeting_participants (
+  user_id, meeting_id,
+  created_by, updated_by,
+  created_at, updated_at)
+
+select
+  user_id, meeting_id,
+  created_by, updated_by,
+  created_at, updated_at
+  from meetings_users
+  where meeting_id in (select id from tuskit.meetings)
+")
+
+db.query("
+insert into tuskit.project_members (
+  id, user_id, project_id,
+  active, send_iteration_report,
+  created_by, updated_by,
+  created_at, updated_at)
+
+select
+  id, user_id, project_id,
+  active, send_iteration_reports,
+  created_by, updated_by,
+  created_at, updated_at
+  from project_members
+")
+
+iterations = Iteration.find(:all, :order => 'id')
+iterations.each do |i|
+  story = Story.create(
+    :iteration_id => i.id,
+    :name => 'Default',
+    :description => 'For tasks which don\'t fit other stories',
+    :completed => true,
+    :created_by  =>  'migration_script',
+    :updated_by => 'migration_script')
+  tasks = db.query("select * from tasks where iteration_id=#{i.id}")
+  tasks.each do |t|
+    task = AgileTask.create(
+      :story_id => story.id,
+      :name  => t[4],
+      :notes => t[7],
+      :completion_date => t[3],
+      :work_units_est => t[5],
+      :work_units_real => t[6],
+      :bug => t[12],
+      :created_by => t[8],
+      :updated_by => t[9],
+      :created_at => t[11],
+      :updated_at => t[12]
+      )
+    users = db.query("select user_id, created_at, updated_at from tasks_users where task_id=#{t[0]}")
+    users.each do |u|
+      TaskOwner.create(
+        :user_id => u[0],
+        :agile_task_id => task.id,
+        :created_by => 'migration_script',
+        :updated_by => 'migration_script',
+        :created_at => t[1],
+        :updated_at => t[2]
+      )
+    end
+  end
+     
+end  

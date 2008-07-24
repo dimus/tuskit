@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml"
+	 width="100%" horizontalGap="10">
+	 <mx:Script source="IterationInputScript.as"/>
+	<mx:Form>
+		<mx:FormItem label="Name">
+			<mx:TextInput id="iterationName" text="{iteration.name}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Objectives">
+			<mx:TextArea id="objectives"  text="{iteration.objectives}"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:Form>
+		<mx:FormItem label="Start Date">
+			<mx:DateField id="startDate" showToday="true" data="{_defaultStartDate}"/>
+		</mx:FormItem>
+		<mx:FormItem label="End Date" >
+			<mx:DateField id="endDate" showToday="true" data="{_defaultEndDate}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Work Units Est.">
+			<mx:NumericStepper id = "workUnits" value="{iteration.workUnits}" maximum="200"/>
+		</mx:FormItem>		
+	</mx:Form>
+</mx:HBox>

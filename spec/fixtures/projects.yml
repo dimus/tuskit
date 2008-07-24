@@ -1,0 +1,39 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+tuskit:
+  tracker: tuskit
+  parent: <%= nil %>
+  name: "TuskIt"
+  description: "Issue tracker with an Agile twist"
+  tracker_project: "flex"
+  start_date: "2007-05-24"
+  iteration_length: 14
+  progress_reports: 1
+  created_by: system
+  updated_by: system
+  created_at: <%= 5.days.ago.to_s :db %>
+  updated_at: <%= 1.days.ago.to_s :db %>
+flex_tuskit:
+  tracker: tuskit
+  parent: tuskit
+  name: "Flex TuskIt"
+  description: "Flex specific parts of TuskIt"
+  tracker_project: "flex"
+  start_date: "2007-06-15"
+  iteration_length: 14
+  progress_reports: 1
+  created_by: system
+  updated_by: system
+  created_at: <%= 5.days.ago.to_s :db %>
+  updated_at: <%= 1.days.ago.to_s :db %>
+lonely_project:
+  tracker: tuskit
+  parent: <%= nil %>
+  name: "Lonely Project"
+  description: "Project not connected to anything through foreign keys"
+  start_date: "2007-06-15"
+  iteration_length: 14
+  progress_reports: 1
+  created_by: system
+  updated_by: system
+  created_at: <%= 5.days.ago.to_s :db %>
+  updated_at: <%= 1.days.ago.to_s :db %>

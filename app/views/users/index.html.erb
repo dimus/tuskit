@@ -1,0 +1,39 @@
+<h3>Manage Users</h3>
+<p><%= link_to "Add User", new_user_url %></p>
+<table class="data spreaded bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Roles</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+<%
+count=0
+#hide system user
+@users.each do |user|
+   count += 1
+   -%>
+    <tr id="user_<%= user.id %>" >
+     <td><%= count %></td>
+     <td><%= user.full_name %></td>
+     <td><%= user.login %></td>
+     <td><%= user.email %></td>
+     <td><%= user.phone %></td>
+     <td>
+     <%= user.groups.map{|r| r.name}.join(', ') %>
+     </td>
+     <td>
+     <%= link_to "Edit", edit_user_url(user) %>
+     ,
+     <%= link_to "Delete", user_path(user), :method => :delete, :confirm => "Are you sure you want to delete user '#{user.login}'?" %>
+     </td>
+    </tr>
+  <% end -%>
+  </tbody>
+</table>

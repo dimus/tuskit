@@ -1,0 +1,9 @@
+%h1== Project '#{@project.name}': Edit Iteration
+
+= error_messages_for :iteration
+
+= render :partial => 'iteration', :locals => {:iteration => @iteration, :button => "Update" }
+
+= link_to 'Show', project_iteration_url(@iteration.project,@iteration)
+= "|"
+= link_to 'Back', project_iterations_url(@iteration.project)

@@ -1,0 +1,32 @@
+<h1>Editing task_owner</h1>
+
+<%= error_messages_for :task_owner %>
+
+<% form_for(@task_owner) do |f| %>
+  <p>
+    <b>User</b><br />
+    <%= f.text_field :user_id %>
+  </p>
+
+  <p>
+    <b>Task</b><br />
+    <%= f.text_field :agile_task_id %>
+  </p>
+
+  <p>
+    <b>Created by</b><br />
+    <%= f.text_field :created_by %>
+  </p>
+
+  <p>
+    <b>Updated by</b><br />
+    <%= f.text_field :updated_by %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @task_owner %> |
+<%= link_to 'Back', task_owners_path %>

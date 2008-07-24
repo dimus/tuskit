@@ -1,0 +1,27 @@
+add_filters:
+  iteration: admin_view
+  name: "Add filters to users"
+  completed: 1
+  work_units_est: 8
+  created_by: system
+  updated_by: system
+  created_at: 2007-07-15 23:14:33
+  updated_at: 2007-07-15 23:14:33
+fix_problems:
+  iteration: admin_view
+  name: "Fix problems"
+  completed: 0
+  work_units_est: 10
+  created_by: system
+  updated_by: system
+  created_at: 2007-07-15 23:14:33
+  updated_at: 2007-07-15 23:14:33
+lonely_story:
+  iteration: admin_view
+  name: "Lonely story"
+  completed: 0
+  work_units_est: 2
+  created_by: system
+  updated_by: system
+  created_at: 2007-07-15 23:14:33
+  updated_at: 2007-07-15 23:14:33

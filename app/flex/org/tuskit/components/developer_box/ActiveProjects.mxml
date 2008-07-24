@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox  xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="200">
+	<mx:Script source="ActiveProjectsScript.as"/>
+	<mx:Panel width="100%" height="100%" title="Your Active Projects" styleName="projectPanel">
+		<mx:DataGrid id = "activeProjectsGrid" width="100%" height="100%" doubleClickEnabled="true" 
+			doubleClick="toIterations(activeProjectsGrid.selectedItem as Iteration)" dataProvider="{_model.currentIterations}">
+			<mx:columns>
+				<mx:DataGridColumn id="parentProjectC" dataField="project" sortCompareFunction="sortByProjectName" labelFunction="parentProject"  headerText="Active Project"/>
+				<mx:DataGridColumn dataField="name" headerText="Current Iteration" width="200" wordWrap="true">
+					<mx:itemRenderer>
+		            	<mx:Component>
+		            		<mx:LinkButton label="{getIteration(data).name}" click="outerDocument.toIterations(getIteration(data))">
+		            		<mx:Script>
+		            			<![CDATA[
+		            				import org.tuskit.model.Iteration;
+		            				import org.tuskit.model.TuskitModelLocator;
+		            			
+		            				private var _model:TuskitModelLocator = TuskitModelLocator.getInstance();
+		            				private function getIteration(data:Object):Iteration {
+		            					return _model.getIteration(data.id);
+		            				}
+		            			]]>
+		            		</mx:Script>
+		            		</mx:LinkButton>
+		            	</mx:Component>
+	            	</mx:itemRenderer>
+				</mx:DataGridColumn>
+				<mx:DataGridColumn dataField="length" headerText="Iter. Length"/>
+				<mx:DataGridColumn id="daysLeftC" labelFunction="daysLeft" sortCompareFunction="sortByDaysLeft" headerText="Days Left"/>
+				<mx:DataGridColumn dataField="workUnits" headerText="Work Units"/>
+				<mx:DataGridColumn id="percentCompleteC" labelFunction="percentComplete" headerText="Completed" sortCompareFunction="sortByPercentComplete"/>
+				<mx:DataGridColumn id="dailyLoadC" labelFunction="dailyLoad" headerText="Daily Load" sortCompareFunction="sortByDailyLoad"/>
+			</mx:columns>
+		</mx:DataGrid>
+	</mx:Panel>
+</mx:VBox>

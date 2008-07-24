@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  user: quentin
+  agile_task: agile_task1
+  created_by: MyString
+  updated_by: MyString
+  created_at: 2007-07-17 21:19:53
+  updated_at: 2007-07-17 21:19:53
+two:
+  user: aaron
+  agile_task: agile_task1
+  created_by: MyString
+  updated_by: MyString
+  created_at: 2007-07-17 21:19:53
+  updated_at: 2007-07-17 21:19:53

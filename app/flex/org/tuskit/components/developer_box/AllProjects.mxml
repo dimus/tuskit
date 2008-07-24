@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:tcd="org.tuskit.components.developer_box.*"
+	width="100%" height="100%" creationComplete="init()">
+	<mx:Script source="AllProjectsScript.as"  />
+	<mx:Panel id="allProjectsPanel" styleName="projectPanel" 
+			title="All Projects" width="100%" height="100%" >
+		<mx:DataGrid
+			width="100%" height="100%"
+			id="projectsGrid" doubleClickEnabled="true" doubleClick="toIterations(projectsGrid.selectedItem as Project)"
+			dataProvider="{_model.projects}">
+			<mx:columns>
+				<mx:DataGridColumn headerText="Name" dataField="name">
+					<mx:itemRenderer>
+		            	<mx:Component>
+		            		<mx:LinkButton label="{getProject(data).name}" click="outerDocument.toIterations(getProject(data))">
+		            		<mx:Script>
+		            			<![CDATA[
+		            				import org.tuskit.model.Project;
+		            				import org.tuskit.model.TuskitModelLocator;
+		            			
+		            				private var _model:TuskitModelLocator = TuskitModelLocator.getInstance();
+		            				
+		            				private function getProject(data:Object):Project {
+		            					return _model.getProject(data.id);
+		            				}
+		            				
+		            			]]>
+		            		</mx:Script>
+		            		</mx:LinkButton>
+		            	</mx:Component>
+	            	</mx:itemRenderer>
+				</mx:DataGridColumn> 
+	
+				<mx:DataGridColumn headerText="Total w.u." dataField="workUnitsReal" sortable="true"/>
+				<mx:DataGridColumn headerText="Send Reports" dataField="progressReport" sortable="false"/>
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:ControlBar width="100%" height="33" visible="true" id="allProjectsBar">
+			<mx:Button id="addProjectButton" icon="{projectAddIcon}" label="Add Project" click="newProject()"/>
+		</mx:ControlBar>
+	</mx:Panel>
+	<mx:Panel id="newProjectPanel" title="New Project" 
+		width="100%" height="0" 
+		styleName="projectPanel"
+		visible="{hideNewProjectPanel(_devModel.triggerNewProjectTab)}">
+		<tcd:ProjectInfoInput id="projectInfoInput" project = "{_newProject}"/>
+		<mx:ControlBar height="27">
+			<mx:Button label="Save" click="saveNewProject()" />
+			<mx:Button label="Cancel" click="stateHideNewProject()"/>
+		</mx:ControlBar>
+	</mx:Panel>
+</mx:VBox>

@@ -1,0 +1,26 @@
+%h1== Project '#{@project.name}': Iterations
+
+%br/
+
+= link_to 'Add iteration', new_project_iteration_url(@project)
+
+%table{:class => 'data bordered'}
+  %thead
+    %tr
+      %th Dates
+      %th Objectives
+      %th Work units est
+      %th W.u. done
+      %th{:colspan => "2"} Action
+
+  %tbody
+    - @iterations.each do |iteration|
+    - opts = iteration.current? ? {:style => "color: red"} : {}
+    %tr
+      %td= link_to_iteration(dates_interval(iteration.start_date, iteration.end_date), iteration, opts)
+      %td= link_to_iteration(iteration.objectives, iteration)
+      %td= link_to_iteration(iteration.work_units, iteration)
+      %td= link_to_iteration(iteration.work_units_real, iteration)
+      %td= link_to 'edit', edit_project_iteration_url(@project,iteration)
+      %td= link_to 'delete', project_iteration_url(@project,iteration), :confirm => 'Are you sure?', :method => :delete
+    - end

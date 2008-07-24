@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+iter_quentin:
+  id: 1
+  meeting_id: 1
+  user_id: 1
+  created_by: string
+  updated_by: string
+  created_at: 2007-07-15 22:20:26
+  updated_at: 2007-07-15 22:20:26
+iter_aaron:
+  id: 2
+  meeting_id: 1
+  user_id: 2
+  created_by: string
+  updated_by: string
+  created_at: 2007-07-15 22:20:26
+  updated_at: 2007-07-15 22:20:26

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ApplicationControlBar xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:flash.filters="flash.filters.*"
+	width="100%" horizontalAlign="right" dock="true" creationComplete="init()">
+	<mx:Script source="ApplicationBarScript.as"/>
+	    <mx:Image source="org/tuskit/assets/logo_small.png"/>
+        <mx:Label text="Tusk•It" fontSize="16" color="#206224">
+        	<mx:filters>
+  				<flash.filters:DropShadowFilter angle="90" blurX="5" blurY="5"
+  					 distance="3" alpha=".3" color="0x000000" />
+  			</mx:filters>
+        </mx:Label>
+        <mx:Label text= "{_model.currentUser.full_name}" styleName="h5">
+        </mx:Label>
+        <mx:Spacer width="100%"/>
+        <mx:Label text="Change role:"/>
+        <mx:ComboBox id="userGroupsCB"
+        	dataProvider="{_model.currentUserGroups}" 
+        	data="id" labelField="name" close="handleSelectView(event)" />
+    	<mx:Button label="Logout" click="logout()"/>
+</mx:ApplicationControlBar>

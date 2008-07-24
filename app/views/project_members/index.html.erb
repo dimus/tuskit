@@ -1,0 +1,59 @@
+<h1>Project "<%= @project.name %>": Members</h1>
+
+<%- form_for(:project_members, :url => project_members_path) do |f| -%>
+  <%= f.hidden_field :project_id, :value => @project.id %>
+  <table class="valign_top">
+    <tr>
+      <td>
+        <table class="data bordered" style="width:30em">
+          <thead>
+            <tr>
+              <th class="top" style="width:10em">Member</th>
+              <th class="top">Send reports</th>
+              <th class="top">Groups</th>
+              <th class="top">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          <%- @project_members.each do |pm| -%>
+            <tr>
+              <td><%= pm.user.full_name %></td>
+              <td><%= link_to (pm.send_iteration_report ? "yes" : "no"), project_member_url(pm.id, :project_member => {:send_iteration_report => pm.send_iteration_report ? 0 : 1}), :method => :put  %></td>
+              <td><%= pm.user.groups.map {|g| g.name}.join(", ") %></td>
+              <td><%= link_to "delete", project_member_path(pm), :method => :delete %></td>
+            </tr>
+          <%- end -%>
+          </tbody>
+        </table>        
+      </td>
+      <td style="vertical-align:middle;">
+        <p>
+          
+        <%= submit_tag '&lt;-', {:style=>"font-size:1.4em"} %>
+        </p>
+      </td>
+      <td>
+        <table class="data bordered" style="width:30em">
+           <thead>
+             <tr>
+               <th class="top">Add</th>
+               <th class="top" style="width:10em">User</th>
+               <th class="top">Groups</th>
+             </tr>
+           </thead>
+           
+           <tbody>
+           <%- @project_non_members.each do |u| -%>
+             <tr>
+               <td><input type="checkbox" name="users[]" id="users_<%= u.id %>" value="<%= u.id %>" /></td>
+               <td><%= u.full_name %></td>
+               <td><%= u.groups.map {|g| g.name}.join(", ") %></td>
+             </tr>
+           <%- end -%>
+           </tbody>
+         </table>                
+      </td>
+    </tr>
+  </table>
+
+<%- end -%>

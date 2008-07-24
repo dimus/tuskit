@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:tcd = "org.tuskit.components.developer_box.*"
+	width="100%" height="100%">
+	<mx:Script source="ProjectInfoScript.as"/>
+	<mx:Panel title="Project Information" width="100%" styleName="projectPanel">
+		<tcd:ProjectInfoInput id="projectInfoInput" project="{project}"/>
+		<mx:ControlBar height="27">
+			<mx:Button label="Update" click="updateProject()" />
+		</mx:ControlBar>
+	</mx:Panel>
+</mx:Canvas> 

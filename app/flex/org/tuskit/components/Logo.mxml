@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Box xmlns:mx="http://www.adobe.com/2006/mxml" cornerRadius="8" borderStyle="outset" borderColor="#25a120" 
+	paddingBottom="15" paddingLeft="15" paddingRight="15" paddingTop="15" horizontalAlign="center">
+    <mx:HBox verticalAlign="middle">
+    <mx:Image source="org/tuskit/assets/logo.png" />
+	<mx:Label text="Tusk•It" fontSize="40" color="#206224"/>	        	
+    </mx:HBox>
+    <mx:Label text="Issue Tracking with an Agile Twist."/>
+</mx:Box>

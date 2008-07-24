@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+tuskit:
+  application: Trac
+  name: TuskIt
+  uri: http://guest:secret@tuskit.org/trac
+  created_by: system
+  updated_by: system
+  created_at: <%= 5.days.ago.to_s :db %>
+  updated_at: <%= 1.days.ago.to_s :db %>
+lonely_tracker:
+  application: Trac
+  name: "Lonely Tracker"
+  uri: http://guest:secret@lonely_tracker.org/trac
+  created_by: system
+  updated_by: system
+  created_at: <%= 5.days.ago.to_s :db %>
+  updated_at: <%= 1.days.ago.to_s :db %>

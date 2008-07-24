@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:tc="org.tuskit.components.*"
+    horizontalAlign="center" verticalAlign="top"
+    width="100%" height="100%">
+
+     <mx:VBox width="500" horizontalAlign="center">
+        <mx:Spacer height="30"/>
+        <tc:Logo/>
+        <mx:Spacer height="60"/>
+            <tc:LoginBox/>
+    </mx:VBox>
+</mx:VBox>

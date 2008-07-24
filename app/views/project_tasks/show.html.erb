@@ -1,0 +1,43 @@
+<p>
+  <b>Project:</b>
+  <%=h @project_task.project_id %>
+</p>
+
+<p>
+  <b>Tracker ticket:</b>
+  <%=h @project_task.tracker_ticket_id %>
+</p>
+
+<p>
+  <b>Tracker ticket submitter:</b>
+  <%=h @project_task.tracker_ticket_submitter %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @project_task.name %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @project_task.notes %>
+</p>
+
+<p>
+  <b>Bug:</b>
+  <%=h @project_task.bug %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%=h @project_task.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%=h @project_task.updated_by %>
+</p>
+
+
+<%= link_to 'Edit', edit_project_task_path(@project_task) %> |
+<%= link_to 'Back', project_tasks_path %>

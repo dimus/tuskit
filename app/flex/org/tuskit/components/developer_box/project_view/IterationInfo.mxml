@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox	
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:tcdp="org.tuskit.components.developer_box.project_view.*" 
+	creationComplete="init()"
+	>
+	<mx:Script source="IterationInfoScript.as"/>
+	<mx:HBox width="100%">
+		<tcdp:IterationInput id="editIteration" iteration="{iteration}"/>
+	</mx:HBox>
+	<mx:ControlBar height="27" width="100%">
+		<mx:Button label="Update Iteration" click="updateIteration()" />
+		<mx:Button label="Cancel" 
+			click="editIteration.iteration=Iteration.NONE;editIteration.iteration=iteration"/>
+	</mx:ControlBar>
+</mx:VBox>

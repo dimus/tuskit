@@ -1,0 +1,18 @@
+<h1>Listing trackers</h1>
+
+<table>
+  <tr>
+  </tr>
+  
+<% for tracker in @trackers %>
+  <tr>
+    <td><%= link_to 'Show', tracker_path(tracker) %></td>
+    <td><%= link_to 'Edit', edit_tracker_path(tracker) %></td>
+    <td><%= link_to 'Destroy', tracker_path(tracker), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New tracker', new_tracker_path %>

@@ -1,0 +1,6 @@
+%h1 Edit story
+
+= error_messages_for :story
+
+= render :partial => 'story', :locals => {:iteration => @iteration, :story => @story, :button => "Update" }
+

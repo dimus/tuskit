@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!--
+Required Environment Variables:
+FLEX_HOME: must point to the root of your flex sdk (probably in flex builder directory)
+-->
+<project name="TuskIt" default="compile">
+<!-- Make the Flex Ant Tasks available -->
+  <taskdef resource="flexTasks.tasks" classpath="lib/flexTasks.jar"/>
+<!-- Module properties -->
+  <property environment="env"/>
+  <property name="FLEX_HOME" value="${env.FLEX_HOME}"/>
+  <property name="build.dir" value="../../public/bin"/>
+  <property name="assets.dir" value="org/tuskit/assets"/>
+  <property name="styles.dir" value="org/tuskit/styles"/>
+  <property name="wrapper.dir" value="${FLEX_HOME}/resources/html-templates/express-installation-with-history"/>
+  <property name="output.html" value="${build.dir}/tuskit.html"/>
+  <property name="swf.name" value="tuskit.swf"/>
+  <property name="root.mxml" value="tuskit.mxml"/>
+  <property name="locale" value="en_US"/>
+<!-- template substitution properties -->
+  <property name="title" value="tuskit"/>
+  <property name="version_major" value="9"/>
+  <property name="version_minor" value="0"/>
+  <property name="version_revision" value="0"/>
+  <property name="width" value="100%"/>
+  <property name="height" value="100%"/>
+  <property name="application" value="tuskit"/>
+  <property name="bgcolor" value="#ffffff"/>
+  <property name="swf" value="tuskit"/>
+<!-- Clears out the build directory -->
+  <target name="clean">
+    <echo message="Removing build directory contents&#x2026;"/>
+    <delete includeemptydirs="true">
+      <fileset dir="${build.dir}" includes="**/*"/>
+    </delete>
+    <delete>
+        <fileset dir="./" includes="*.cache"/>
+    </delete>
+  </target>
+<!-- standard compile w/o debug -->
+  <target name="compile">
+    <antcall target="perform-compile">
+      <param name="debugMode" value="false"/>
+    </antcall>
+  </target>
+<!-- compile with debug -->
+  <target name="compile-debug">
+    <antcall target="perform-compile">
+      <param name="debugMode" value="true"/>
+    </antcall>
+  </target>
+  <target name="perform-compile">
+<!-- Make sure the build directory exists -->
+    <mkdir dir="${build.dir}"/>
+    <mxmlc file="${root.mxml}" output="${build.dir}/${swf.name}" incremental="true" debug="${debugMode}">
+      <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+<!-- directories outside of your ‘main’ source director>
+      <source-path path-element="${FLEX_HOME}/frameworks"/ -->
+<!-- list any swcs in your lib directory to include -->
+      <library-path dir="lib" append="true">
+        <include name="Cairngorm.swc"/>
+        <include name="flexlib.swc"/>
+      </library-path>
+<!-- flex sdk core libraries -->
+      <library-path dir="${FLEX_HOME}/frameworks" append="true">
+        <include name="libs"/>
+        <include name="../bundles/${locale}"/>
+      </library-path>
+    </mxmlc>
+<!-- copy over the etc directory contents -->
+    <antcall target="copy-files"/>
+<!-- create an html wrapper -->
+    <antcall target="copy-wrapper"/>
+  </target>
+<!-- Copies contents of /etc to /build -->
+  <target name="copy-files">
+    <copy todir="${build.dir}">
+      <fileset dir="." includes="etc/**/*"/>
+    </copy>
+    <copy todir="${build.dir}/org/tuskit/assets">
+      <fileset dir="${assets.dir}"/>
+    </copy>
+    <copy todir="${build.dir}/org/tuskit/styles">
+      <fileset dir="${styles.dir}"/>
+    </copy>
+  </target>
+<!-- Creates an html wrapper -->
+  <target name="copy-wrapper">
+    <copy todir="${build.dir}">
+      <fileset dir="${wrapper.dir}">
+        <exclude name="**/index.template.html" />
+      </fileset>
+    </copy>
+    <copy file="${wrapper.dir}/index.template.html" tofile="${output.html}"
+encoding="utf-8">
+      <filterchain>
+        <expandproperties />
+      </filterchain>
+    </copy>
+  </target>
+</project>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	
+	xmlns:tca="org.tuskit.components.admin_box.*"
+    width="100%" height="100%" 
+    backgroundColor="#FFFFFF" creationComplete="init()"> 
+    
+    <mx:Script source="AdminBoxScript.as"/>
+			<tca:AdminBar id = "filterBox" resetFilter="{_state.resetFilter}"/>
+			<tca:UserGrid id = "userGrid" />
+			<tca:UserInputPanel id="userInputPanel" userInput="{_state.userInput}"/>
+
+</mx:VBox> 

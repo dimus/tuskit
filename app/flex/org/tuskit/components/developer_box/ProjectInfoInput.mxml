@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Form xmlns:mx="http://www.adobe.com/2006/mxml" width="100%">
+	<mx:Script source="ProjectInfoInputScript.as"/>
+	<mx:FormItem label="Name" width="100%">
+		<mx:TextInput id="projectName" text="{project.name}" width="100%"/>
+	</mx:FormItem>
+	<mx:FormItem label="Description"  width="100%">
+		<mx:TextArea id="projectDescription" text="{project.description}" width="100%"/>
+	</mx:FormItem>
+	<mx:FormItem label="Start/End Dates">
+		<mx:DateField id="projectStartDate" selectedDate="{project.startDate}" yearNavigationEnabled="true"/>
+		<mx:DateField id="projectEndDate" selectedDate="{project.endDate}" yearNavigationEnabled="true"/>
+	</mx:FormItem>
+	<mx:FormItem label="Iteration Length">
+		<mx:NumericStepper id="projectIterationLength" value="{project.iterationLength}" minimum="1" maximum="60"/>
+	</mx:FormItem>
+	<mx:FormItem label="Send Progress Reports">
+		<mx:CheckBox id="projectProgressReports" selected="{project.progressReports}"/>
+	</mx:FormItem>
+</mx:Form>

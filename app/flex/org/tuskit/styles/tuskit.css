@@ -1,0 +1,296 @@
+/*
+//------------------------------
+//  AccordionHeader
+//------------------------------
+*/
+
+/*AccordionHeader.navigator
+{
+
+	disabledSkin: Embed(source="images/AccordionHeader_disabledSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	downSkin: Embed(source="images/AccordionHeader_downSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	overSkin: Embed(source="images/AccordionHeader_overSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	selectedDisabledSkin: Embed(source="images/AccordionHeader_disabledSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	selectedDownSkin: Embed(source="images/AccordionHeader_downSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	selectedOverSkin: Embed(source="images/AccordionHeader_selectedSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	selectedUpSkin: Embed(source="images/AccordionHeader_selectedSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+	upSkin: Embed(source="images/AccordionHeader_upSkin.png",
+		scaleGridLeft="27", scaleGridTop="1", scaleGridRight="151", scaleGridBottom="27");
+    
+    fontSize: 14;
+    fontWeight: normal;
+    color: #ffffff; 
+    letterSpacing: 2;
+    paddingLeft: 35;
+}
+*/
+
+/*
+//-------------------------------
+// Application
+//-------------------------------
+*/
+
+
+Application {  
+   paddingTop: 0;
+   paddingBottom: 0;
+   paddingLeft: 0;
+   paddingRight: 0;
+   horizontalAlign: center; 
+   verticalAlign: top;
+   
+}
+
+/*
+//--------------------------------
+// ApplicationControlBar
+//--------------------------------
+*/
+
+ApplicationControlBar {
+    borderSkin: Embed(source="images/ApplicationBarBackgroundSkin.png",
+		scaleGridLeft="1", scaleGridTop="1", scaleGridRight="275", scaleGridBottom="18");
+}
+
+SuperTabNavigator {
+   borderColor: #333333;
+   backgroundColor: #ffffff;
+   backgroundAlpha: 1;
+   tabStyleName: "myTabs";
+   firstTabStyleName: "myTabs";
+   lastTabStyleName: "myTabs";
+   selectedTabTextStyleName: "mySelectedTabs";
+   paddingTop: 5;
+   paddingBottom: 5;
+   paddingLeft: 0;
+   paddingRight: 0;
+   
+}
+
+.myTabs {
+   highlightAlphas: 0.56, 0.34;
+   fillAlphas: 0.22, 0.39;
+   fillColors: #ffffff, #444444;
+   backgroundAlpha: 1;
+   borderColor: #333333;
+   paddingLeft: 5;
+   paddingRight: 5;
+   paddingTop:5;
+   paddingBottom:5;
+}
+
+.mySelectedTabs {
+}
+
+.tabBox {
+	paddingLeft:20;
+	paddingRight:20;
+	paddingBottom:10;
+}
+
+/*
+//------------------------------
+//GridItem
+//------------------------------
+*/
+
+GridItem.sideTitle {
+    horizontalAlign: right;
+}
+
+/*
+//----------------------------------
+//LinkButton
+//----------------------------------
+*/
+
+LinkButton {
+}
+
+LinkButton.notCurrent {
+}
+
+LinkButton.current {
+    color: #888888;
+}
+
+/*
+//--------------------------------
+// Panel
+//--------------------------------
+*/
+
+Panel {
+   borderColor: #000000;
+   headerColors: #ffffff, #cccccc;
+   borderAlpha: 0.59;
+   backgroundAlpha: 0.64;
+   highlightAlphas: 0.74, 0;
+   roundedBottomCorners: true;
+   cornerRadius: 5;
+   borderThicknessLeft: 0;
+   borderThicknessTop: 0;
+   borderThicknessBottom: 0;
+   borderThicknessRight: 0;
+   dropShadowEnabled: true;
+   shadowDistance: 4;
+   shadowDirection: center;
+   paddingTop: 3;
+   paddingBottom: 3;
+   paddingLeft: 3;
+   paddingRight: 3;
+}
+
+Panel.projectPanel {
+   borderSkin: Embed(source="images/Panel_borderSkin.png",
+		scaleGridLeft="12", scaleGridTop="35", scaleGridRight="265", scaleGridBottom="189");
+   
+   /*borderColor: #cccccc;
+   headerColors: #ffffff, #cccccc;*/
+   borderAlpha: 0;
+   highlightAlphas: 0,0;
+   dropShadowEnabled: false;
+   verticalGap: 0;
+   borderThicknessTop:0;
+   borderThicknessBottom:0;
+   borderThicknessLeft:0;
+   borderThicknessRight:0;
+   paddingTop: 0;
+   paddingBottom: 0;
+   paddingLeft: 0;
+   paddingRight: 0;
+   titleStyleName: "projectPanelTitle";
+}
+
+.projectPanelTitle {
+	fontSize: 16;
+    fontWeight: bold;
+    color: #555555;
+    letterSpacing: 1;
+}
+
+Panel.newUser {
+   borderColor: #00cc00;
+   headerColors: #00cc66, #00ff66;
+}
+
+Panel.popUp {
+    backgroundAlpha: 1;
+    borderAlpha: 1;
+}
+
+Panel.updateUser {
+   borderColor: #cccccc;
+   headerColors: #ffffff, #cccccc;
+}
+
+/*
+//----------------------------------
+//Panel ControlBar
+//----------------------------------
+*/
+
+ControlBar {
+    borderSkin: Embed(source="images/Panel_controlBarBackgroundSkin.png",
+		scaleGridLeft="2", scaleGridTop="2", scaleGridRight="273", scaleGridBottom="17");
+    paddingTop: 2;
+    paddingBottom: 2;
+}
+
+/*
+//------------------------------------
+//ViewStack
+//------------------------------------
+*/
+
+ViewStack {
+}
+
+
+
+.ovalBox {
+    backgroundColor: #ffffff;
+    cornerRadius: 4;
+    borderColor: black;
+    borderType: inset;
+    paddingTop:0;
+    paddingBottom:0;
+    paddingLeft:0;
+    paddingRight:0;
+    
+}
+
+.blueBar {
+
+}
+
+LinkButton {
+   rollOverColor: #33cc66;
+   selectionColor: #0099cc;
+   color: #000099;
+   fontFamily: Arial;
+   fontWeight: bold;
+   textDecoration: underline;
+   textAlign: left;
+}
+
+Button.sideMenu {
+    fontSize:12;
+    alpha:1;
+    cornerRadius:0;
+    textAlign:left;
+    paddingLeft:10;
+    paddingTop:5;
+    paddingRight:5;
+    paddingBottom:5;
+    backgroundAlpha:0;
+    backgroundColor:green;
+}
+
+TextInput {
+   borderStyle:inset;
+}
+
+
+TextInput.inputEnabled {
+   borderStyle:inset;
+}
+
+TextInput.inputDisabled {
+   borderColors: #ff1111;
+   borderStyle:none;
+}
+
+Label.h3 {
+    fontSize: 18;
+    fontWeight: bold;
+}
+
+Label.h4 {
+    fontSize: 14;
+}
+
+Label.h5 {
+	fontSize: 12;
+	fontWeight: bold;
+	colof:black;
+}
+
+Label.link {
+   color: #0033cc;
+   fontWeight: normal;
+   textDecoration: underline;
+}
+
+Button.newUser {
+   fillAlphas: 1, 1, 0.2, 0.4;
+   fillColors: #00cc66, #00ff66, #00cc66, #00ff66;
+}

@@ -1,0 +1,28 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+quentin_admin:
+  user: quentin
+  group: admin
+
+quetnin_developer:
+  user: quentin
+  group: developer
+ 
+aaron_customer:
+  user: aaron
+  group: customer
+
+john_developer:
+  user: john
+  group: developer
+  
+quentin_customer:
+  user: quentin
+  group: customer
+  
+lonely_user_customer:
+  user: lonely_user
+  group: customer
+  
+mary_developer:
+  user: mary
+  group: developer

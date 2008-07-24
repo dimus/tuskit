@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+OPTIONS = {
+  :environment => "production",
+}
+
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: ruby #{script_name} [options]"
+
+  opts.separator ""
+
+  opts.on("-e", "--environment=name", String,
+          "Specifies the environment to create the account under (test/development/production).",
+          "Default: production") { |OPTIONS[:environment]| }
+
+  opts.separator ""
+
+  opts.on("-h", "--help",
+          "Show this help message.") { puts opts; exit }
+
+  opts.parse!
+end
+
+ENV["RAILS_ENV"] = OPTIONS[:environment]
+require File.dirname(__FILE__) + "/../config/environment"
+require 'user'
+
+begin
+  admin = User.new
+  admin_group=Group.find_by_name("admin")
+  puts "Please enter the following information for the new admin user account:"
+  print 'Username: '
+  admin.login = gets.strip
+  print 'Password (visible): '
+  admin.password_confirmation = admin.password = gets.strip
+  print 'First Name: '
+  admin.first_name = gets.strip
+  print 'Last Name: '
+  admin.last_name = gets.strip
+  print 'Email: '
+  admin.email = gets.strip
+  
+  admin.created_by = 'admin_create'
+  admin.updated_by = 'admin_create'
+  
+  if admin.save! && Membership.create!({:user_id=>admin.id, :group_id=>admin_group})
+    puts "User #{admin.login} was created for #{OPTIONS[:environment]} environment."
+  else
+    puts "Unable to create new user account. The following errors occured:"
+    admin.errors.each_full {|m| puts m}
+    admin.destroy! rescue nil
+  end
+rescue 
+  puts "If you see this message either your database is not set or you have to change environment variable. Run the script with -h for help."
+  exit
+end

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:tcdp="org.tuskit.components.developer_box.project_view.*"
+	width = "100%" height="100%"
+	styleName="tabBox"
+	>
+	<mx:Script source="ProjectViewScript.as"/>
+	<mx:Spacer height="5"/>
+	<mx:HBox width="100%" height="100%">	
+		<mx:Panel title="Menu"  
+			width="160" height="100%" styleName="projectPanel">
+			<mx:LinkBar id="projectMenu" height="100%" width="150" 
+				direction="vertical" verticalGap="0"
+				dataProvider="{projectStack}">
+			</mx:LinkBar>
+		</mx:Panel>	
+		<mx:ViewStack id = "projectStack" 
+			
+			width="100%" height="100%"
+			>
+			
+			<tcdp:ProjectInfo label="Project Info" id="projectInfoTab" project="{project}"/>
+			<tcdp:Members label="Members" id="membersTab" project="{project}"/>
+			<tcdp:Iterations label="Iterations" id="iterationsTab" project="{project}"/>
+			<tcdp:IssueTracker label="Issue Tracker" id="issueTrackerTab"/>
+			<tcdp:ExternalTasks label="Project's External Tasks" id="externalTasksTab"/>
+		</mx:ViewStack>
+		
+	</mx:HBox>
+
+</mx:VBox>

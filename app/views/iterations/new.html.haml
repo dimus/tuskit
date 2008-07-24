@@ -1,0 +1,7 @@
+%h1== Project '#{@project.name}': New Iteration
+
+= error_messages_for :iteration
+
+= render :partial => 'iteration', :locals => {:iteration => @iteration, :project => @project, :button => "Create" }
+
+= link_to 'Back', iterations_path

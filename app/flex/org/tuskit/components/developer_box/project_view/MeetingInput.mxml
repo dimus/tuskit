@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	styleName="popUp" width="802" height="476" creationComplete="init()">
+	
+	<mx:Script source="MeetingInputScript.as"/>
+	
+	<mx:Form width="100%" height="100%">
+		<mx:FormItem label="Title" width="100%">
+			<mx:TextInput id="meetingName" text="{meeting.meetingName}" width="100%"/>
+		</mx:FormItem>
+		<mx:FormItem label="Date">
+			<mx:DateField id="meetingDate" selectedDate="{meeting.meetingDate}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Length">
+			<mx:NumericStepper id="meetingLength" minimum="0" maximum="10" stepSize="0.25" value="{meeting.length}"/>
+		</mx:FormItem>
+		<mx:FormItem>
+			<mx:TextInput id = "testing" text="{meeting.iteration.project.projectMembers.length}"/>
+		</mx:FormItem>
+		<mx:FormItem label="Participants" width="100%" height="100">
+				<mx:DataGrid id="participants" dataProvider="{meeting.iteration.project.projectMembers}">
+					<mx:columns>
+						<mx:DataGridColumn headerText="id" dataField="id"/>
+						<mx:DataGridColumn labelFunction="getUserName" headerText="Name" sortCompareFunction="sortByUserName"/>	
+					</mx:columns>
+				</mx:DataGrid>
+		</mx:FormItem>
+		<mx:FormItem label="Notes" height="100%" width="100%">
+			<mx:TextArea id="notes" text= "{meeting.notes}" width="400" height="400"/>
+		</mx:FormItem>
+	</mx:Form>
+	<mx:ControlBar>
+		<mx:Button id="InputButton" label=""/>
+		<mx:Button label="Cancel" click="removeMeetingInput()"/>
+	</mx:ControlBar>
+</mx:Panel>

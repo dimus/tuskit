@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100%" 
+	paddingBottom="5" paddingLeft="5" 
+	paddingRight="5" paddingTop="5" 
+	creationComplete="init()">
+	<mx:Script source="MeetingsViewScript.as"/>
+
+<mx:Form>
+	<mx:FormItem label = "Title:">
+		<mx:Text text="{meeting.meetingName}"  styleName="h4"/>
+	</mx:FormItem>
+	<mx:FormItem label="Participants:">
+		<mx:Text text="{participantsToString(_model.isInTransitionState)}"/>
+	</mx:FormItem>
+	<mx:FormItem label="Notes:">
+		<mx:Text text="{meeting.notes}" width="500"/>
+	</mx:FormItem>
+</mx:Form>
+	<mx:Button label="Edit" click="editMeeting()"/>
+</mx:VBox>

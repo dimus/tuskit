@@ -1,0 +1,44 @@
+
+<p>
+  <b>Tracker:</b>
+  <%=h @tracker_task.tracker_id %>
+</p>
+
+<p>
+  <b>Tracker ticket:</b>
+  <%=h @tracker_task.tracker_ticket_id %>
+</p>
+
+<p>
+  <b>Tracker ticket submitter:</b>
+  <%=h @tracker_task.tracker_ticket_submitter %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%=h @tracker_task.name %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%=h @tracker_task.notes %>
+</p>
+ 
+<p>
+  <b>Bug:</b>
+  <%=h @tracker_task.bug %>
+</p>
+
+<p>
+  <b>Created by:</b>
+  <%=h @tracker_task.created_by %>
+</p>
+
+<p>
+  <b>Updated by:</b>
+  <%=h @tracker_task.updated_by %>
+</p>
+
+
+<%= link_to 'Edit', edit_tracker_task_path(@tracker_task) %> |
+<%= link_to 'Back', tracker_tasks_path %>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<mx:HBox width="100%" 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	verticalAlign="middle">
+
+	<mx:Script source="AdminBarScript.as"/>
+	<mx:Label text="Users (double-click to edit)" styleName="h4"/>
+	<mx:Spacer width="100%"/>
+	<mx:Label text="Filter:"/>
+	<mx:ComboBox id='selectGroupCB' dataProvider="{SELECT_GROUP}" close="handleUserFilter(event)"/>
+	<mx:Image source="org/tuskit/assets/search.png"/>
+	<mx:TextInput id="filterInput" text="" change="handleFilterInputChange()"/>
+	<mx:Button label="Reload" click="_state.resetFilter=(1 - _state.resetFilter)"/>
+</mx:HBox>

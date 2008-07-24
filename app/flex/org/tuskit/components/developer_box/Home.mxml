@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	xmlns:tcd="org.tuskit.components.developer_box.*"
+	width="100%" 
+	height="100%" styleName="tabBox">
+	
+	<tcd:ActiveProjects id = "activeProjects" />
+	<mx:HDividedBox width="100%" height="100%">
+		<tcd:AllProjects id = "projectsSidebar" width="500"/>
+		<tcd:Statistics id = "statistics" width="100%"/>
+	</mx:HDividedBox>
+</mx:VBox>
