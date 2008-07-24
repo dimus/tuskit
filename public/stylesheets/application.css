@@ -123,6 +123,27 @@ padding: 1em;
   
 }
 
+.story_button {
+  padding: 0.25em;
+  border: 1px solid grey;
+  border-right: 1px solid grey;
+}
+
+.story_todo {
+  background-color:red;
+  color: white;
+}
+
+.story_to_close {
+  background-color:yellow;
+  color: black;
+}
+
+.story_done {
+  background-color:green;
+  color: white;
+}
+
 table.story_info {
   padding: 0;
   margin: 0;
@@ -131,6 +152,8 @@ table.story_info {
 }
 table.story_info td {
 }
+
+
 
 .agile_tasks {
   padding-left: 2em;

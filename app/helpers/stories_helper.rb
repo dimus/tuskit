@@ -35,11 +35,11 @@ module StoriesHelper
   def story_completion(story)
     link_text = ""
     if story.completed
-      link_text = "Done Story"
+      link_text = '<span class="story_button story_done">Done</span>'
     elsif story_can_be_completed?(story):
-      link_text = '<span style = "color:red">Done Story?</span>'
+      link_text = '<span class="story_button story_to_close">Done?</span>'
     else
-      return "Not Done Story"
+      return '<span class="story_button story_todo">To do</span>'
     end
     link_to link_text, iteration_story_url(story.iteration_id, story.id, :story => {:completed => story.completed ? 0 : 1}), :method => :put, :confirm => story.completed ? "Mark '#{story.name}' as not completed?" : "Mark story '#{story.name}' as completed?"
   end
