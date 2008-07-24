@@ -52,9 +52,6 @@ Rails::Initializer.run do |config|
   config.log_level = :fatal;
 end
 
-begin
-  APP_VERSION  = IO.popen("svn info").readlines[4]
-rescue SystemCallError
-  APP_VERSION="0.5+"
-end
+APP_VERSION = "0.5+"
+
 
