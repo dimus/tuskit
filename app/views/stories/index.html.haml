@@ -19,71 +19,67 @@
   %b= @iteration.work_units_planned
   , Done: 
   %b= @iteration.work_units_real
+
 %fieldset.subsection
   %legend.subsection Stories/Tasks
   = link_to 'Add story', new_iteration_story_path(@iteration) 
   - @stories.each do |story|
-  .story
-    .story_title
-      %table.story_info
-        %tr
-          %td{:style => "width:8em"}= story_completion(story)
-          %td{:style => "width:25em"}
-            %b= story.name.capitalize
-          %td{:style => "width:5em"}==  (#{story.work_units_est} w.u.) 
-          %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
-          %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
-    .agile_tasks
-      = link_to "<b>Add task</b>", new_story_agile_task_url(story)
-      - if story.agile_tasks.size > 0
-      %table{:class => "data bordered"}
-        %thead
+    .story
+      .story_title
+        %table.story_info
           %tr
-            %th Task Name
-            %th A bug
-            %th Completed
-            %th Owners
-            %th t.u.
-            %th{:colspan => "2"} Actions
+            %td{:style => "width:8em"}= story_completion(story)
+            %td{:style => "width:25em"}
+              %b= story.name.capitalize
+            %td{:style => "width:5em"}==  (#{story.work_units_est} w.u.) 
+            %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
+            %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
+      .agile_tasks
+        = link_to "<b>Add task</b>", new_story_agile_task_url(story)
+        - if !story.agile_tasks.empty?
+          %table{:class => "data bordered"}
+            %thead
+              %tr
+                %th Task Name
+                %th A bug
+                %th Completed
+                %th Owners
+                %th t.u.
+                %th{:colspan => "2"} Actions
 
-        - story.agile_tasks_sorted.each do |task|
-        - td_style = (!task.completion_date? && task.task_owners.size > 0) ? "background-color: #efd7b5" : ""
-        - td_class = task.completion_date? ? "task_complete" : "task_incomplete"
-        %tr
-          %td{:style => "width:20em; " + td_style, :class => td_class}= link_to_task task.name, task
-          %td{:style => td_style}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
-          %td{:style => td_style}= link_to_task((task.completion_date ? 'yes' : '-'), task)
-          %td{:style => td_style}= link_to_task task_owners(task), task
-          %td{:style => td_style}= link_to_task((task.task_units ? task.task_units : '-'), task)
-          %td{:style => td_style}= link_to_task('edit', task)
-          %td{:style => td_style}= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
-        - end
-        - end
+            - story.agile_tasks_sorted.each do |task|
+              - td_style = (!task.completion_date? && task.task_owners.size > 0) ? "background-color: #efd7b5" : ""
+              - td_class = task.completion_date? ? "task_complete" : "task_incomplete"
+              %tr
+                %td{:style => "width:20em; " + td_style, :class => td_class}= link_to_task task.name, task
+                %td{:style => td_style}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
+                %td{:style => td_style}= link_to_task((task.completion_date ? 'yes' : '-'), task)
+                %td{:style => td_style}= link_to_task task_owners(task), task
+                %td{:style => td_style}= link_to_task((task.task_units ? task.task_units : '-'), task)
+                %td{:style => td_style}= link_to_task('edit', task)
+                %td{:style => td_style}= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
 
-  - end
 
 %fieldset.subsection
   %legend.subsection Meetings
   = link_to 'Add meeting', new_iteration_meeting_path(@iteration) 
   
-  - if @meetings.size > 0
-  %table{:class => "data bordered"}
-    %thead
-      %tr
-        %th Date
-        %th Meeting
-        %th length (w.u)
-        %th{:style => "width: 30em"} Participants
-        %th{:colspan => "2"} Actions
-    %tbody
-      - @meetings.each do |meeting|
-      %tr
-        %td= link_to format_date(meeting.meeting_date), edit_iteration_meeting_path(@iteration, meeting)
-        %td= link_to meeting.name, edit_iteration_meeting_path(@iteration, meeting)
-        %td= link_to meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
-        %td= link_to participants(meeting), edit_iteration_meeting_path(@iteration, meeting)
-        %td= link_to 'edit', edit_iteration_meeting_path(@iteration, meeting)
-        %td= link_to 'delete', iteration_meeting_url(@iteration, meeting), :confirm => 'Are you sure?', :method => :delete
-      - end
-  - end
+  - if !@meetings.empty?
+    %table{:class => "data bordered"}
+      %thead
+        %tr
+          %th Date
+          %th Meeting
+          %th length (w.u)
+          %th{:style => "width: 30em"} Participants
+          %th{:colspan => "2"} Actions
+      %tbody
+        - @meetings.each do |meeting|
+          %tr
+            %td= link_to format_date(meeting.meeting_date), edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to meeting.name, edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to participants(meeting), edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to 'edit', edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to 'delete', iteration_meeting_url(@iteration, meeting), :confirm => 'Are you sure?', :method => :delete
 

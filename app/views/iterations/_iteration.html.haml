@@ -1,28 +1,22 @@
 - form_for(iteration) do |f|
   
-= f.hidden_field :project_id, :value => @project.id
+  = f.hidden_field :project_id, :value => @project.id
+  %p
+    %b Objectives
+    %br/
+    = f.text_area :objectives
+  %p
+    %b Start date
+    %br/
+    = f.date_select :start_date
+  %p
+    %b End date
+    %br/
+    = f.date_select :end_date
+  %p
+    %b Work units
+    %br/
+    = f.text_field :work_units
+  %p
+    = f.submit button
 
-%p
-  %b Objectives
-  %br/
-  = f.text_area :objectives
-
-%p
-  %b Start date
-  %br/
-  = f.date_select :start_date
-
-%p
-  %b End date
-  %br/
-  = f.date_select :end_date
-
-%p
-  %b Work units
-  %br/
-  = f.text_field :work_units
-
-%p
-  = f.submit button
-
-- end

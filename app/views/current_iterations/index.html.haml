@@ -1,53 +1,47 @@
-- if @all_projects.size > 0
-%fieldset.subsection
-  %legend.subsection My Active Projects
-  
-  - if @iterations && @iterations.size > 0
-  %table{:class =>"data bordered"}
-    %thead
-      %tr
-        %th{:style => "width:4em"} w.u. Load
-        %th{:style => "width:1em"} Days left     
-        %th{:style => "width:8em"} Dates
-        %th{:style => "width:30%"} Project
-        %th{:style => "width:3em"} w.u. planned
-        %th{:style => "width:3em"} w.u. done
-    %tbody
-      - @iterations.each do |iteration|
-      - daily_load_style = iteration.daily_load > 8 ? "color:red; font-weight: bold;" : "" rescue ""
-      %tr
-        %td.daily_load= link_to_stories(sprintf("%d.2/day", iteration.daily_load), iteration, :style => daily_load_style)
-        %td= link_to_stories(iteration.days_left.to_s, iteration)
-        %td= link_to_stories(dates_interval(iteration.start_date, iteration.end_date), iteration)
-        %td{:style => "font-weight: bold;"}= link_to_stories(iteration.project.name,iteration)
-        %td= link_to_stories(iteration.work_units, iteration)
-        %td= link_to_stories(iteration.work_units_real, iteration)
-      - end # @iterations block
-  -end #end of if iterations.size
-  
-  - if @iterations.empty?
-  .info-div
-    You have no active projects. Create a new working iteration for a project. Previous or future iterations don't make a project active.
-  - end
-- end #end of if all_projects.size
+- if !@all_projects.empty?
+  %fieldset.subsection
+    %legend.subsection My Active Projects
+    
+    - if @iterations.empty?
+      .info-div
+        You have no active projects. Create a new working iteration for a project. Previous or future iterations don't make a project active.
+    - else
+      %table{:class =>"data bordered"}
+        %thead
+          %tr
+            %th{:style => "width:4em"} w.u. Load
+            %th{:style => "width:1em"} Days left     
+            %th{:style => "width:8em"} Dates
+            %th{:style => "width:30%"} Project
+            %th{:style => "width:3em"} w.u. planned
+            %th{:style => "width:3em"} w.u. done
+        %tbody
+          - @iterations.each do |iteration|
+            - daily_load_style = iteration.daily_load > 8 ? "color:red; font-weight: bold;" : "" rescue ""
+            %tr
+              %td.daily_load= link_to_stories(sprintf("%d.2/day", iteration.daily_load), iteration, :style => daily_load_style)
+              %td= link_to_stories(iteration.days_left.to_s, iteration)
+              %td= link_to_stories(dates_interval(iteration.start_date, iteration.end_date), iteration)
+              %td{:style => "font-weight: bold;"}= link_to_stories(iteration.project.name,iteration)
+              %td= link_to_stories(iteration.work_units, iteration)
+              %td= link_to_stories(iteration.work_units_real, iteration)
+    
 
 %fieldset.subsection
   %legend.subsection All Projects
   = link_to "Add Project", new_project_url
-  - if @all_projects.size > 0
-  %table{:class => "data bordered"}
-    %thead
-      %tr
-        %th{:style => "width:10em"} Project
-        %th{:style => "width:3em"} Do I Participate?
-        %th{:style => "width:5em"} Total w.u.
-        %th{:style => "width:3em"} Send Reports
-    %tbody
-      - @all_projects.each do |project|
-      %tr
-        %td= link_to h(project.name), project_url(project.id) + "/iterations"
-        %td= link_to project.users.include?(current_user) ? h("yes") : h("no"), project_project_members_url(project)
-        %td= h project.work_units_real
-        %td= link_to project.progress_reports ? "yes" : "no", project_url(project.id, :project => {:progress_reports => project.progress_reports ? 0 : 1}), :method => :put, :confirm => project.progress_reports ? "Are you sure you want to stop sending reports to '#{project.name}' members?" : "Are you sure you want to start sending reports to '#{project.name}' members?"
-      - end
-  - end #if all_projects.size
+  - if !@all_projects.empty?
+    %table{:class => "data bordered"}
+      %thead
+        %tr
+          %th{:style => "width:10em"} Project
+          %th{:style => "width:3em"} Do I Participate?
+          %th{:style => "width:5em"} Total w.u.
+          %th{:style => "width:3em"} Send Reports
+      %tbody
+        - @all_projects.each do |project|
+          %tr
+            %td= link_to h(project.name), project_url(project.id) + "/iterations"
+            %td= link_to project.users.include?(current_user) ? h("yes") : h("no"), project_project_members_url(project)
+            %td= h project.work_units_real
+            %td= link_to project.progress_reports ? "yes" : "no", project_url(project.id, :project => {:progress_reports => project.progress_reports ? 0 : 1}), :method => :put, :confirm => project.progress_reports ? "Are you sure you want to stop sending reports to '#{project.name}' members?" : "Are you sure you want to start sending reports to '#{project.name}' members?"

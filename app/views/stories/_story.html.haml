@@ -1,24 +1,22 @@
 - form_for(story) do |f|
 
-= f.hidden_field :iteration_id, :value => iteration.id
+  = f.hidden_field :iteration_id, :value => iteration.id
 
-%p
-  - is_disabled = story_can_be_completed?(story) ? false : true
-  = f.check_box :completed, :disabled => is_disabled
-  %label{:for => "story_completed"} Completed
-  - if is_disabled
-  .help_info Story cannot be completed if it has uncompleted tasks or has no tasks
-  - end
-  %br/
-%p
-  %b Name
-  %br/
-  = f.text_field :name
+  %p
+    - is_disabled = story_can_be_completed?(story) ? false : true
+    = f.check_box :completed, :disabled => is_disabled
+    %label{:for => "story_completed"} Completed
+    - if is_disabled
+      .help_info Story cannot be completed if it has uncompleted tasks or has no tasks
+    %br/
+  %p
+    %b Name
+    %br/
+    = f.text_field :name
 
-%p
-  %b Work units est
-  %br/
-  = f.text_field :work_units_est, :class => "numeric_entry"
-%p
-  = f.submit button
-- end
+  %p
+    %b Work units est
+    %br/
+    = f.text_field :work_units_est, :class => "numeric_entry"
+  %p
+    = f.submit button
