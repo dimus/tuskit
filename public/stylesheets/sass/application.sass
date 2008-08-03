@@ -1,0 +1,766 @@
+body
+  :background-color #003366
+  :background-image url(/images/public/developer_bkg.gif)
+  :background-repeat repeat
+  :background-position left top
+  :color #000000
+  :font-family Arial, Helvetica, sans-serif
+  :font-size 100%
+  :margin 16px 0 0 0
+  :padding 0
+  :min-width 770px
+
+
+h1
+  :margin 0
+  :margin-top 0.5em
+  :margin-bottom 0.5em
+  :font-size 1.6em
+
+
+h2,  h3,  h4,  h5,  h6
+  :margin 0
+  :margin-top 0.5em
+  :margin-bottom 0.5em
+
+
+h2
+  :font-size 1.4em
+
+
+h3
+  :font-size 1.2em
+
+
+h4
+  :font-size 1.1em
+
+
+h5
+  :font-size 1em
+
+
+h6
+  :font-size 0.9em
+
+
+p
+
+label.title
+  :font-size 1.1em
+  :font-weight bold
+
+
+form
+  :margin 0
+  :padding 0
+
+
+img
+  :border none
+
+
+a
+  :color #45704D
+  :text-decoration none
+
+  &:hover
+    :color #333
+
+  &.btn_like
+    :margin 0
+    :margin-top 0.5em
+    :padding 0
+    :font-size 1em
+    :text-decoration none
+    :color black
+    :padding 0.15em
+    :background #eee
+    :border 2px outset #aaa
+    :cursor default
+    :padding 0.3em
+
+  &.node
+    &:hover
+      :color blue
+      :text-decoration none
+
+    &:visited
+      :color blue
+      :text-decoration none
+
+    &:link
+      :color blue
+      :text-decoration none
+
+
+hr
+  :border none
+  :border-bottom 1px solid #7D8692
+
+
+input
+  &[type="text"]
+    :border 1px solid #444
+    :padding 0.2em
+
+  &.numeric_entry
+    :width 3em
+
+
+input
+  &[type="password"]
+    :border 1px solid #444
+    :padding 0.2em
+
+  &[type="submit"]
+    :margin 0
+    :margin-top 0.5em
+    :padding 0
+    :font-size 1em
+    :text-decoration none
+    :color black
+    :padding 0.15em
+    :background #eee
+    :border 2px outset #aaa
+    :cursor default
+
+
+textarea
+  :width 40em
+  :height 4em
+
+  &.big
+    :height 30em
+    :width 40em
+
+
+.info-div
+  :border 1px solid #2e9410
+  :background-color #cbe4c3
+  :margin 1em 0em 1em 0
+  :width 50em
+  :padding 1em
+
+
+.error-div
+  :border 1px solid #822
+  :background-color #e99
+
+
+.error-div
+  :margin 1em 0em 1em 0
+  :width 50em
+  :padding 1em
+
+
+.story
+  :padding 0
+  :padding-bottom 1em
+  :margin 0
+  :margin-bottom 1em
+  :background-color #e5e5e5
+
+
+.story_title
+  :background-color #CBE4C3
+  :border-top 1px solid #aaa
+  :border-bottom 1px solid #aaa
+
+
+.story_button
+  :padding 0.25em
+  :border 1px solid grey
+  :border-right 1px solid grey
+
+
+.story_todo
+  :background-color #f44
+  :color white
+
+
+.story_to_close
+  :background-color yellow
+  :color black
+
+
+.story_done
+  :background-color green
+  :color white
+
+
+table
+  :margin-top 1.5em
+
+  &.story_info
+    :padding 0
+    :margin 0
+    :margin-left 0.3em
+    :border-collapse collapse
+
+    td
+  &.layout
+    :margin-top 0
+    :width 100%
+    :border-style none
+    :border-collapse collapse
+
+    td
+      :padding 0
+
+  &.spreaded
+    :width 100%
+
+  &.data
+    :padding 0
+    :width 80em
+
+    td
+      :margin 0
+      :padding 0.3em
+
+    th
+      :text-align right
+      :padding-right 0.5em
+      :color #45704D
+      :background #cbe4c3
+
+      &.top
+        :text-align left
+
+    tr
+      :background #fff
+
+      &.even_row
+        :background #e0f2da
+
+  &.valign_top
+    :vertical-align top
+
+    td
+      :vertical-align top
+
+  &.bordered
+    :border-right 1px solid #777
+    :border-top 1px solid #777
+    :border-collapse collapse
+
+    td
+      :border-left 1px solid #777
+      :border-bottom 1px solid #777
+
+  &.no_border
+    :border 0
+
+
+.agile_tasks
+  :padding-left 2em
+
+
+.task_incomplete
+
+.task_complete
+  :text-decoration line-through
+
+
+.help_info
+  :color #999
+  :margin 0
+  :padding 0
+
+
+div
+  &.drawer_closed
+    :background #eee url("/images/triangle.gif") no-repeat .45em .45em
+    :border-bottom 1px solid #bbb
+
+  &.drawer_open
+    :background #ccc url("/images/triangle_open.gif") no-repeat .45em .45em
+    :padding 0.2em 0em 0.2em 1.6em
+    :border-left 1px solid #bbb
+
+  &.drawer_content
+    :background #eee
+    :padding .5em .5em .5em .5em
+    :margin 0
+    :margin-bottom 2px
+    :color #111
+    :font-size 98%
+    :display none
+    :border-bottom 1px solid #bbb
+    :border-left 1px solid #bbb
+
+    input
+      :font-size 91%
+
+    label
+      :color #333
+      :text-decoration underline
+
+    p
+      :padding .3em .3em .3em .3em
+      :margin 0 0 0 .8em
+
+  &.search_field
+    :margin-top 0.3em
+    :margin-bottom 0.3em
+
+
+div
+  &.drawer_closed
+    :padding 0.2em 0em 0.2em 1.6em
+    :border-left 1px solid #bbb
+
+  &.drawer_content
+    option, select
+      :font-size 91%
+
+
+#centerwrapper
+  :background-image url(/images/public/developer_left_side.gif)
+  :background-repeat repeat-y
+  :background-position left top
+  :margin 0 15px 0 24px
+
+
+#masthead
+  :background-image url(/images/public/developer_masthead_bg.gif)
+  :background-repeat repeat-x
+
+
+#logodiv
+  :background-image url(/images/public/developer_logo_bg.gif)
+  :background-repeat no-repeat
+  :background-position right top
+
+
+#centerbox
+  :background-image url(/images/public/developer_right_side.gif)
+  :background-repeat repeat-y
+  :background-position right top
+
+
+#navwrapper
+  :margin 0px 18px 0px 8px
+  :font-size .85em
+
+
+.clearit
+  :clear both
+  :height 0
+  :line-height 0.0
+  :font-size 1px
+
+
+#centercontent
+  :font-size .8em
+  :line-height 1.5em
+  :margin 0px 18px 0px 8px
+  :padding 10px 20px 1px 20px
+  :background-color #FFFFFF
+
+  .topmainHeader
+    :color #DAD2AD
+    :font-size 1.35em
+    :margin 16px 0 6px 0
+
+  p
+    :margin 0 0 12px 0
+
+  h2
+    :color #660000
+
+  a
+    :text-decoration none
+
+
+#sidecontent p
+  :margin 0 0 12px 0
+
+
+#centercontent h3
+  :color #660000
+
+
+.imageleft
+  :float left
+  :padding .4em 12px 0px 0px
+
+
+.imageright
+  :float right
+  :padding .4em 0px 0px 12px
+
+
+#centerbottom
+  :background-image url(/images/public/developer_bottom.gif)
+  :background-repeat repeat-x
+
+
+#centerbottominfo
+  :background-image url(/images/public/developer_bottom_right.gif)
+  :background-repeat no-repeat
+  :background-position right top
+
+
+#footer
+  :font-size 0.65em
+  :padding 8px 0 30px 0
+  :margin 0 20px 0 30px
+  :font-style italic
+  :color #FFFFFF
+
+  p
+    :margin 0 0 4px 0
+
+  a
+    :color white
+
+    &:visited
+      :color white
+
+    &:hover
+      :color #333333
+
+    &:active
+      :color white
+      :background-color #505050
+      :text-decoration none
+
+
+#tabs-container
+  :font-family "Trebuchet MS", Arial, sans-serif
+  :font-size 1.1em
+  :background-image url(/images/public/developer_menutile.gif)
+  :border-bottom 6px solid #FFF
+  :background-color #779ec6
+  :background-repeat repeat-x
+
+
+#tabs
+  :padding 0
+  :padding-top 1px
+  :margin 0
+  :line-height normal
+
+  li
+    :list-style none
+    :margin 0
+    :padding 0
+    :display inline
+
+    a
+      :padding-left 0.5em
+      :padding-right 0.5em
+      :background #cbe4c3
+      :text-decoration none
+      :color #003
+      :border-right 1px solid #375f87
+      :border-top 1px solid #375f87
+      :border-bottom 0
+      :line-height normal
+
+      &:hover
+        :background #D7DFE4
+        :border-color #859AA8
+
+      &.active
+        :background white
+
+        &:hover
+          :color #777
+          :background #fff
+          :border-color #637987
+
+
+#subtabs-container
+  :background-color #fff
+  :border-top 1px solid #cbe4c3
+  :border-bottom 1px solid #cbe4c3
+  :font-size .9em
+  :font-family "Trebuchet MS", Arial, sans-serif
+  :padding 3px
+  :font-weight bold
+
+
+#subtabs
+  :padding 0
+  :margin 0
+
+  li
+    :list-style none
+    :margin 0
+    :display inline
+
+    a
+      :margin 0
+      :text-decoration none
+      :color #003
+      :padding-left 8px
+      :padding-right 8px
+      :border-right 1px solid #777777
+      :padding-top 3px
+      :padding-bottom 3px
+      :background #cbe4c3
+
+      &:hover
+        :color #fff
+        :background #777777
+        :border-color #777777
+        :color #FFFFFF
+        :font-weight bold
+        :padding-top 3px
+        :padding-bottom 3px
+
+      &.active
+        :background white
+
+        &:hover
+          :color #003366
+          :background #fff
+          :border-color #777777
+          :padding-top 3px
+          :padding-bottom 3px
+
+
+#subtabs li a.active
+  :margin 0
+  :text-decoration none
+  :color #003
+  :padding-left 8px
+  :padding-right 8px
+  :border-right 1px solid #777777
+  :padding-top 3px
+  :padding-bottom 3px
+
+
+#footer a:focus
+  :color white
+  :background-color #505050
+  :text-decoration none
+
+
+.p7ie6Fix:active
+  :color #F7E577
+  :background-color #505050
+
+
+#skiplinks a
+  &:active, &:focus
+    :color #F7E577
+    :background-color #505050
+
+
+#p7PMnav li
+  :width auto
+
+
+#logo_tuskit
+  :color #45704D
+  :font-family Arial
+  :font-size 32px
+  :margin-left 120px
+  :margin-top 35px
+  :position absolute
+
+
+#logo_motto
+  :color black
+  :font-family Arial
+  :font-size 12px
+  :margin-left 30px
+  :margin-top 90px
+  :position absolute
+
+
+#login_box
+  :margin-left auto
+  :margin-right auto
+  :padding 1em
+  :background-color #DDD
+  :width 30em
+  :text-align left
+  :border 2px solid #888
+
+
+#overall
+  :background #fff
+  :width 100%
+  :margin 0 auto
+
+
+#info
+  :float right
+  :margin-right 30px
+  :margin-top 5px
+  :font-size .8em
+
+
+#title
+  :float left
+  :margin-top 20px
+  :margin-left 0px
+  :color #45704D
+  :font-size 1em
+  :font-weight bold
+
+
+table
+  &.data
+    th
+      :margin 0
+      :padding 0.3em
+
+    thead th
+      :text-align left
+
+  &.valign_top th
+    :vertical-align top
+
+  &.bordered th
+    :border-left 1px solid #777
+    :border-bottom 1px solid #777
+
+  &.no_border
+    td, th
+      :border 0
+
+
+fieldset.subsection
+  :margin-bottom 1em
+  :border 1px solid #45704D
+
+
+legend.subsection
+  :color #555
+  :font-weight bold
+
+
+em.red
+  :color #a00
+
+
+.btn_help
+  :background-repeat no-repeat
+  :background-image url(/images/public/btn_help_off.gif)
+  :color red
+  :padding-right 45px
+
+  &:hover
+    :background-image url(/images/public/btn_help_on.gif)
+    :color blue
+
+
+.unofficial
+  :color #777
+
+
+#flash
+  :position fixed
+  :top 45px
+  :left 270px
+  :width 40em
+
+  span
+    :color #0C2504
+    :display block
+
+  .notice
+    :padding 2em
+    :background #CBE4C3
+    :border-top 1px solid #2E9410
+    :border-bottom 1px solid #2E9410
+
+  .error
+    :background #e99
+    :border-top 1px solid #822
+    :border-bottom 1px solid #822
+
+
+#flash .error
+  :padding 2em
+
+
+li
+  &.node
+    :color black
+    :list-style none
+
+  &.leaf
+    :color black
+    :list-style none
+    :margin-left 1em
+
+
+
+ul
+  &.expanded
+  &.collapsed
+    :display none
+
+
+.toggle_on
+  :color #990000
+
+
+.toggle_off
+  :color gray
+  :text-decoration underline
+
+
+.access_on
+  :padding 0.1em
+  :background-color #333
+  :color #fff
+
+
+.access_off,  a.access_on:hover
+  :background-color white
+  :padding 0.1em
+  :color #dd0000
+
+
+.tree
+  :margin-left -2em
+  :line-height 2em
+
+
+.tree_main_table
+  :width 100%
+  :border 1px solid gray
+  :border-collapse collapse
+
+  td
+    :border 1px solid gray
+
+
+.tree_permissions_table
+  :width 100%
+  :border none
+  :border-collapse collapse
+
+  td
+    :border none
+
+
+.tip-catlist
+  :width 200px
+  :background #EEF1FE
+  :border 2px solid #C2D2E7
+  :padding 5px
+
+
+.popUp
+  :font-size 10px
+  :font-family Verdana, Arial, Helvetica, sans-serif
+  :background-color #FFC
+  :visibility hidden
+  :margin 0 10px
+  :padding 0.5em
+  :position absolute
+  :border solid 1px black
+
+  td
+    :padding-right 2em
+    :vertical-align top
+
