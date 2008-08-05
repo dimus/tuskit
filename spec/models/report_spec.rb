@@ -22,7 +22,7 @@ describe Report do
       report = Hash.from_xml(Report.generate(@iteration))['hash']
       report['project'].should == 'TuskIt'
       report['iteration'].should == '07/01/07 - 07/14'
-      report['iteration_objectives'].should == 'Creating administrator view for TuskIt'
+      report['objectives'].should == 'Creating administrator view for TuskIt'
       report['stories'].class.should == Array
       stories = report['stories'].sort_by {|s| s['updated_at']}
       stories[0]['name'].should == 'Lonely story'

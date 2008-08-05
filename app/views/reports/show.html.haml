@@ -1,0 +1,22 @@
+%h1== Report #{@r['iteration']} of project '#{@project.name}'
+
+%div
+  %b Objectives:
+  = @r['objectives']
+%div
+  %b Work Units Planned:
+  == #{@r['work_units_planned']},
+  %b Work Units Accomplished:
+  = @r['work_units_real']
+%h3 Planned work
+
+%ul
+  - @r['stories'].each do |story|
+    %li
+      %b= story['completed'] ? 'Done': 'Not Done' 
+      == (#{story['work_units_est']} work units)
+      %b= story['name']
+
+
+
+

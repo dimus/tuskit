@@ -8,7 +8,9 @@ class Report < ActiveRecord::Base
     report = {}
     report[:project] = i.project.name
     report[:iteration] = dates_interval(i.start_date,i.end_date)
-    report[:iteration_objectives] = i.objectives
+    report[:objectives] = i.objectives
+    report[:work_units_planned] = i.work_units_planned
+    report[:work_units_real] = i.work_units_real
     report[:stories] = []
     i.stories.sort_by(&:updated_at).each do |story|
       s={}
@@ -27,7 +29,7 @@ class Report < ActiveRecord::Base
         t[:created_at] = task.created_at
         owners = []
         task.task_owners.each do |owner|
-          owners << owner.user.full_name
+          owners << {:name => owner.user.full_name}
         end
         t[:owners] = owners unless owners.blank?
         tasks << t

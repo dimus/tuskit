@@ -2,14 +2,44 @@
 
 admin_view_report:
   iteration: admin_view
-  report: '<?xml version="1.0" ?>
+  report: '<?xml version="1.0"?>
 <hash>
+  <project>Tuskit</project>
   <iteration>07/1/2007 - 06/14</iteration>
+  <objectives>Creating administrator view for TuskIt</objectives>
+  <work_units_planned>30</work_units_planned>
+  <work_units_real>30</work_units_real>
+  <stories type="array">
+    <story>
+      <name>Make admin page</name>
+      <work_units_est type="integer">13</work_units_est>
+      <completed type="boolean">1</completed>
+      <updated_at type="datetime">2007-07-05 21:18:32</updated_at>
+      <created_at type="datetime">2007-07-01 21:18:32</created_at>
+      <tasks type="array">
+        <task>
+          <name>Make admin role</name>
+          <completion_date type="date">2007-07-05</completion_date>
+          <bug type="boolean">0</bug>
+          <updated_at type="datetime">2007-07-05 21:18:32</updated_at>
+          <created_at type="datetime">2007-07-05 21:18:32</created_at>
+          <owners type="array">
+            <owner>
+              <name>Quentin Dorward</name>   
+            </owner>
+            <owner>
+              <name>Bloody Mary</name>   
+            </owner>
+          </owners>
+        </task>
+      </tasks>
+    </story>
+  </stories>
 </hash>'
 
 dev_rails_report:
   iteration: dev_rails
-  report: '<?xml version = "1.0" ?>
+  report: '<?xml version = "1.0"?>
 <hash>
   <iteration>08/1/2008 - 08/14/2008</iteration>
 </hash>'
