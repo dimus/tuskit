@@ -1,0 +1,11 @@
+%h1== Reports for project '#{@project.name}'
+
+- if @reports.blank?
+  .div-info No reports generated yet
+- else
+  %ul
+    - @reports.each do |report|
+      - r = Hash.from_xml(report.report)['hash']
+      %li= link_to r['iteration'], project_report_url(@project, report.id)
+
+  

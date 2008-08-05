@@ -2,8 +2,14 @@
 
 admin_view_report:
   iteration: admin_view
-  report: MyText
+  report: '<?xml version="1.0" ?>
+<hash>
+  <iteration>07/1/2007 - 06/14</iteration>
+</hash>'
 
 dev_rails_report:
   iteration: dev_rails
-  report: MyText
+  report: '<?xml version = "1.0" ?>
+<hash>
+  <iteration>08/1/2008 - 08/14/2008</iteration>
+</hash>'
