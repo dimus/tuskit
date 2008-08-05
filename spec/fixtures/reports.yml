@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+admin_view_report:
+  iteration: admin_view
+  report: MyText
+
+dev_rails_report:
+  iteration: dev_rails
+  report: MyText

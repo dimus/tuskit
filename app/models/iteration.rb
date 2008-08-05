@@ -4,6 +4,7 @@ class Iteration < ActiveRecord::Base
   has_many :meetings
   has_many :stories, :order => "created_at desc"
   has_many :agile_tasks, :through => :stories
+  has_one :report
   
   validates_presence_of :start_date
   validates_presence_of :end_date

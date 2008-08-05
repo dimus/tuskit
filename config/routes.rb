@@ -18,7 +18,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :has_many => [:groups, :memberships]
   map.resources :sessions, :trackers, :groups, :memberships
   
-  map.resources :projects, :has_many => [:iterations, :users, :project_members]
+  map.resources :projects, :has_many => [:iterations, :reports, :users, :project_members]
   map.resources :iterations, :has_many => [:meetings, :stories]
   map.resources :stories, :has_many => [:agile_tasks]
   map.resources :meetings, :has_many => [:meeting_participants]

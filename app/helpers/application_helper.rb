@@ -1,6 +1,8 @@
 # Methods added to this helper will be available to all templates in the application.
+require 'date_helpers'
 module ApplicationHelper
-
+  include DateHelpers
+  
   def page_type
     "developer"
   end
@@ -53,7 +55,8 @@ module ApplicationHelper
       subtabs = [ 
           ["Project", edit_project_url(project_id)], 
           ["Members", project_project_members_url(project_id)],
-          ["Iterations", project_iterations_url(project_id)]
+          ["Iterations", project_iterations_url(project_id)],
+          ["Reports", project_reports_url(project_id)]
         ]
       subtabs.each do |stb|
         subtabs_hash << {
@@ -107,20 +110,6 @@ module ApplicationHelper
     output.join("<br/>\n")
   end
   
-  def format_date(date,format='%m/%d/%y')
-    date.strftime(format)
-  end
-  
-  def dates_interval(date1, date2)
-    raise ArgumentError, "#{format_date(date1)} is bigger than #{format_date(date2)}" if date1 > date2
-    date_string = format_date(date1) + " - "
-    if date1.year == date2.year
-      date_string += format_date(date2, '%m/%d')
-    else
-      date_string += format_date(date2)
-    end
-    date_string  
-  end
 
   def checked?(expr)
     if expr
