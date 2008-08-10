@@ -52,7 +52,6 @@ describe "/current_iterations" do
       response.should be_success
       response.should_not have_tag('legend.subsection', :text => "My Active Projects")    
       response.should have_tag('legend.subsection', :text => "All Projects")
-    
     end
   
     it "should display only Add project link when there are no projects" do

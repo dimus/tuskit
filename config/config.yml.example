@@ -1,0 +1,6 @@
+general:
+  site_title: 
+
+mailer:
+  email_from: from@example.com
+
