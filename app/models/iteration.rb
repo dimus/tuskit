@@ -23,7 +23,7 @@ class Iteration < ActiveRecord::Base
       end
       if story.completed
         finished << story
-      elsif completed_all_tasks
+      elsif completed_all_tasks and self.current? #stories from old iterations cannot be finished
         maybe_finished << story
       else
         unfinished << story  

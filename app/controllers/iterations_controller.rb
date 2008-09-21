@@ -4,7 +4,7 @@ class IterationsController < ApplicationController
   # GET /iterations.xml
   def index
     @project = Project.find(params[:project_id])
-    @project.move_incomplete_stories_to_current_iteration
+    @project.copy_incomplete_stories_to_current_iteration
     @iterations = @project.iterations
     
     respond_to do |format|

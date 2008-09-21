@@ -9,7 +9,7 @@ class CurrentIterationsController < ApplicationController
     :conditions => ["id in (?)", @iteration_ids])
     @iterations = @iterations.sort {|x,y| y.daily_load <=> x.daily_load}
     @iterations.each do |iteration|
-      iteration.project.move_incomplete_stories_to_current_iteration
+      iteration.project.copy_incomplete_stories_to_current_iteration
     end
     respond_to do |format|
       format.html {

@@ -9,20 +9,20 @@
       %table{:class =>"data bordered"}
         %thead
           %tr
+            %th{:style => "width:4em"} Project
             %th{:style => "width:4em"} w.u. Load
             %th{:style => "width:1em"} Days left     
             %th{:style => "width:8em"} Dates
-            %th{:style => "width:30%"} Project
             %th{:style => "width:3em"} w.u. planned
             %th{:style => "width:3em"} w.u. done
         %tbody
           - @iterations.each do |iteration|
             - daily_load_style = iteration.daily_load > 8 ? "color:red; font-weight: bold;" : "" rescue ""
             %tr
+              %td{:style => "font-weight: bold;font-size: 1.1em"}= link_to_stories(iteration.project.name,iteration)
               %td.daily_load= link_to_stories(sprintf("%d.2/day", iteration.daily_load), iteration, :style => daily_load_style)
               %td= link_to_stories(iteration.days_left.to_s, iteration)
               %td= link_to_stories(dates_interval(iteration.start_date, iteration.end_date), iteration)
-              %td{:style => "font-weight: bold;"}= link_to_stories(iteration.project.name,iteration)
               %td= link_to_stories(iteration.work_units, iteration)
               %td= link_to_stories(iteration.work_units_real, iteration)
     

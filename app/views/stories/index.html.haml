@@ -7,6 +7,13 @@
 = link_to 'Edit', edit_project_iteration_url(@iteration.project,@iteration)
 = "|"
 = link_to 'All Iterations', project_iterations_path(@iteration.project)
+- if @previous_iteration
+  = "|"
+  = link_to 'Prev. Iteraion', iteration_stories_url(@previous_iteration)
+- if @next_iteration
+  = "|"
+  = link_to 'Next Iteration', iteration_stories_url(@next_iteration)
+
 
 
 %p
@@ -27,6 +34,7 @@
   %legend.subsection Stories/Tasks
   = link_to 'Add story', new_iteration_story_path(@iteration) 
   - @stories.each do |story|
+    - story.reload
     .story
       .story_title
         %table.story_info

@@ -22,7 +22,7 @@ module StoriesHelper
   end
 
   def story_can_be_completed?(story)
-    can_be_completed = story.agile_tasks.empty? ? false : true
+    can_be_completed = (story.agile_tasks.empty? || !story.iteration.current?) ? false : true
     story.agile_tasks.each do |task|
       if !task.completion_date
         can_be_completed = false
@@ -39,7 +39,8 @@ module StoriesHelper
     elsif story_can_be_completed?(story):
       link_text = '<span class="story_button story_to_close">Done?</span>'
     else
-      return '<span class="story_button story_todo">To do</span>'
+      msg = story.iteration.current? ? 'To do' : 'Unfinished' 
+      return "<span class=\"story_button story_todo\">#{msg}</span>"
     end
     link_to link_text, iteration_story_url(story.iteration_id, story.id, :story => {:completed => story.completed ? 0 : 1}), :method => :put, :confirm => story.completed ? "Mark '#{story.name}' as not completed?" : "Mark story '#{story.name}' as completed?"
   end

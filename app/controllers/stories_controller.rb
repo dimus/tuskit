@@ -4,10 +4,14 @@ class StoriesController < ApplicationController
   # GET /stories.xml
   def index
     @iteration = Iteration.find(params[:iteration_id])
-    @stories = @iteration.stories_prepare
     @meetings = @iteration.meetings.sort_by(&:meeting_date).reverse
     @project = @iteration.project
-    @project.move_incomplete_stories_to_current_iteration
+    @project.copy_incomplete_stories_to_current_iteration
+    @stories = @iteration.stories_prepare
+    all_iters = @project.iterations.reverse
+    iter_index = all_iters.index @iteration
+    @previous_iteration = (iter_index > 0)  ? all_iters[iter_index - 1] : nil
+    @next_iteration = (iter_index != (iter_index.size - 1)) ? all_iters[iter_index + 1] : nil
 
     respond_to do |format|
       format.html # index.html.erb

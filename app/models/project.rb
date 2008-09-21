@@ -22,22 +22,26 @@ class Project < ActiveRecord::Base
     current_iteration.id rescue nil
   end
 
-  def move_incomplete_stories_to_current_iteration
+  def copy_incomplete_stories_to_current_iteration
     ci = current_iteration
     if ci && !ci.old_stories_added?
       old_incomplete_stories = self.stories.select {|story| story.iteration != ci && !story.completed} 
       stories_to_move = old_incomplete_stories.select {|story| story.iteration.end_date < Date.today}
       
       stories_to_move.each do |story|
-        story.iteration_id = ci.id
-        story.save
+        story_hash = Hash.from_xml(story.to_xml)["story"].merge({"iteration_id" => ci.id})
+        story_copy = Story.new(story_hash)
+        story_copy.save
+        story.agile_tasks.select {|t| t.completion_date == nil}.each do |task|
+          task.story_id = story_copy.id
+          task.save
+        end
       end
       
       if old_incomplete_stories.size == stories_to_move.size
         ci.old_stories_added = true
         ci.save
       end
-    
     end
   end
   

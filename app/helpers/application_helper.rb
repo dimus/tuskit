@@ -150,9 +150,16 @@ module ApplicationHelper
     end
     real = burndown_data.map { |bd| bd[:units] }
     
-    chart = '<img src="http://chart.apis.google.com/chart?chbh=10,0,4&amp;cht=bvg&amp;chco=45704D,CBE4C3'
+    chart = '<img src="http://chart.apis.google.com/chart?'
+    
+    #bars width, space between them and bar colors
+    chart += 'chbh=10,0,4&amp;cht=bvg&amp;chco=45704D,CBE4C3'
+    
+    #title
     chart += '&amp;chtt=Iteration+Burndown'
     chart += '&amp;chts=660000,15'
+
+    #legend
     chart += '&amp;chdl=units+left|reference'
 
     # axis
@@ -165,8 +172,9 @@ module ApplicationHelper
     chart += "|" + perfect.join(",")
       
     chart += "&amp;chds=0," + total_work_units.to_s
-    #chart += "&amp;ch
-    chart += '" alt="Iteration Burndown" />'
+    
+    #alt name if gif is not shown
+    chart += '" alt="Iteration Burndown Graph is Broken?" />'
     chart
   end
 
