@@ -8,6 +8,7 @@
 .project
 .loadpath
 config/database.yml
+config/config.yml
 db/schema.rb
 db/*.sql
 tmp/cache/*
