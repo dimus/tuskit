@@ -71,5 +71,17 @@ class Iteration < ActiveRecord::Base
     #amount of days left to the end of the iteration
     end_date.-(Date.today).to_i + 1
   end
+
+  def burndown
+    data = []
+    data_date = self.start_date
+    while data_date <= self.end_date
+      stories_to_go = self.stories.select {|s| !s.completed? || s.completion_date > data_date}
+      units_to_go = Date.today > data_date ? stories_to_go.inject(0) {|res, s| res += s.work_units_est} : 0
+      data << {:date => data_date, :units => units_to_go}
+      data_date += 1.day
+    end
+    data
+  end
   
 end

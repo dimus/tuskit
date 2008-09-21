@@ -13,6 +13,9 @@ jQuery.fn.debug = jQuery.fn.dbg = function () {
 
 $(function() {
 
+  // Set focus on login text input for login
+  $("input#login,input#user_login").focus();
+
   // Set zebra style for data tables
   $('table.data tbody tr:nth-child(even)').addClass('even_row');
 

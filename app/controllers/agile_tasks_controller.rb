@@ -62,7 +62,12 @@ class AgileTasksController < ApplicationController
           format.html { redirect_to(iteration_stories_url(@agile_task.story.iteration_id)) }
           format.xml  { render :xml => @agile_task, :status => :created, :location => @agile_task }
         else
-          format.html { render :action => "new" }
+          format.html do 
+            @story = Story.find(@agile_task.story_id)
+            @iteration = Iteration.find(@story.iteration_id)
+            @project = @iteration.project
+            render :action => "new" 
+          end
           format.xml  { render :xml => @agile_task.errors, :status => :unprocessable_entity }
         end
       else
@@ -98,7 +103,13 @@ class AgileTasksController < ApplicationController
           format.html { redirect_to(iteration_stories_url(iteration)) }
           format.xml  { head :ok }
         else
-          format.html { render :action => "edit" }
+          format.html do 
+            @agile_task.reload
+            @story = Story.find(@agile_task.story_id)
+            @iteration = Iteration.find(@story.iteration_id)
+            @project = @iteration.project
+            render :action => "edit"
+          end 
           format.xml  { render :xml => @agile_task.errors, :status => :unprocessable_entity }
         end
       else

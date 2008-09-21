@@ -8,6 +8,7 @@
 = "|"
 = link_to 'All Iterations', project_iterations_path(@iteration.project)
 
+
 %p
   %b Objectives:
   = (@iteration.objectives.strip == "") ? "N/A" : @iteration.objectives
@@ -19,6 +20,8 @@
   %b= @iteration.work_units_planned
   , Done: 
   %b= @iteration.work_units_real
+
+= burndown_chart(@iteration.burndown, @iteration.work_units_planned)
 
 %fieldset.subsection
   %legend.subsection Stories/Tasks

@@ -3,9 +3,10 @@ end
 
 class AgileTask < Task
   belongs_to :story
-  has_many :task_owners
+  has_many :task_owners, :dependent => :destroy
   
   validates_presence_of :story_id
+  validates_presence_of :name
   
   def iteration
     story.iteration
@@ -17,6 +18,17 @@ class AgileTask < Task
   
   def tracker
     project.tracker
+  end
+
+  def validate 
+    if self.completion_date != nil 
+      if self.task_units.to_f == 0.0
+        errors.add_to_base("Please add Task Units before completing this task.")
+      end
+      if self.id && TaskOwner.find_by_agile_task_id(self.id).blank?
+        errors.add_to_base("Please add Task Owners before completing this task.")
+      end
+    end
   end
 end
 

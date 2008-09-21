@@ -55,6 +55,9 @@ describe Iteration, "without iterations fixture" do
     @iteration = Iteration.new(:project => project, :start_date => 15.days.from_now.to_s, :end_date => 3.days.from_now.to_s, :work_units => 20)
     @iteration.stub!(:work_units_real).and_return(10)
   end
+
+  describe '.burndown' do
+  end
   
   it "should know daily load for remaining days" do
     @iteration.daily_load.should == 2.5

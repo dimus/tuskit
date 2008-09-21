@@ -8,6 +8,22 @@ class Story < ActiveRecord::Base
     iteration.project
   end
 
+  def completed
+    self.completion_date != nil
+  end
+
+  def completed?
+    completed
+  end
+
+  def completed=(is_completed)
+    if is_completed
+      self.completion_date = Date.today
+    else
+      self.completion_date = nil
+    end
+  end
+
   def agile_tasks_sorted
     unowned_bugs = []
     unowned = []

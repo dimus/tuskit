@@ -139,6 +139,37 @@ module ApplicationHelper
     {:controller  => "/sessions"}
   end
 
+  def burndown_chart(burndown_data, total_work_units)
+    dates = burndown_data.map { |bd| bd[:date]}
+    work_per_day = total_work_units/dates.size
+    perfect = []
+    count = 0
+    dates.each do |d|
+      perfect << (dates.size - count) * work_per_day
+      count += 1
+    end
+    real = burndown_data.map { |bd| bd[:units] }
+    
+    chart = '<img src="http://chart.apis.google.com/chart?chbh=10,0,4&amp;cht=bvg&amp;chco=45704D,CBE4C3'
+    chart += '&amp;chtt=Iteration+Burndown'
+    chart += '&amp;chts=660000,15'
+    chart += '&amp;chdl=units+left|reference'
+
+    # axis
+    chart += '&amp;chxt=y,x'
+    chart += '&amp;chxl=0:|' + total_work_units.to_s + '|1:|' + dates[0].to_s + '|' + dates[-1].to_s 
+    chart += '&amp;chxp=0,100|1,0,100' 
+    chart += '&amp;chxs=0,000000|1,000000'
+    chart += "&amp;chs=" + (dates.size * 25 + 100).to_s + "x200"
+    chart += "&amp;chd=t:" + real.join(",")
+    chart += "|" + perfect.join(",")
+      
+    chart += "&amp;chds=0," + total_work_units.to_s
+    #chart += "&amp;ch
+    chart += '" alt="Iteration Burndown" />'
+    chart
+  end
+
   def drawer(drawer_id, title, drawer_opened_data, drawer_closed_data=nil, open=false)
   
     drawerState="drawer_closed"

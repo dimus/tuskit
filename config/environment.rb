@@ -54,6 +54,6 @@ end
 
 APP_VERSION = "0.5+"
 
-CUSTOM = YAML.load('config.yml')
+CUSTOM = YAML.load(open(File.dirname(__FILE__) + '/config.yml').read)
 
 

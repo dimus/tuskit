@@ -1,7 +1,7 @@
 add_filters:
   iteration: admin_view
   name: "Add filters to users"
-  completed: 1
+  completion_date: 2007-07-03
   work_units_est: 8
   created_by: system
   updated_by: system
@@ -10,7 +10,6 @@ add_filters:
 fix_problems:
   iteration: admin_view
   name: "Fix problems"
-  completed: 0
   work_units_est: 10
   created_by: system
   updated_by: system
@@ -19,7 +18,6 @@ fix_problems:
 lonely_story:
   iteration: admin_view
   name: "Lonely story"
-  completed: 0
   work_units_est: 2
   created_by: system
   updated_by: system

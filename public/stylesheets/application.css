@@ -84,6 +84,8 @@ input[type="text"] {
   padding: 0.2em; }
 input.numeric_entry {
   width: 3em; }
+input.long {
+  width: 50em; }
 
 input[type="password"] {
   border: 1px solid #444;
@@ -104,8 +106,8 @@ textarea {
   width: 40em;
   height: 4em; }
   textarea.big {
-    height: 30em;
-    width: 40em; }
+    width: 40em;
+    height: 15em; }
 
 .info-div {
   border: 1px solid #2e9410;
@@ -501,7 +503,8 @@ table.no_border td, table.no_border th {
 
 fieldset.subsection {
   margin-bottom: 1em;
-  border: 1px solid #45704D; }
+  border: 1px solid #45704D;
+  padding: 0.5em; }
 
 legend.subsection {
   color: #555;
