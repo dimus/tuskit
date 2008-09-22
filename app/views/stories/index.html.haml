@@ -29,6 +29,7 @@
   %b= @iteration.work_units_real
 
 = burndown_chart(@iteration.burndown, @iteration.work_units_planned)
+= velocity_chart(@project.velocity, @iteration.id)
 
 %fieldset.subsection
   %legend.subsection Stories/Tasks

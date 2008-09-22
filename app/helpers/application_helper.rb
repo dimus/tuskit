@@ -139,6 +139,43 @@ module ApplicationHelper
     {:controller  => "/sessions"}
   end
 
+  def velocity_chart(velocity_data, iteration_id = nil)
+    iterations = velocity_data.map {|vd| vd[:iteration_id]}
+    iter_index = iteration_id ? iterations.index(iteration_id) : iterations[-1]
+    start_index = iter_index >= 20 ? iter_index - 20 : 0
+    velocity_subset = velocity_data[start_index..iter_index]
+    dates = velocity_subset.map {|vs| vs[:start_date] + vs[:iteration_length].days}
+    velocities = velocity_subset.map {|vs| vs[:units]}
+
+    chart = '<img src="http://chart.apis.google.com/chart?'
+
+    #bars width, space between them and bar colors
+    bar_width = (iter_index - start_index) > 0 ? 200/(iter_index - start_index) : 200
+    chart += 'chbh=' + bar_width.to_s + ',0,4'
+    chart += '&amp;cht=bvg&amp;chco=CBE4C3'
+
+    #title
+    chart += '&amp;chtt=Project+Velocity'
+    chart += '&amp;chts=660000,15'
+    
+    # axis
+    chart += '&amp;chxt=y,x'
+    chart += '&amp;chxl=0:|' + velocities.sort[-1].to_s + '|1:|' + dates[0].to_s + '|' + dates[-1].to_s 
+    chart += '&amp;chxp=0,100|1,0,100' 
+    chart += '&amp;chxs=0,000000|1,000000'
+    chart += "&amp;chs=400x200"
+    chart += "&amp;chd=t:" + velocities.join(",")
+
+    #line
+    chart += '&amp;chm=D,45704D,0,0,4,1'
+      
+    chart += "&amp;chds=0," + velocities.sort[-1].to_s
+    
+    #alt name if gif is not shown
+    chart += '" alt="Project Velocity Graph is Broken?" />'
+    chart
+  end
+
   def burndown_chart(burndown_data, total_work_units)
     dates = burndown_data.map { |bd| bd[:date]}
     work_per_day = total_work_units/dates.size
@@ -161,13 +198,14 @@ module ApplicationHelper
 
     #legend
     chart += '&amp;chdl=units+left|reference'
+    chart += '&amp;chdlp=l'
 
     # axis
     chart += '&amp;chxt=y,x'
     chart += '&amp;chxl=0:|' + total_work_units.to_s + '|1:|' + dates[0].to_s + '|' + dates[-1].to_s 
     chart += '&amp;chxp=0,100|1,0,100' 
     chart += '&amp;chxs=0,000000|1,000000'
-    chart += "&amp;chs=" + (dates.size * 25 + 100).to_s + "x200"
+    chart += "&amp;chs=" + (dates.size * 25 + 150).to_s + "x200"
     chart += "&amp;chd=t:" + real.join(",")
     chart += "|" + perfect.join(",")
       

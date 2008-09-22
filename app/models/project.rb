@@ -63,5 +63,16 @@ class Project < ActiveRecord::Base
     end
     developers
   end
+
+  def velocity
+    data = []
+    all_iters = self.iterations.reverse
+    all_iters.each do |iteration|
+      iter_length = (iteration.end_date - iteration.start_date).to_i
+      normalized_units = iteration.work_units_real/(iter_length/self.iteration_length) rescue iteration.work_units_real
+      data << {:iteration_id => iteration.id, :iteration_length => iter_length, :start_date => iteration.start_date, :units => normalized_units}
+    end
+    data
+  end
   
 end
