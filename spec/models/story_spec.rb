@@ -2,9 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe Story do
   fixtures :projects, :iterations, :stories
-  before(:each) do
-    @iteration => :iterations(:admin_view)
-  end
 
   describe '.completed' do
     before do

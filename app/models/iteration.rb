@@ -49,7 +49,7 @@ class Iteration < ActiveRecord::Base
   def complete_tasks
     #finished tasks
     agile_tasks.find(:all, 
-      :conditions=>"completion_date is not null", 
+      :conditions=>"tasks.completion_date is not null", 
       :order=>"completion_date desc, updated_at desc")
   end
 

@@ -1,10 +1,11 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/stories" do
-  fixtures :iterations, :stories
+  fixtures :projects, :iterations, :stories
   
   before(:each) do
     @iteration = iterations(:admin_view)
+    assigns[:project] = @iteration.project
     assigns[:iteration] = @iteration
     assigns[:stories] = @iteration.stories
     assigns[:meetings] = @iteration.meetings

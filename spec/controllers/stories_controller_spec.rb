@@ -6,10 +6,14 @@ describe StoriesController do
     @user = mock_model(User)
     @project = mock_model(Project, :id => 1)
     @story_old = mock_model(Story)
+    @story_old2 = mock_model(Story)
     @meeting = mock_model(Meeting, :meeting_date => Date.today, :name => 'Iteration Meeting')
+    @meeting2 = mock_model(Meeting, :meeting_date => 20.days.ago, :name => 'Iteration Meeting')
     @iteration = mock_model(Iteration, :project => @project, :stories => [@story_old], :meetings => [@meeting])
+    @iteration2 = mock_model(Iteration, :project => @project, :stories => [@story_old2], :meetings => [@meeting2])
     @story = mock_model(Story, :iteration => @iteration)
     @story_old.stub!(:iteration).and_return(@iteration)
+    @project.stub!(:iterations).and_return([@iteration,@iteration2])
     Story.stub!(:new).and_return(@story)
     Iteration.stub!(:find).and_return(@iteration)
     controller.stub!(:current_user).and_return(@user)
@@ -18,7 +22,7 @@ describe StoriesController do
 
   describe ".index" do
     it "should load the index page for developer" do
-      @project.should_receive(:move_incomplete_stories_to_current_iteration).and_return(nil)
+      @project.should_receive(:copy_incomplete_stories_to_current_iteration).and_return(nil)
       @iteration.should_receive(:stories_prepare).and_return([@story])
       get "index", :iteration_id => @iteration.id
       response.should be_success

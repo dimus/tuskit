@@ -7,8 +7,9 @@ describe "/iteration/1/stories/2/edit" do
     @story = mock_model(Story, 
       :iteration      => @iteration, 
       :name           => 'Story Name', 
+      :description        => 'Story description',
       :work_units_est => '20',
-      :completed      => false,
+      :completion_date      => nil,
       :agile_tasks    => [])
     assigns[:story]     = @story
     assigns[:iteration] = @iteration
@@ -24,8 +25,8 @@ describe "/iteration/1/stories/2/edit" do
     render "/stories/edit"
     response.should have_tag("form[action=#{story_path(@story)}][method=post]") do
           with_tag('input#story_name[name=?]', "story[name]")
+          with_tag('textarea#story_description[name=?]', "story[description]")
           with_tag('input#story_work_units_est[name=?]', "story[work_units_est]")
-          with_tag('input#story_completed[name=?]', "story[completed]")
           with_tag('input[type=?]', "submit")
           
     end
