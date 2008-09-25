@@ -1,5 +1,5 @@
-- iteration_label = @iteration.current? ? "Current Iteration" : "Old Iteration"
-- iteration_label = "Future Iteration" if @iteration.start_date > Date.today
+- iteration_label = @iteration == @iteration.project.current_iteration ? "Current Iteration" : "Old Iteration"
+- iteration_label = "Future Iteration" if @iteration.start_date >= Date.today
 - days_left = @iteration.current? ? " (#{@iteration.days_left} #{@iteration.days_left == 1 ? "day" : "days"} left)" : ""
 %h1 
   = h("#{iteration_label} #{dates_interval(@iteration.start_date, @iteration.end_date)}#{days_left}")

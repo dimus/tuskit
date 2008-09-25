@@ -15,7 +15,7 @@ class Project < ActiveRecord::Base
   end
 
   def current_iteration 
-    self.iterations.select {|i| i.current?}.sort_by(&:start_date).last  
+    self.iterations.select {|i| i.current?}.sort_by(&:start_date).first
   end
   
   def current_iteration_resource
