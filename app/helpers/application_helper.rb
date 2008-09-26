@@ -164,7 +164,7 @@ module ApplicationHelper
     chart += '&amp;chxp=0,100|1,0,100' 
     chart += '&amp;chxs=0,000000|1,000000'
     chart += "&amp;chs=400x200"
-    chart += "&amp;chd=t:" + velocities.join(",")
+    chart += "&amp;chd=t:" + velocities.map {|x| format "%.1f", x}.join(",")
 
     #line
     chart += '&amp;chm=D,45704D,0,0,4,1'
@@ -206,8 +206,8 @@ module ApplicationHelper
     chart += '&amp;chxp=0,100|1,0,100' 
     chart += '&amp;chxs=0,000000|1,000000'
     chart += "&amp;chs=" + (dates.size * 25 + 150).to_s + "x200"
-    chart += "&amp;chd=t:" + real.join(",")
-    chart += "|" + perfect.join(",")
+    chart += "&amp;chd=t:" + real.map {|x| format "%.1f", x}.join(",")
+    chart += "|" + perfect.map {|x| format "%.1f", x}.join(",")
       
     chart += "&amp;chds=0," + total_work_units.to_s
     
