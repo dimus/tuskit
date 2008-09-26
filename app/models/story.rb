@@ -24,6 +24,7 @@ class Story < ActiveRecord::Base
     end
   end
 
+
   def agile_tasks_sorted
     unowned_bugs = []
     unowned = []
