@@ -30,7 +30,10 @@ $(function() {
     var originalBG = $(anchor).css("background-color"); 
     var highlightBG = "#ffe822";
     $.scrollTo(anchor, 1000, {offset:-150});
-    $(anchor).effect("pulsate",{},100).effect("highlight",{},3000);
+    $(anchor).animate({opacity: 1},500, 
+      function(){
+        $(anchor).effect("highlight",{},3000);
+      });
   }
 
 
