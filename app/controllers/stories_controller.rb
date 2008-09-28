@@ -58,7 +58,6 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if developer?
         if @story.save
-          flash[:notice] = 'Story was successfully created.'
           format.html { redirect_to(iteration_stories_url(@story.iteration, :anchor => "story_" + @story.id.to_s)) }
           format.xml  { render :xml => @story, :status => :created, :location => @story }
         else
@@ -79,7 +78,6 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if developer?
         if @story.update_attributes(params[:story])
-          flash[:notice] = 'Story was successfully updated.'
           format.html { redirect_to(iteration_stories_url(@story.iteration, :anchor => "story_" + @story.id.to_s)) }
           format.xml  { head :ok }
         else

@@ -24,6 +24,18 @@ $(function() {
 
   // Set info messages dissapear after 5 seconds
   $('#flash').animate({opacity: 1.0}, 5000).hide('slow')
+
+  //Toggle stories view
+  $('#toggle_stories').bind("click", 
+    function(e){
+      if ($('#toggle_stories a strong').text() == "Expand Stories") {
+        $('.agile_tasks').show();
+        $('#toggle_stories a strong').text("Collapse Stories");
+      } else {
+        $('.agile_tasks').hide();
+        $('#toggle_stories a strong').text("Expand Stories");
+      }
+    });
   
 });
 

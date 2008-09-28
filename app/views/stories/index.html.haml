@@ -33,8 +33,10 @@
 
 %fieldset.subsection
   %legend.subsection Stories/Tasks
-  %div{:style => "margin-bottom:1em"}= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration) 
-  
+  %div{:style => "margin-bottom:1em"}
+    %span= link_to '<strong>Add story</strong>', new_iteration_meeting_path(@iteration)
+    = "|"
+    %span#toggle_stories.hide_stories= link_to '<strong>Collapse Stories</strong>', "#toggle"
   - @stories.each do |story|
     .story{:id => "story_" + story.id.to_s}
       .story_title
@@ -53,8 +55,8 @@
             %thead
               %tr
                 %th Task Name
-                %th A bug
-                %th Completed
+                %th Bug?
+                %th Done
                 %th Owners
                 %th t.u.
                 %th{:colspan => "2"} Actions
@@ -63,11 +65,11 @@
               - td_style = (!task.completion_date? && task.task_owners.size > 0) ? "background-color: #efd7b5" : ""
               - td_class = task.completion_date? ? "task_complete" : "task_incomplete"
               %tr{:id => "task_" + task.id.to_s}
-                %td{:style => "width:20em; " + td_style, :class => td_class}= link_to_task task.name, task
-                %td{:style => td_style}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
-                %td{:style => td_style}= link_to_task((task.completion_date ? 'yes' : '-'), task)
+                %td{:style => "width:35em; " + td_style, :class => td_class}= link_to_task task.name, task
+                %td{:style => "width:2em; " + td_style}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
+                %td{:style => "width:2em; " + td_style}= link_to_task((task.completion_date ? 'yes' : '-'), task)
                 %td{:style => td_style}= link_to_task task_owners(task), task
-                %td{:style => td_style}= link_to_task((task.task_units ? task.task_units : '-'), task)
+                %td{:style => "width:2em; " + td_style}= link_to_task((task.task_units ? task.task_units : '-'), task)
                 %td{:style => td_style}= link_to_task('edit', task)
                 %td{:style => td_style}= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
 
