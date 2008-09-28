@@ -34,7 +34,7 @@
 %fieldset.subsection
   %legend.subsection Stories/Tasks
   %div{:style => "margin-bottom:1em"}
-    %span= link_to '<strong>Add story</strong>', new_iteration_meeting_path(@iteration)
+    %span= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration)
     = "|"
     %span#toggle_stories.hide_stories= link_to '<strong>Collapse Stories</strong>', "#toggle"
   - @stories.each do |story|
@@ -74,7 +74,7 @@
                 %td= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
 
   %div{:style => "margin-bottom:1em"}
-    %span= link_to '<strong>Add story</strong>', new_iteration_meeting_path(@iteration)
+    %span= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration)
 
 %fieldset.subsection
   %legend.subsection Meetings
