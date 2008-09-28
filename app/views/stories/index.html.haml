@@ -73,6 +73,8 @@
                 %td{:style => td_style}= link_to_task('edit', task)
                 %td{:style => td_style}= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
 
+  %div{:style => "margin-bottom:1em"}
+    %span= link_to '<strong>Add story</strong>', new_iteration_meeting_path(@iteration)
 
 %fieldset.subsection
   %legend.subsection Meetings

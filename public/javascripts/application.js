@@ -14,7 +14,16 @@ jQuery.fn.debug = jQuery.fn.dbg = function () {
 $(function() {
 
   //show dom element marked by an id anchor in url
-  $(document.location.hash).fadeOut("slow").fadeIn("slow").fadeOut("slow").fadeIn("slow")
+  /*var anchor = document.location.hash
+
+  if (anchor != "" && anchor.match(/^#(task|story)_[0-9]+$/)) {
+    
+    var originalBG = $(anchor).css("background-color"); 
+    var highlightBG = "#ffe822";
+    $(anchor)
+      .animate({backgroundColor:"#ff0000"}, 1500)
+      .animate({opacity: 1}, 1500);
+  }*/
 
   // Set focus on login text input for login
   $("input#login,input#user_login").focus();

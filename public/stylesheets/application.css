@@ -610,3 +610,7 @@ ul.collapsed {
   .popUp td {
     padding-right: 2em;
     vertical-align: top; }
+
+.recently_changed {
+  background-color: #ffe822;
+  color: #660000; }
