@@ -59,7 +59,7 @@ class AgileTasksController < ApplicationController
                TaskOwner.create(:user => User.find(uid.to_i), :agile_task => @agile_task, :created_by => current_user.login, :updated_by => current_user.login);
           end if params[:user_ids]
           flash[:notice] = "Task '#{@agile_task.name}' was successfully created."
-          format.html { redirect_to(iteration_stories_url(@agile_task.story.iteration_id)) }
+          format.html { redirect_to(iteration_stories_url(@agile_task.story.iteration_id, :anchor => "task_" + @agile_task.id.to_s)) }
           format.xml  { render :xml => @agile_task, :status => :created, :location => @agile_task }
         else
           format.html do 
@@ -100,7 +100,7 @@ class AgileTasksController < ApplicationController
           story = Story.find(@agile_task.story_id)
           iteration = story.iteration
           flash[:notice] = "Task '#{@agile_task.name}' was successfully updated."
-          format.html { redirect_to(iteration_stories_url(iteration)) }
+          format.html { redirect_to(iteration_stories_url(iteration,:anchor => "task_" + @agile_task.id.to_s)) }
           format.xml  { head :ok }
         else
           format.html do 

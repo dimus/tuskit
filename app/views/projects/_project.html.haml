@@ -1,0 +1,19 @@
+%table
+  %tr
+    %th Name
+    %td= form.text_field :name 
+  %tr
+    %th Description
+    %td= form.text_field :description 
+  %tr
+    %th Start Date
+    %td= form.date_select(:start_date) 
+  %tr
+    %th Iteration Length
+    %td
+      = form.text_field :iteration_length, :size => 2 
+      days
+  %tr
+    %th Send Progress Reports
+    %td= form.check_box :progress_reports 
+  %tr

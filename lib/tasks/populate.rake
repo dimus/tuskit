@@ -1,7 +1,9 @@
+#requires gems facets and populator. 
 namespace :db do
   desc "Erase and fill database"
   task :populate => :environment do
     require 'rubygems'
+    require 'facets'
     require 'populator'
     [Project, Iteration, Story, Task].each(&:delete_all)
     Project.populate 5..10 do |project|

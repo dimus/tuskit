@@ -69,7 +69,8 @@ class Project < ActiveRecord::Base
     all_iters = self.iterations.reverse
     all_iters.each do |iteration|
       iter_length = (iteration.end_date - iteration.start_date).to_i
-      normalized_units = iteration.work_units_real/(iter_length/self.iteration_length) rescue iteration.work_units_real
+      length_coef = self.iteration_length && self.iteration_length > 0 ? self.iteration_length.to_f/iter_length.to_f : 1.0
+      normalized_units = iteration.work_units_real * length_coef rescue iteration.work_units_real
       data << {:iteration_id => iteration.id, :iteration_length => iter_length, :start_date => iteration.start_date, :units => normalized_units}
     end
     data

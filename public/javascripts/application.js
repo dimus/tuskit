@@ -13,6 +13,9 @@ jQuery.fn.debug = jQuery.fn.dbg = function () {
 
 $(function() {
 
+  //show dom element marked by an id anchor in url
+  $(document.location.hash).fadeOut("slow").fadeIn("slow").fadeOut("slow").fadeIn("slow")
+
   // Set focus on login text input for login
   $("input#login,input#user_login").focus();
 

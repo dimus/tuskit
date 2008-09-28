@@ -150,7 +150,7 @@ module ApplicationHelper
     chart = '<img src="http://chart.apis.google.com/chart?'
 
     #bars width, space between them and bar colors
-    bar_width = (iter_index - start_index) > 0 ? 200/(iter_index - start_index) : 200
+    bar_width = (iter_index - start_index) > 0 ? 160/(iter_index - start_index) : 160
     chart += 'chbh=' + bar_width.to_s + ',0,4'
     chart += '&amp;cht=bvg&amp;chco=CBE4C3'
 
@@ -160,7 +160,7 @@ module ApplicationHelper
     
     # axis
     chart += '&amp;chxt=y,x'
-    chart += '&amp;chxl=0:|' + velocities.sort[-1].to_s + '|1:|' + dates[0].to_s + '|' + dates[-1].to_s 
+    chart += '&amp;chxl=0:|' + format("%.1f", velocities.sort[-1]) + '|1:|' + dates[0].to_s + '|' + dates[-1].to_s 
     chart += '&amp;chxp=0,100|1,0,100' 
     chart += '&amp;chxs=0,000000|1,000000'
     chart += "&amp;chs=400x200"
@@ -169,7 +169,7 @@ module ApplicationHelper
     #line
     chart += '&amp;chm=D,45704D,0,0,4,1'
       
-    chart += "&amp;chds=0," + velocities.sort[-1].to_s
+    chart += "&amp;chds=0," + format("%.1f", velocities.sort[-1])
     
     #alt name if gif is not shown
     chart += '" alt="Project Velocity Graph is Broken?" />'

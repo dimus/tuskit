@@ -33,10 +33,10 @@
 
 %fieldset.subsection
   %legend.subsection Stories/Tasks
-  = link_to 'Add story', new_iteration_story_path(@iteration) 
+  %div{:style => "margin-bottom:1em"}= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration) 
+  
   - @stories.each do |story|
-    - story.reload
-    .story
+    .story{:id => "story_" + story.id.to_s}
       .story_title
         %table.story_info
           %tr
@@ -47,7 +47,7 @@
             %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
             %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
       .agile_tasks
-        = link_to "<b>Add task</b>", new_story_agile_task_url(story)
+        = link_to "<strong>Add task</strong>", new_story_agile_task_url(story)
         - if !story.agile_tasks.empty?
           %table{:class => "data bordered"}
             %thead
@@ -62,7 +62,7 @@
             - story.agile_tasks_sorted.each do |task|
               - td_style = (!task.completion_date? && task.task_owners.size > 0) ? "background-color: #efd7b5" : ""
               - td_class = task.completion_date? ? "task_complete" : "task_incomplete"
-              %tr
+              %tr{:id => "task_" + task.id.to_s}
                 %td{:style => "width:20em; " + td_style, :class => td_class}= link_to_task task.name, task
                 %td{:style => td_style}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
                 %td{:style => td_style}= link_to_task((task.completion_date ? 'yes' : '-'), task)
