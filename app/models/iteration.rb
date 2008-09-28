@@ -11,6 +11,7 @@ class Iteration < ActiveRecord::Base
   
   def stories_prepare
     unfinished = []
+    active = []
     finished = []
     maybe_finished = []
     self.stories.each do |story|
@@ -25,11 +26,13 @@ class Iteration < ActiveRecord::Base
         finished << story
       elsif completed_all_tasks and self.current? #stories from old iterations cannot be finished
         maybe_finished << story
+      elsif story.active?
+        active << story
       else
         unfinished << story  
       end
     end
-    maybe_finished.sort_by(&:updated_at).reverse + unfinished.sort_by(&:updated_at).reverse + finished.sort_by(&:updated_at).reverse
+    maybe_finished.sort_by(&:created_at) + active.sort_by(&:created_at) + unfinished.sort_by(&:created_at) + finished.sort_by(&:created_at)
   end
   
   def work_units_real

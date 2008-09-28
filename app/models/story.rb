@@ -24,6 +24,15 @@ class Story < ActiveRecord::Base
     end
   end
 
+  def active?
+    self.agile_tasks.each do |t| 
+      if !t.completion_date && !t.task_owners.blank?
+        return true
+      end
+    end
+    return false
+  end
+
 
   def agile_tasks_sorted
     unowned_bugs = []
