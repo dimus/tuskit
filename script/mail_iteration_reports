@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+OPTIONS = {
+  :environment => "development",
+  :mark_emailed_reports => false,
+}
+
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: ruby #{script_name} [options]"
+
+  opts.separator ""
+
+  opts.on("-e", "--environment=name", String,
+          "Specifies the environment for the script to run.",
+          "Default: #{OPTIONS[:environment]}") {|OPTIONS[:environment]|}
+          
+          
+  opts.separator ""
+  
+  opts.on("-m", "--mark_emailed_reports", String,
+          "Marks processed reports as sent",
+          "Default: #{OPTIONS[:mark_emailed_reports]}") {|OPTIONS[:mark_emailed_reports]|}
+          
+          
+  opts.separator ""
+  opts.on("-h", "--help",
+          "Show this help message.") { puts opts; exit }
+
+  opts.parse!
+end
+
+ENV["RAILS_ENV"] = OPTIONS[:environment]
+require File.dirname(__FILE__) + "/../config/environment"
+require 'report_mailer'
+require 'project'
+require 'iteration'
+require 'report'
+
+projects=Project.find(:all, :conditions => ["progress_reports = 1"] )
+ 
+projects.each do |project|
+  iterations = project.iterations.find(:first, :conditions=>["end_date < ? and report_sent != 1", Time.now.strftime('%Y-%m-%d')], :order => "start_date")
+  iterations.each do |iteration|
+  if iteration and !iteration.report.recipients.blank?
+    iteration.report.recipients.each do
+    email=ReportMailer.create(iter.iteration_report)
+    ReportMailer.deliver(email)
+    if OPTIONS[:mark_emailed_reports]
+      iteration.report_sent = true
+      iteration.save
+    end
+  end
+end
+
+if OPTIONS[:environment] != 'production'
+  p ActionMailer::Base.deliveries[0].encoded.split('\n').join
+end
+
+
+
+
