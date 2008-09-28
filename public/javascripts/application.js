@@ -13,18 +13,9 @@ jQuery.fn.debug = jQuery.fn.dbg = function () {
 
 $(function() {
 
-  //show dom element marked by an id anchor in url
-  /*var anchor = document.location.hash
-
-  if (anchor != "" && anchor.match(/^#(task|story)_[0-9]+$/)) {
-    
-    var originalBG = $(anchor).css("background-color"); 
-    var highlightBG = "#ffe822";
-    $(anchor)
-      .animate({backgroundColor:"#ff0000"}, 1500)
-      .animate({opacity: 1}, 1500);
-  }*/
-
+  //anchor received from url (or empty string)
+  var anchor = document.location.hash
+  
   // Set focus on login text input for login
   $("input#login,input#user_login").focus();
 
@@ -33,6 +24,15 @@ $(function() {
 
   // Set info messages dissapear after 5 seconds
   $('#flash').animate({opacity: 1.0}, 5000).hide('slow')
+  
+  // highlights temporary and anchor for story or task
+  if (anchor != "" && anchor.match(/^#(task|story)_[0-9]+$/)) {
+    var originalBG = $(anchor).css("background-color"); 
+    var highlightBG = "#ffe822";
+    $.scrollTo(anchor, 1000, {offset:-150});
+    $(anchor).effect("pulsate",{},300).effect("highlight",{},3000);
+  }
+
 
   //Toggle stories view
   $('#toggle_stories').bind("click", 

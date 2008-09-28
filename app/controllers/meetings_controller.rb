@@ -8,7 +8,6 @@ class MeetingsController < ApplicationController
       :conditions => ["iteration_id = ?", params[:iteration_id]])
 
     respond_to do |format|
-      format.html # index.html.erb
       format.xml  { render :xml => @meetings }
     end
   end
@@ -19,7 +18,6 @@ class MeetingsController < ApplicationController
     @meeting = Meeting.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
       format.xml  { render :xml => @meeting }
     end
   end

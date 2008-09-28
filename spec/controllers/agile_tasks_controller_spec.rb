@@ -83,7 +83,7 @@ describe AgileTasksController do
 
     it "should redirect to iteration stories index" do
       post "create", :agile_task => @params
-      response.should redirect_to(iteration_stories_url(@iteration))
+      response.should redirect_to(iteration_stories_url(@iteration, :anchor => "task_" + @new_task.id.to_s))
     end
 
     it "should set complete_date to current_date if @params agile_task_completed exists" do
@@ -126,7 +126,7 @@ describe AgileTasksController do
 
     it "should redirect to iteration stories index" do
       put "update", :agile_task => @params, :id => @old_task.id
-      response.should redirect_to(iteration_stories_url(@iteration))
+      response.should redirect_to(iteration_stories_url(@iteration, :anchor => "task_" + @old_task.id.to_s))
     end
     
     it "should set complete_date to current_date if parameter task_completed exists" do

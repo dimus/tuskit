@@ -187,6 +187,8 @@ table {
       background: #fff; }
       table.data tr.even_row {
         background: #e0f2da; }
+      table.data tr.task_active {
+        background-color: #efd7b5; }
   table.valign_top {
     vertical-align: top; }
     table.valign_top td {

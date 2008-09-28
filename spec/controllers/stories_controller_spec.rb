@@ -58,7 +58,7 @@ describe StoriesController do
 
     it "should redirect to stories index" do
       post "create", :story => @params
-      response.should redirect_to(iteration_stories_url(@iteration))
+      response.should redirect_to(iteration_stories_url(@iteration, :anchor => "story_" + @story.id.to_s))
     end
   
   end
@@ -83,7 +83,7 @@ describe StoriesController do
 
     it "should redirect to iteration stories index" do
       put "update", :story => @params, :id => @story_old.id
-      response.should redirect_to(iteration_stories_url(@story_old.iteration))
+      response.should redirect_to(iteration_stories_url(@story_old.iteration, :anchor => "story_" + @story_old.id.to_s))
     end
 
   end
