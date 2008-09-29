@@ -18,9 +18,11 @@ class IterationsController < ApplicationController
   def show
     @iteration = Iteration.find(params[:id])
     @project = @iteration.project
+    collapse_stories ={:collapse =>  session["collapse_iteration_" + params[:id].to_s] ? true : false}
     respond_to do |format|
       format.html { redirect_to :controller => "stories", :action => "index", :iteration_id => @iteration.id }
       format.xml  { render :xml => @iteration.to_xml(:methods => [:daily_load,:work_units_real, :agile_tasks_number]) }
+      format.json { render :json => collapse_stories.to_json } 
     end
   end
 
@@ -41,6 +43,11 @@ class IterationsController < ApplicationController
   def edit
     @iteration = Iteration.find(params[:id])
     @project = @iteration.project
+  end
+
+  # GET /iterations/1/is_collapsed
+  def is_collapsed
+      
   end
 
   # POST /iterations
@@ -68,9 +75,11 @@ class IterationsController < ApplicationController
   # PUT /iterations/1.xml
   def update
     @iteration = Iteration.find(params[:id])
+    #remember collapsing state of stories
+    session["collapse_iteration_" + params[:id].to_s] = (params[:collapse] == "true") if params[:collapse]
 
     respond_to do |format|
-      if developer?
+      if developer? && params[:iteration]
         if @iteration.update_attributes(params[:iteration])
           flash[:notice] = 'Iteration was successfully updated.'
           format.html { redirect_to(project_iteration_url(@iteration.project,@iteration)) }
@@ -106,6 +115,7 @@ class IterationsController < ApplicationController
       end
     end      
   end
+
 protected
   def init
     @current_subtab = "Iterations"

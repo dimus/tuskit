@@ -204,6 +204,7 @@ table {
     border: 0; }
 
 .agile_tasks {
+  display: none;
   padding-left: 2em; }
 
 
