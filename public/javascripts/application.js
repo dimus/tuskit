@@ -34,16 +34,6 @@ $(function() {
       var msg = collapse ? "Expand Stories" : "Collapse Stories"
       collapse ? $('.agile_tasks').hide("slide",{},200) : $('.agile_tasks').show("slide",{},200);
       $('#toggle_stories a strong').text(msg);
-      // highlights temporary and anchor for story or task
-      if (anchor != "" && anchor.match(/^#(task|story)_[0-9]+$/)) {
-        var originalBG = $(anchor).css("background-color"); 
-        var highlightBG = "#ffe822";
-        $.scrollTo(anchor, 1000, {offset:-150});
-        $(anchor).animate({opacity: 1},500, 
-          function(){
-            $(anchor).effect("highlight",{},3000);
-          });
-      }
     }
 
     function saveCollapseState(collapse) {
@@ -54,10 +44,16 @@ $(function() {
       });
     }
 
-    // collapse or expand stories depending on state
-    $.getJSON("/iterations/" + path[2], function(json) {
-      json["collapse"] ? '' : collapse(false);
-    });
+    // highlights temporary and anchor for story or task
+    if (anchor != "" && anchor.match(/^#(task|story)_[0-9]+$/)) {
+      var originalBG = $(anchor).css("background-color"); 
+      var highlightBG = "#ffe822";
+      $.scrollTo(anchor, 1000, {offset:-150});
+      $(anchor).animate({opacity: 1},500, 
+        function(){
+          $(anchor).effect("highlight",{},3000);
+        });
+    }
 
     //Toggle stories view
     $('#toggle_stories').bind("click", 

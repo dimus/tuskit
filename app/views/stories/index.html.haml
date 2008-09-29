@@ -35,8 +35,9 @@
   %legend.subsection Stories/Tasks
   %div{:style => "margin-bottom:1em"}
     %span= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration)
-    = "|"
-    %span#toggle_stories.hide_stories= link_to '<strong>Expand Stories</strong>', "#toggle"
+    |
+    - collapse_stories_msg = @collapse_iteration ? '<strong>Expand Stories</strong>' : '<strong>Collapse Stories</strong>'
+    %span#toggle_stories.hide_stories= link_to collapse_stories_msg, "#toggle"
   - @stories.each do |story|
     .story{:id => "story_" + story.id.to_s}
       .story_title
@@ -48,7 +49,8 @@
             %td{:style => "width:5em"}==  (#{story.work_units_est} w.u.) 
             %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
             %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
-      .agile_tasks
+      - show_style = @collapse_iteration ? "display:none;" : "display:block"
+      .agile_tasks{:style => show_style}
         = link_to "<strong>Add task</strong>", new_story_agile_task_url(story)
         - if !story.agile_tasks.empty?
           %table{:class => "data bordered"}
