@@ -1,0 +1,53 @@
+%h1
+  Project "
+  = @project.name
+  ": Members
+- form_for(:project_members, :url => project_members_path) do |f|
+  = f.hidden_field :project_id, :value => @project.id
+  %table.valign_top
+    %tr
+      %td
+        %table.data.bordered{ :style => "width:30em" }
+          %thead
+            %tr
+              %th.top{ :style => "width:10em" }
+                Member
+              %th.top
+                Send reports
+              %th.top
+                Groups
+              %th.top
+                Action
+          %tbody
+            - @project_members.each do |pm|
+              %tr
+                %td
+                  = pm.user.full_name
+                %td
+                  = link_to((pm.send_iteration_report ? "yes" : "no"), project_member_url(pm.id, :project_member => {:send_iteration_report => pm.send_iteration_report ? 0 : 1}), :method => :put)
+                %td
+                  = pm.user.groups.map {|g| g.name}.join(", ")
+                %td
+                  = link_to "delete", project_member_path(pm), :method => :delete
+      %td{ :style => "vertical-align:middle;" }
+        %p
+          = submit_tag '&lt;-', {:style=>"font-size:1.4em"}
+      %td
+        %table.data.bordered{ :style => "width:30em" }
+          %thead
+            %tr
+              %th.top
+                Add
+              %th.top{ :style => "width:10em" }
+                User
+              %th.top
+                Groups
+          %tbody
+            - @project_non_members.each do |u|
+              %tr
+                %td
+                  %input{:id => "users_#{u.id}", :name => "users[]", :value => u.id, :type => "checkbox" }/
+                %td
+                  = u.full_name
+                %td
+                  = u.groups.map {|g| g.name}.join(", ")
