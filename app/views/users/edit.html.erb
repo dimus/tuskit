@@ -1,5 +1,0 @@
-<% form_for(:user, :url => user_path(@user), :html => { :method => :put}) do |f| -%>
-<%= f.hidden_field :id, :value => @user.id %>
-<%= render :partial => 'user', :locals => { :user => @user, :form => f} %>
-
-<% end -%>

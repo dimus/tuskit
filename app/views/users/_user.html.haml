@@ -1,0 +1,26 @@
+%table
+  %tr 
+    %th Login
+    %td= form.text_field :login 
+  %tr 
+    %th First Name
+    %td= form.text_field :first_name 
+  %tr 
+    %th Last Name
+    %td= form.text_field :last_name 
+  %tr 
+    %th Email
+    %td= form.text_field :email 
+  %tr 
+    %th Password
+    %td= form.password_field :password   
+  %tr 
+    %th Confirm Password
+    %td= form.password_field :password_confirmation 
+%br/
+%h4>Check all roles which apply:</h4>
+- Group.find(:all).each do |group|
+  %input{:type => "checkbox", :name => "groups[]", :id => "groups_#{group.id}", :value => group.id, :checked => (user && user.groups.include?(group))}/
+  %label{:for => "groups_#{group.id}"}
+    = group.name
+%p= submit_tag 'Save'

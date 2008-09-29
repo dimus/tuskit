@@ -24,9 +24,6 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     usr = prepare_user(@user);
     respond_to do |format|
-      format.html {
-        
-      }
       format.xml  { render :xml => usr.to_xml }
     end
   end

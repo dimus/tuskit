@@ -12,7 +12,6 @@ class MembershipsController < ApplicationController
     end    
 
     respond_to do |format|
-      format.html # index.erb
       format.xml  { render :xml => @memberships.to_xml }
     end
   end
@@ -23,7 +22,6 @@ class MembershipsController < ApplicationController
     @membership = Membership.find(params[:id])
 
     respond_to do |format|
-      format.html # show.erb
       format.xml  { render :xml => @membership.to_xml }
     end
   end
@@ -46,10 +44,8 @@ class MembershipsController < ApplicationController
     respond_to do |format|
       if @membership.save
         flash[:notice] = 'Membership was successfully created.'
-        format.html { redirect_to membership_url(@membership) }
         format.xml  { head :created, :location => membership_url(@membership) }
       else
-        format.html { render :action => "new" }
         format.xml  { render :xml => @membership.errors.to_xml }
       end
     end
@@ -63,10 +59,8 @@ class MembershipsController < ApplicationController
     respond_to do |format|
       if @membership.update_attributes(params[:membership])
         flash[:notice] = 'Membership was successfully updated.'
-        format.html { redirect_to membership_url(@membership) }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
         format.xml  { render :xml => @membership.errors.to_xml }
       end
     end
@@ -79,7 +73,6 @@ class MembershipsController < ApplicationController
     @membership.destroy
 
     respond_to do |format|
-      format.html { redirect_to memberships_url }
       format.xml  { head :ok }
     end
   end
