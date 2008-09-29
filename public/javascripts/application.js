@@ -54,10 +54,9 @@ $(function() {
       });
     }
 
-    
     // collapse or expand stories depending on state
     $.getJSON("/iterations/" + path[2], function(json) {
-      json["collapse"] ? collapse(true) : collapse(false);
+      json["collapse"] ? '' : collapse(false);
     });
 
     //Toggle stories view
