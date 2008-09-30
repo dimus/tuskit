@@ -67,11 +67,11 @@ class ProjectMembersController < ApplicationController
                 success = false              
               end
             end  
-          end
-          if success
-            flash[:notice] = "#{@project_member.user.full_name} is assigned to project #{@project.name}"
-          else
-            flash[:error] = "Could not assign project membership"
+            if success
+              flash[:notice] = "#{@project_member.user.full_name} is assigned to project #{@project.name}"
+            else
+              flash[:error] = "Could not assign project membership"
+            end
           end
             redirect_to project_project_members_url(@project)
         end
