@@ -48,7 +48,10 @@
               %b= h story.name
             %td{:style => "width:5em"}==  (#{h story.work_units_est} w.u.) 
             %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
-            %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
+            %td{:style => "width:7em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
+            %td{:style => "width:1em"}= link_to "<", story_url(story, "story[iteration_id]" => @previous_iteration.id), :method => "put", :confirm => "Story will be moved to the previous iteration" if @previous_iteration
+            %td{:style => "width:0em"}= "iteration" if @previous_iteration || @next_iteration
+            %td{:style => "width:1em"}= link_to ">", story_url(story, "story[iteration_id]" => @next_iteration.id), :method => "put", :confirm => "Story will be moved to the next iteration" if @next_iteration
       - show_style = @collapse_iteration ? "display:none;" : "display:block"
       .agile_tasks{:style => show_style}
         = link_to "<strong>Add task</strong>", new_story_agile_task_url(story)
