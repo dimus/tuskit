@@ -11,7 +11,7 @@ class StoriesController < ApplicationController
     all_iters = @project.iterations.reverse
     iter_index = all_iters.index @iteration
     @previous_iteration = (iter_index > 0)  ? all_iters[iter_index - 1] : nil
-    @next_iteration = (iter_index != (iter_index.size - 1)) ? all_iters[iter_index + 1] : nil
+    @next_iteration = (iter_index != (all_iters.size - 1)) ? all_iters[iter_index + 1] : nil
     @collapse_iteration = session["collapse_iteration_" + @iteration.id.to_s] ? true : false
     respond_to do |format|
       format.html # index.html.erb

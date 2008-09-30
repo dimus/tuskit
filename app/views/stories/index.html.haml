@@ -18,15 +18,15 @@
 
 %p
   %b Objectives:
-  = (@iteration.objectives.strip == "") ? "N/A" : @iteration.objectives
+  = @iteration.objectives.strip == "" ? "N/A" : h(@iteration.objectives)
 %p
   %b Work units:
   Limit: 
-  %b= @iteration.work_units
+  %b= h @iteration.work_units
   , Planned: 
-  %b= @iteration.work_units_planned
+  %b= h @iteration.work_units_planned
   , Done: 
-  %b= @iteration.work_units_real
+  %b= h @iteration.work_units_real
 
 = burndown_chart(@iteration.burndown, @iteration.work_units_planned)
 = velocity_chart(@project.velocity, @iteration.id)
@@ -45,8 +45,8 @@
           %tr
             %td{:style => "width:8em"}= story_completion(story)
             %td{:style => "width:25em"}
-              %b= story.name
-            %td{:style => "width:5em"}==  (#{story.work_units_est} w.u.) 
+              %b= h story.name
+            %td{:style => "width:5em"}==  (#{h story.work_units_est} w.u.) 
             %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
             %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
       - show_style = @collapse_iteration ? "display:none;" : "display:block"
@@ -67,16 +67,24 @@
               - tr_class = (!task.completion_date? && task.task_owners.size > 0) ? "task_active" : "task_inactive"
               - td_class = task.completion_date? ? "task_complete" : "task_incomplete"
               %tr{:id => "task_" + task.id.to_s, :class => tr_class}
-                %td{:style => "width:35em;", :class => td_class}= link_to_task task.name, task
+                %td{:style => "width:35em;", :class => td_class}= link_to_task h(task.name), task
                 %td{:style => "width:2em;"}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
                 %td{:style => "width:2em;"}= link_to_task((task.completion_date ? 'yes' : '-'), task)
                 %td= link_to_task task_owners(task), task
-                %td{:style => "width:2em;"}= link_to_task((task.task_units ? task.task_units : '-'), task)
+                %td{:style => "width:2em;"}= link_to_task((task.task_units ? h(task.task_units) : '-'), task)
                 %td= link_to_task('edit', task)
                 %td= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
 
   %div{:style => "margin-bottom:1em"}
     %span= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration)
+    %p
+      %b Work units:
+      Limit: 
+      %b= h @iteration.work_units
+      , Planned: 
+      %b= h @iteration.work_units_planned
+      , Done: 
+      %b= h @iteration.work_units_real
 
 %fieldset.subsection
   %legend.subsection Meetings
@@ -95,9 +103,9 @@
         - @meetings.each do |meeting|
           %tr
             %td= link_to format_date(meeting.meeting_date), edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to meeting.name, edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to participants(meeting), edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to h meeting.name, edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to h meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to h participants(meeting), edit_iteration_meeting_path(@iteration, meeting)
             %td= link_to 'edit', edit_iteration_meeting_path(@iteration, meeting)
             %td= link_to 'delete', iteration_meeting_url(@iteration, meeting), :confirm => 'Are you sure?', :method => :delete
 
