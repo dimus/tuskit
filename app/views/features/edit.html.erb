@@ -1,0 +1,28 @@
+<h1>Editing feature</h1>
+
+<% form_for(@feature) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.label :milestone %><br />
+    <%= f.text_field :milestone %>
+  </p>
+  <p>
+    <%= f.label :completion_date %><br />
+    <%= f.date_select :completion_date %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @feature %> |
+<%= link_to 'Back', features_path %>

@@ -2,12 +2,12 @@
   
   = f.hidden_field :iteration_id, :value => iteration.id
 
-  %p
+  .form_client
     %b Name
     %br/
     = f.text_field :name
 
-  %p
+  .form_client
     %b Meeting date
     %br/
     = f.date_select :meeting_date
@@ -19,14 +19,14 @@
         %input{:type => "checkbox", :name => "users[]", :id => "users_" + participant.user.id.to_s, :value => participant.user.id, :checked => meeting.meeting_participants.map { |mp| mp.user }.include?(participant.user)}   
         %label{:for => "users_" + participant.user.id.to_s } 
           = participant.user.full_name
-  %p
+  .form_client
     %b Length (hours)
     %br/
     = f.text_field :length
 
-  %p
+  .form_client
     %b Notes
     %br/
     = f.text_area :notes, :class => "big"
-  %p
+  .form_client
     = f.submit button

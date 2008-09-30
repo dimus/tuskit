@@ -55,6 +55,7 @@ module ApplicationHelper
       subtabs = [ 
           ["Project", edit_project_url(project_id)], 
           ["Members", project_project_members_url(project_id)],
+          ["Milestones", project_milestones_url(project_id)],
           ["Iterations", project_iterations_url(project_id)],
           ["Reports", project_reports_url(project_id)]
         ]

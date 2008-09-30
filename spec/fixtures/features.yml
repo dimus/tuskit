@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+add_authentication:
+  name: Create authentication system
+  description: Admin should be authenticated and authorized to do admin stuff
+  milestone: admin_view
+  completion_date: 2008-09-30
+
+add_login:
+  name: Users should be able to login to the site
+  description: Login to the site
+  milestone: admin_view
+  completion_date: nil

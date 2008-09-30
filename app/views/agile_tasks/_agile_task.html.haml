@@ -1,17 +1,17 @@
 - form_for(agile_task) do |f|
-  %p
+  .form_client
     = f.hidden_field :story_id, :value => story.id
-  /%p
+  /.form_client
   /  %b Tracker ticket
   /  %br/
   /  = f.text_field :tracker_ticket_id
   /
-  /%p
+  /.form_client
   /  %b Tracker ticket submitter
   /  %br/
   /  = f.text_field :tracker_ticket_submitter
   /
-  %p
+  .form_client
     - if !agile_task.completion_date
       == <input type="checkbox" name="task_completed" id="task_completed" value = "1" /><input type="hidden" name="task_completed" value = "0" />
       %label{:for => "task_completed"} 
@@ -23,21 +23,21 @@
       %label{:for => "task_not_completed"} 
         %b Make not completed)
 
-  %p
+  .form_client
     %b Name
     %br/
     = f.text_field :name, :class => "long"
 
-  %p
+  .form_client
     = f.check_box :bug
     %label{:for => "agile_task_bug"} 
       %b Is it a bug fix?
 
 
-  %p
+  .form_client
     = drawer("task_users", "Add/Delete Task Owners", developers_list(story, agile_task), task_developers(agile_task), agile_task.task_owners.empty?)
 
-  %p
+  .form_client
     %b Notes
     %br/
     = f.text_area :notes, :class => "big"
@@ -47,5 +47,5 @@
     .help_info Estimation of time in hours required to finish the task
     = f.text_field :task_units, :class => "numeric_entry"
 
-  %p
+  .form_client
     = f.submit button

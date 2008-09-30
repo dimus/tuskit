@@ -1,5 +1,6 @@
 class Story < ActiveRecord::Base
   belongs_to :iteration
+  belongs_to :feature
   has_many :agile_tasks
   
   validates_presence_of :name

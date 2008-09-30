@@ -2,19 +2,19 @@
 
   = f.hidden_field :iteration_id, :value => iteration.id
 
-  %p
+  .form_client
     %b Name
     %br/
     = f.text_field :name, :class => "long"
 
-  %p
+  .form_client
     %b Description
     %br/
     = f.text_area :description, :class => "big"
 
-  %p
-    %b Work units est
+  .form_client
     %br/
+    Work units est
     = f.text_field :work_units_est, :class => "numeric_entry"
-  %p
+  .form_client
     = f.submit button

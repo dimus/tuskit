@@ -7,6 +7,7 @@ class Project < ActiveRecord::Base
   has_many :iterations, :order => "start_date desc"
   has_many :stories, :through => :iterations
   has_many :project_tasks
+  has_many :milestones
   
   validates_presence_of :name
  

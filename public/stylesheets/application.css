@@ -617,3 +617,6 @@ ul.collapsed {
 .recently_changed {
   background-color: #ffe822;
   color: #660000; }
+
+.form_client {
+  margin-bottom: 1em; }

@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+admin_view:
+  project: tuskit
+  name: Create Admin Interface
+  description: Admin needs a place to enter data
+  deadline: 2008-09-30
+  completion_date: 2008-09-29
+
+developer_view:
+  project: tuskit
+  name: Create Developer Interface
+  description: Developer needs a place to enter data
+  deadline: 2008-09-30
+  completion_date: null

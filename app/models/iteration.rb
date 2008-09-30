@@ -1,6 +1,7 @@
 require 'task'
 class Iteration < ActiveRecord::Base
   belongs_to :project
+  belongs_to :features
   has_many :meetings
   has_many :stories, :order => "created_at desc"
   has_many :agile_tasks, :through => :stories
