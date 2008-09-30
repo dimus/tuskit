@@ -45,7 +45,7 @@
           %tr
             %td{:style => "width:8em"}= story_completion(story)
             %td{:style => "width:25em"}
-              %b= story.name.capitalize
+              %b= story.name
             %td{:style => "width:5em"}==  (#{story.work_units_est} w.u.) 
             %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
             %td{:style => "width:3em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"

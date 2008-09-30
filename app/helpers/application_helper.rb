@@ -193,7 +193,7 @@ module ApplicationHelper
     chart += 'chbh=10,0,4&amp;cht=bvg&amp;chco=45704D,CBE4C3'
     
     #title
-    chart += '&amp;chtt=Iteration+Burndown'
+    chart += '&amp;chtt=Iteration+Burn-down'
     chart += '&amp;chts=660000,15'
 
     #legend

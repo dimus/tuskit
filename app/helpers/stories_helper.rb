@@ -40,9 +40,9 @@ module StoriesHelper
       link_text = '<span class="story_button story_to_close">Done?</span>'
     else
       msg = story.iteration.current? ? 'To do' : 'Unfinished' 
-      return "<span class=\"story_button story_todo\">#{msg}</span>"
+      link_text = "<span class=\"story_button story_todo\">#{msg}</span>"
     end
-    link_to link_text, iteration_story_url(story.iteration_id, story.id, :story => {:completed => story.completed ? 0 : 1}), :method => :put, :confirm => story.completed ? "Mark '#{story.name}' as not completed?" : "Mark story '#{story.name}' as completed?"
+    link_to link_text, iteration_story_url(story.iteration_id, story.id, :story => {:completion_date => story.completed ? nil : Date.today.to_s}), :method => :put, :confirm => story.completed ? "Mark '#{story.name}' as not completed?" : "Mark story '#{story.name}' as completed?"
   end
 
 end

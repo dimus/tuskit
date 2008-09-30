@@ -9,10 +9,12 @@
     %b Start date
     %br/
     = f.date_select :start_date
+    = iteration.start_date.strftime "%a" if iteration.start_date
   %p
     %b End date
     %br/
     = f.date_select :end_date
+    = iteration.end_date.strftime "%a" if iteration.end_date
   %p
     %b Work units
     %br/
