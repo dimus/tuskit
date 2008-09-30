@@ -63,7 +63,6 @@ class MilestonesController < ApplicationController
   def update
     @milestone = Milestone.find(params[:id])
     @milestone.deadline = nil unless params[:show_deadline]
-
     respond_to do |format|
       if @milestone.update_attributes(params[:milestone])
         flash[:notice] = 'Milestone was successfully updated.'

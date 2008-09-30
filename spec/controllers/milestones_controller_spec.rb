@@ -113,7 +113,6 @@ describe MilestonesController do
         post :create, :milestone => {:these => "params"} #, :show_deadline => 1
         assigns(:milestone).should equal(mock_milestone)
       end
-      
     end
     
     describe "with invalid params" do

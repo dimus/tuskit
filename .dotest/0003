@@ -1,0 +1,1569 @@
+From 0bc5cccdd79e428a35ac26a1f2f9899a09038fc6 Mon Sep 17 00:00:00 2001
+From: Dmitry Mozzherin <dmozzherin@gmail.com>
+Date: Tue, 30 Sep 2008 17:22:22 -0400
+Subject: create milestones and features scaffolds and adjust it for web
+
+---
+ app/controllers/features_controller.rb             |   85 +++++++++
+ app/controllers/milestones_controller.rb           |   98 ++++++++++
+ app/helpers/application_helper.rb                  |    1 +
+ app/helpers/features_helper.rb                     |    2 +
+ app/helpers/milestones_helper.rb                   |    2 +
+ app/models/feature.rb                              |    7 +
+ app/models/iteration.rb                            |    1 +
+ app/models/milestone.rb                            |   10 +
+ app/models/project.rb                              |    1 +
+ app/models/story.rb                                |    1 +
+ app/views/agile_tasks/_agile_task.html.haml        |   18 +-
+ app/views/features/edit.html.erb                   |   28 +++
+ app/views/features/index.html.erb                  |   26 +++
+ app/views/features/new.html.erb                    |   27 +++
+ app/views/features/show.html.erb                   |   23 +++
+ app/views/iterations/_iteration.html.haml          |   10 +-
+ app/views/meetings/_meeting.html.haml              |   10 +-
+ app/views/milestones/edit.html.erb                 |   28 +++
+ app/views/milestones/index.html.erb                |   26 +++
+ app/views/milestones/new.html.erb                  |   27 +++
+ app/views/milestones/show.html.erb                 |   23 +++
+ app/views/stories/_story.html.haml                 |   10 +-
+ config/routes.rb                                   |    6 +-
+ db/migrate/20080930174700_create_milestones.rb     |   17 ++
+ db/migrate/20080930174858_create_features.rb       |   16 ++
+ .../20080930174948_story_add_feature_reference.rb  |   11 ++
+ ...80930181248_iteration_add_feature_references.rb |   13 ++
+ public/stylesheets/application.css                 |    3 +
+ public/stylesheets/sass/application.sass           |    3 +
+ spec/controllers/features_controller_spec.rb       |  180 +++++++++++++++++++
+ spec/controllers/features_routing_spec.rb          |   61 +++++++
+ spec/controllers/milestones_controller_spec.rb     |  186 ++++++++++++++++++++
+ spec/controllers/milestones_routing_spec.rb        |   61 +++++++
+ spec/fixtures/features.yml                         |   13 ++
+ spec/fixtures/milestones.yml                       |   15 ++
+ spec/helpers/features_helper_spec.rb               |   11 ++
+ spec/helpers/milestones_helper_spec.rb             |   11 ++
+ spec/models/feature_spec.rb                        |   25 +++
+ spec/models/milestone_spec.rb                      |   40 +++++
+ 39 files changed, 1111 insertions(+), 25 deletions(-)
+ create mode 100644 app/controllers/features_controller.rb
+ create mode 100644 app/controllers/milestones_controller.rb
+ create mode 100644 app/helpers/features_helper.rb
+ create mode 100644 app/helpers/milestones_helper.rb
+ create mode 100644 app/models/feature.rb
+ create mode 100644 app/models/milestone.rb
+ create mode 100644 app/views/features/edit.html.erb
+ create mode 100644 app/views/features/index.html.erb
+ create mode 100644 app/views/features/new.html.erb
+ create mode 100644 app/views/features/show.html.erb
+ create mode 100644 app/views/milestones/edit.html.erb
+ create mode 100644 app/views/milestones/index.html.erb
+ create mode 100644 app/views/milestones/new.html.erb
+ create mode 100644 app/views/milestones/show.html.erb
+ create mode 100644 db/migrate/20080930174700_create_milestones.rb
+ create mode 100644 db/migrate/20080930174858_create_features.rb
+ create mode 100644 db/migrate/20080930174948_story_add_feature_reference.rb
+ create mode 100644 db/migrate/20080930181248_iteration_add_feature_references.rb
+ create mode 100644 spec/controllers/features_controller_spec.rb
+ create mode 100644 spec/controllers/features_routing_spec.rb
+ create mode 100644 spec/controllers/milestones_controller_spec.rb
+ create mode 100644 spec/controllers/milestones_routing_spec.rb
+ create mode 100644 spec/fixtures/features.yml
+ create mode 100644 spec/fixtures/milestones.yml
+ create mode 100644 spec/helpers/features_helper_spec.rb
+ create mode 100644 spec/helpers/milestones_helper_spec.rb
+ create mode 100644 spec/models/feature_spec.rb
+ create mode 100644 spec/models/milestone_spec.rb
+
+diff --git a/app/controllers/features_controller.rb b/app/controllers/features_controller.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..fb5581922045c0566fcdd32b6206d4a57a0ac161
+--- /dev/null
++++ b/app/controllers/features_controller.rb
+@@ -0,0 +1,85 @@
++class FeaturesController < ApplicationController
++  # GET /features
++  # GET /features.xml
++  def index
++    @features = Feature.find(:all)
++
++    respond_to do |format|
++      format.html # index.html.erb
++      format.xml  { render :xml => @features }
++    end
++  end
++
++  # GET /features/1
++  # GET /features/1.xml
++  def show
++    @feature = Feature.find(params[:id])
++
++    respond_to do |format|
++      format.html # show.html.erb
++      format.xml  { render :xml => @feature }
++    end
++  end
++
++  # GET /features/new
++  # GET /features/new.xml
++  def new
++    @feature = Feature.new
++
++    respond_to do |format|
++      format.html # new.html.erb
++      format.xml  { render :xml => @feature }
++    end
++  end
++
++  # GET /features/1/edit
++  def edit
++    @feature = Feature.find(params[:id])
++  end
++
++  # POST /features
++  # POST /features.xml
++  def create
++    @feature = Feature.new(params[:feature])
++
++    respond_to do |format|
++      if @feature.save
++        flash[:notice] = 'Feature was successfully created.'
++        format.html { redirect_to(@feature) }
++        format.xml  { render :xml => @feature, :status => :created, :location => @feature }
++      else
++        format.html { render :action => "new" }
++        format.xml  { render :xml => @feature.errors, :status => :unprocessable_entity }
++      end
++    end
++  end
++
++  # PUT /features/1
++  # PUT /features/1.xml
++  def update
++    @feature = Feature.find(params[:id])
++
++    respond_to do |format|
++      if @feature.update_attributes(params[:feature])
++        flash[:notice] = 'Feature was successfully updated.'
++        format.html { redirect_to(@feature) }
++        format.xml  { head :ok }
++      else
++        format.html { render :action => "edit" }
++        format.xml  { render :xml => @feature.errors, :status => :unprocessable_entity }
++      end
++    end
++  end
++
++  # DELETE /features/1
++  # DELETE /features/1.xml
++  def destroy
++    @feature = Feature.find(params[:id])
++    @feature.destroy
++
++    respond_to do |format|
++      format.html { redirect_to(features_url) }
++      format.xml  { head :ok }
++    end
++  end
++end
+diff --git a/app/controllers/milestones_controller.rb b/app/controllers/milestones_controller.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..7956e3defc66ce7a0f7e9448e431af5bfbca9676
+--- /dev/null
++++ b/app/controllers/milestones_controller.rb
+@@ -0,0 +1,98 @@
++class MilestonesController < ApplicationController
++  layout "user"
++
++  before_filter :project_find
++  
++  # GET /milestones
++  # GET /milestones.xml
++  def index
++    @milestones = @project.milestones
++
++    respond_to do |format|
++      format.html # index.html.erb
++      format.xml  { render :xml => @milestones }
++    end
++  end
++
++  # GET /milestones/1
++  # GET /milestones/1.xml
++  def show
++    @milestone = Milestone.find(params[:id])
++
++    respond_to do |format|
++      format.html # show.html.erb
++      format.xml  { render :xml => @milestone }
++    end
++  end
++
++  # GET /milestones/new
++  # GET /milestones/new.xml
++  def new
++    @milestone = Milestone.new
++
++    respond_to do |format|
++      format.html # new.html.erb
++      format.xml  { render :xml => @milestone }
++    end
++  end
++
++  # GET /milestones/1/edit
++  def edit
++    @milestone = Milestone.find(params[:id])
++  end
++
++  # POST /milestones
++  # POST /milestones.xml
++  def create
++    @milestone = Milestone.new(params[:milestone])
++
++    respond_to do |format|
++      if @milestone.save
++        flash[:notice] = 'Milestone was successfully created.'
++        format.html { redirect_to(@milestone) }
++        format.xml  { render :xml => @milestone, :status => :created, :location => @milestone }
++      else
++        format.html { render :action => "new" }
++        format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
++      end
++    end
++  end
++
++  # PUT /milestones/1
++  # PUT /milestones/1.xml
++  def update
++    @milestone = Milestone.find(params[:id])
++
++    respond_to do |format|
++      if @milestone.update_attributes(params[:milestone])
++        flash[:notice] = 'Milestone was successfully updated.'
++        format.html { redirect_to(@milestone) }
++        format.xml  { head :ok }
++      else
++        format.html { render :action => "edit" }
++        format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
++      end
++    end
++  end
++
++  # DELETE /milestones/1
++  # DELETE /milestones/1.xml
++  def destroy
++    @milestone = Milestone.find(params[:id])
++    @milestone.destroy
++
++    respond_to do |format|
++      format.html { redirect_to(project_milestones_url(@project)) }
++      format.xml  { head :ok }
++    end
++  end
++
++protected
++  def init
++    @current_subtab = "Milestones"
++  end
++
++  def project_find
++    @project = params[:project_id] ? Project.find(params[:project_id]) : nil
++  end
++end
+diff --git a/app/helpers/application_helper.rb b/app/helpers/application_helper.rb
+index bba96fc77f14c362a2661ce1358715b12d208b99..c3616c48bb35f0b2fe02141f85bbcb2829b55642 100644
+--- a/app/helpers/application_helper.rb
++++ b/app/helpers/application_helper.rb
+@@ -55,6 +55,7 @@ module ApplicationHelper
+       subtabs = [ 
+           ["Project", edit_project_url(project_id)], 
+           ["Members", project_project_members_url(project_id)],
++          ["Milestones", project_milestones_url(project_id)],
+           ["Iterations", project_iterations_url(project_id)],
+           ["Reports", project_reports_url(project_id)]
+         ]
+diff --git a/app/helpers/features_helper.rb b/app/helpers/features_helper.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a5e6b20fcac9d154c55f4a67e9b883b4c2a73fe
+--- /dev/null
++++ b/app/helpers/features_helper.rb
+@@ -0,0 +1,2 @@
++module FeaturesHelper
++end
+diff --git a/app/helpers/milestones_helper.rb b/app/helpers/milestones_helper.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..8093dec38540072684c02c20b2aa71450242afae
+--- /dev/null
++++ b/app/helpers/milestones_helper.rb
+@@ -0,0 +1,2 @@
++module MilestonesHelper
++end
+diff --git a/app/models/feature.rb b/app/models/feature.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..60fce0986a70bc6748f205b2313a6c823b8cfc6e
+--- /dev/null
++++ b/app/models/feature.rb
+@@ -0,0 +1,7 @@
++class Feature < ActiveRecord::Base
++  belongs_to :milestone
++  has_many :stories
++  has_many :iterations
++
++  validates_presence_of :name
++end
+diff --git a/app/models/iteration.rb b/app/models/iteration.rb
+index 42da9a4b13829fa10338eb237e5f3e3c7c911bdd..eb231a49a62dfd3e8db5c634235f6706c657820e 100644
+--- a/app/models/iteration.rb
++++ b/app/models/iteration.rb
+@@ -1,6 +1,7 @@
+ require 'task'
+ class Iteration < ActiveRecord::Base
+   belongs_to :project
++  belongs_to :features
+   has_many :meetings
+   has_many :stories, :order => "created_at desc"
+   has_many :agile_tasks, :through => :stories
+diff --git a/app/models/milestone.rb b/app/models/milestone.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..ec20424d1d471fb53527092d273c58dcc07476cf
+--- /dev/null
++++ b/app/models/milestone.rb
+@@ -0,0 +1,10 @@
++class Milestone < ActiveRecord::Base
++  belongs_to :project
++  has_many :features
++
++  validates_presence_of :name
++
++  def self.current
++    Milestone.find(:first, :conditions => "completion_date is null")
++  end
++end
+diff --git a/app/models/project.rb b/app/models/project.rb
+index 716c18dbcdf5509edb5b32c1af3a3c0c902b2ffc..af4ab9abd84d331a6953820a14cbd9a6ed00b7ce 100644
+--- a/app/models/project.rb
++++ b/app/models/project.rb
+@@ -7,6 +7,7 @@ class Project < ActiveRecord::Base
+   has_many :iterations, :order => "start_date desc"
+   has_many :stories, :through => :iterations
+   has_many :project_tasks
++  has_many :milestones
+   
+   validates_presence_of :name
+  
+diff --git a/app/models/story.rb b/app/models/story.rb
+index ed7a1a93b18f512145ebd6bd6e66f4de6ee96837..8cfe6adcc03cad2232d86f1a5a3e6aeccaab0234 100644
+--- a/app/models/story.rb
++++ b/app/models/story.rb
+@@ -1,5 +1,6 @@
+ class Story < ActiveRecord::Base
+   belongs_to :iteration
++  belongs_to :feature
+   has_many :agile_tasks
+   
+   validates_presence_of :name
+diff --git a/app/views/agile_tasks/_agile_task.html.haml b/app/views/agile_tasks/_agile_task.html.haml
+index 1a045303c6550d032c85e2eb2897496944e7d531..4a06ed963d197f02eea9dfbe87f958b5839e2c8f 100644
+--- a/app/views/agile_tasks/_agile_task.html.haml
++++ b/app/views/agile_tasks/_agile_task.html.haml
+@@ -1,17 +1,17 @@
+ - form_for(agile_task) do |f|
+-  %p
++  .form_client
+     = f.hidden_field :story_id, :value => story.id
+-  /%p
++  /.form_client
+   /  %b Tracker ticket
+   /  %br/
+   /  = f.text_field :tracker_ticket_id
+   /
+-  /%p
++  /.form_client
+   /  %b Tracker ticket submitter
+   /  %br/
+   /  = f.text_field :tracker_ticket_submitter
+   /
+-  %p
++  .form_client
+     - if !agile_task.completion_date
+       == <input type="checkbox" name="task_completed" id="task_completed" value = "1" /><input type="hidden" name="task_completed" value = "0" />
+       %label{:for => "task_completed"} 
+@@ -23,21 +23,21 @@
+       %label{:for => "task_not_completed"} 
+         %b Make not completed)
+ 
+-  %p
++  .form_client
+     %b Name
+     %br/
+     = f.text_field :name, :class => "long"
+ 
+-  %p
++  .form_client
+     = f.check_box :bug
+     %label{:for => "agile_task_bug"} 
+       %b Is it a bug fix?
+ 
+ 
+-  %p
++  .form_client
+     = drawer("task_users", "Add/Delete Task Owners", developers_list(story, agile_task), task_developers(agile_task), agile_task.task_owners.empty?)
+ 
+-  %p
++  .form_client
+     %b Notes
+     %br/
+     = f.text_area :notes, :class => "big"
+@@ -47,5 +47,5 @@
+     .help_info Estimation of time in hours required to finish the task
+     = f.text_field :task_units, :class => "numeric_entry"
+ 
+-  %p
++  .form_client
+     = f.submit button
+diff --git a/app/views/features/edit.html.erb b/app/views/features/edit.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..3f824dd42c9e99ade97bf6d3aaf58e679f2a3456
+--- /dev/null
++++ b/app/views/features/edit.html.erb
+@@ -0,0 +1,28 @@
++<h1>Editing feature</h1>
++
++<% form_for(@feature) do |f| %>
++  <%= f.error_messages %>
++
++  <p>
++    <%= f.label :name %><br />
++    <%= f.text_field :name %>
++  </p>
++  <p>
++    <%= f.label :description %><br />
++    <%= f.text_area :description %>
++  </p>
++  <p>
++    <%= f.label :milestone %><br />
++    <%= f.text_field :milestone %>
++  </p>
++  <p>
++    <%= f.label :completion_date %><br />
++    <%= f.date_select :completion_date %>
++  </p>
++  <p>
++    <%= f.submit "Update" %>
++  </p>
++<% end %>
++
++<%= link_to 'Show', @feature %> |
++<%= link_to 'Back', features_path %>
+diff --git a/app/views/features/index.html.erb b/app/views/features/index.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..96b7d3c215276e3720ecaec3a2fff01f1486ac5b
+--- /dev/null
++++ b/app/views/features/index.html.erb
+@@ -0,0 +1,26 @@
++<h1>Listing features</h1>
++
++<table>
++  <tr>
++    <th>Name</th>
++    <th>Description</th>
++    <th>Milestone</th>
++    <th>Completion date</th>
++  </tr>
++
++<% for feature in @features %>
++  <tr>
++    <td><%=h feature.name %></td>
++    <td><%=h feature.description %></td>
++    <td><%=h feature.milestone %></td>
++    <td><%=h feature.completion_date %></td>
++    <td><%= link_to 'Show', feature %></td>
++    <td><%= link_to 'Edit', edit_feature_path(feature) %></td>
++    <td><%= link_to 'Destroy', feature, :confirm => 'Are you sure?', :method => :delete %></td>
++  </tr>
++<% end %>
++</table>
++
++<br />
++
++<%= link_to 'New feature', new_feature_path %>
+diff --git a/app/views/features/new.html.erb b/app/views/features/new.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ffd93e3e0922d09a99b5672f9298740fce31835
+--- /dev/null
++++ b/app/views/features/new.html.erb
+@@ -0,0 +1,27 @@
++<h1>New feature</h1>
++
++<% form_for(@feature) do |f| %>
++  <%= f.error_messages %>
++
++  <p>
++    <%= f.label :name %><br />
++    <%= f.text_field :name %>
++  </p>
++  <p>
++    <%= f.label :description %><br />
++    <%= f.text_area :description %>
++  </p>
++  <p>
++    <%= f.label :milestone %><br />
++    <%= f.text_field :milestone %>
++  </p>
++  <p>
++    <%= f.label :completion_date %><br />
++    <%= f.date_select :completion_date %>
++  </p>
++  <p>
++    <%= f.submit "Create" %>
++  </p>
++<% end %>
++
++<%= link_to 'Back', features_path %>
+diff --git a/app/views/features/show.html.erb b/app/views/features/show.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..137083dfdca8b12711541f41e84d308ed25f823d
+--- /dev/null
++++ b/app/views/features/show.html.erb
+@@ -0,0 +1,23 @@
++<p>
++  <b>Name:</b>
++  <%=h @feature.name %>
++</p>
++
++<p>
++  <b>Description:</b>
++  <%=h @feature.description %>
++</p>
++
++<p>
++  <b>Milestone:</b>
++  <%=h @feature.milestone %>
++</p>
++
++<p>
++  <b>Completion date:</b>
++  <%=h @feature.completion_date %>
++</p>
++
++
++<%= link_to 'Edit', edit_feature_path(@feature) %> |
++<%= link_to 'Back', features_path %>
+diff --git a/app/views/iterations/_iteration.html.haml b/app/views/iterations/_iteration.html.haml
+index 90d56aa084881a84ec281936e4b552a902f87890..89ab26937eed2953e043d30fdf3410d44ba8f8bb 100644
+--- a/app/views/iterations/_iteration.html.haml
++++ b/app/views/iterations/_iteration.html.haml
+@@ -1,24 +1,24 @@
+ - form_for(iteration) do |f|
+   
+   = f.hidden_field :project_id, :value => @project.id
+-  %p
++  .form_client
+     %b Objectives
+     %br/
+     = f.text_area :objectives
+-  %p
++  .form_client
+     %b Start date
+     %br/
+     = f.date_select :start_date
+     = iteration.start_date.strftime "%a" if iteration.start_date
+-  %p
++  .form_client
+     %b End date
+     %br/
+     = f.date_select :end_date
+     = iteration.end_date.strftime "%a" if iteration.end_date
+-  %p
++  .form_client
+     %b Work units
+     %br/
+     = f.text_field :work_units
+-  %p
++  .form_client
+     = f.submit button
+ 
+diff --git a/app/views/meetings/_meeting.html.haml b/app/views/meetings/_meeting.html.haml
+index 2fbc81ce48ed8fea43c1e69948d5949d6443e9c7..a5cf2fda4132c84c85e034abdf927fd1c3c80088 100644
+--- a/app/views/meetings/_meeting.html.haml
++++ b/app/views/meetings/_meeting.html.haml
+@@ -2,12 +2,12 @@
+   
+   = f.hidden_field :iteration_id, :value => iteration.id
+ 
+-  %p
++  .form_client
+     %b Name
+     %br/
+     = f.text_field :name
+ 
+-  %p
++  .form_client
+     %b Meeting date
+     %br/
+     = f.date_select :meeting_date
+@@ -19,14 +19,14 @@
+         %input{:type => "checkbox", :name => "users[]", :id => "users_" + participant.user.id.to_s, :value => participant.user.id, :checked => meeting.meeting_participants.map { |mp| mp.user }.include?(participant.user)}   
+         %label{:for => "users_" + participant.user.id.to_s } 
+           = participant.user.full_name
+-  %p
++  .form_client
+     %b Length (hours)
+     %br/
+     = f.text_field :length
+ 
+-  %p
++  .form_client
+     %b Notes
+     %br/
+     = f.text_area :notes, :class => "big"
+-  %p
++  .form_client
+     = f.submit button
+diff --git a/app/views/milestones/edit.html.erb b/app/views/milestones/edit.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..a6176fc2ea1cac62a3d35edcfb455c8d6e740d8f
+--- /dev/null
++++ b/app/views/milestones/edit.html.erb
+@@ -0,0 +1,28 @@
++<h1>Editing milestone</h1>
++
++<% form_for(@milestone) do |f| %>
++  <%= f.error_messages %>
++
++  <p>
++    <%= f.label :project %><br />
++    <%= f.text_field :project %>
++  </p>
++  <p>
++    <%= f.label :name %><br />
++    <%= f.text_field :name %>
++  </p>
++  <p>
++    <%= f.label :description %><br />
++    <%= f.text_area :description %>
++  </p>
++  <p>
++    <%= f.label :deadline %><br />
++    <%= f.date_select :deadline %>
++  </p>
++  <p>
++    <%= f.submit "Update" %>
++  </p>
++<% end %>
++
++<%= link_to 'Show', @milestone %> |
++<%= link_to 'Back', milestones_path %>
+diff --git a/app/views/milestones/index.html.erb b/app/views/milestones/index.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..5cba7deb35873c08f6db136c29f90ee5ea9ee875
+--- /dev/null
++++ b/app/views/milestones/index.html.erb
+@@ -0,0 +1,26 @@
++<h1>Listing milestones</h1>
++
++<table>
++  <tr>
++    <th>Project</th>
++    <th>Name</th>
++    <th>Description</th>
++    <th>Deadline</th>
++  </tr>
++
++<% for milestone in @milestones %>
++  <tr>
++    <td><%=h milestone.project %></td>
++    <td><%=h milestone.name %></td>
++    <td><%=h milestone.description %></td>
++    <td><%=h milestone.deadline %></td>
++    <td><%= link_to 'Show', milestone %></td>
++    <td><%= link_to 'Edit', edit_milestone_path(milestone) %></td>
++    <td><%= link_to 'Destroy', milestone, :confirm => 'Are you sure?', :method => :delete %></td>
++  </tr>
++<% end %>
++</table>
++
++<br />
++
++<%= link_to 'New milestone', new_milestone_path %>
+diff --git a/app/views/milestones/new.html.erb b/app/views/milestones/new.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..e48005c57d8505166d26ba118c88c0be294a0455
+--- /dev/null
++++ b/app/views/milestones/new.html.erb
+@@ -0,0 +1,27 @@
++<h1>New milestone</h1>
++
++<% form_for(@milestone) do |f| %>
++  <%= f.error_messages %>
++
++  <p>
++    <%= f.label :project %><br />
++    <%= f.text_field :project %>
++  </p>
++  <p>
++    <%= f.label :name %><br />
++    <%= f.text_field :name %>
++  </p>
++  <p>
++    <%= f.label :description %><br />
++    <%= f.text_area :description %>
++  </p>
++  <p>
++    <%= f.label :deadline %><br />
++    <%= f.date_select :deadline %>
++  </p>
++  <p>
++    <%= f.submit "Create" %>
++  </p>
++<% end %>
++
++<%= link_to 'Back', milestones_path %>
+diff --git a/app/views/milestones/show.html.erb b/app/views/milestones/show.html.erb
+new file mode 100644
+index 0000000000000000000000000000000000000000..ea396151d03091e37de87557ddd11a8dbf96fba8
+--- /dev/null
++++ b/app/views/milestones/show.html.erb
+@@ -0,0 +1,23 @@
++<p>
++  <b>Project:</b>
++  <%=h @milestone.project %>
++</p>
++
++<p>
++  <b>Name:</b>
++  <%=h @milestone.name %>
++</p>
++
++<p>
++  <b>Description:</b>
++  <%=h @milestone.description %>
++</p>
++
++<p>
++  <b>Deadline:</b>
++  <%=h @milestone.deadline %>
++</p>
++
++
++<%= link_to 'Edit', edit_milestone_path(@milestone) %> |
++<%= link_to 'Back', milestones_path %>
+diff --git a/app/views/stories/_story.html.haml b/app/views/stories/_story.html.haml
+index 061455e438352d68bb262da7ddee6269f6e50400..193a8fa9ecaa019e17694108b5e8fd4d7a3534a8 100644
+--- a/app/views/stories/_story.html.haml
++++ b/app/views/stories/_story.html.haml
+@@ -2,19 +2,19 @@
+ 
+   = f.hidden_field :iteration_id, :value => iteration.id
+ 
+-  %p
++  .form_client
+     %b Name
+     %br/
+     = f.text_field :name, :class => "long"
+ 
+-  %p
++  .form_client
+     %b Description
+     %br/
+     = f.text_area :description, :class => "big"
+ 
+-  %p
+-    %b Work units est
++  .form_client
+     %br/
++    Work units est
+     = f.text_field :work_units_est, :class => "numeric_entry"
+-  %p
++  .form_client
+     = f.submit button
+diff --git a/config/routes.rb b/config/routes.rb
+index dc9621e35130642e823d08c34434aa40f65a9226..86fd0e4a70419786d5c8ca823e31e7354c151203 100644
+--- a/config/routes.rb
++++ b/config/routes.rb
+@@ -1,4 +1,8 @@
+ ActionController::Routing::Routes.draw do |map|
++  map.resources :milestones
++
++  map.resources :features
++
+   map.resources :task_owners
+ 
+   map.resources :tracker_tasks
+@@ -18,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
+   map.resources :users, :has_many => [:groups, :memberships]
+   map.resources :sessions, :trackers, :groups, :memberships
+   
+-  map.resources :projects, :has_many => [:iterations, :reports, :users, :project_members]
++  map.resources :projects, :has_many => [:milestones, :iterations, :reports, :users, :project_members]
+   map.resources :iterations, :has_many => [:meetings, :stories]
+   map.resources :stories, :has_many => [:agile_tasks]
+   map.resources :meetings, :has_many => [:meeting_participants]
+diff --git a/db/migrate/20080930174700_create_milestones.rb b/db/migrate/20080930174700_create_milestones.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..e292b837f81778a88bda938504429cff1e24a6a7
+--- /dev/null
++++ b/db/migrate/20080930174700_create_milestones.rb
+@@ -0,0 +1,17 @@
++class CreateMilestones < ActiveRecord::Migration
++  def self.up
++    create_table :milestones do |t|
++      t.references :project
++      t.string :name
++      t.text :description
++      t.date :deadline
++      t.date :completion_date
++
++      t.timestamps
++    end
++  end
++
++  def self.down
++    drop_table :milestones
++  end
++end
+diff --git a/db/migrate/20080930174858_create_features.rb b/db/migrate/20080930174858_create_features.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..1f81b2db0b6214f6dd4f9ee10a39af4115a659d2
+--- /dev/null
++++ b/db/migrate/20080930174858_create_features.rb
+@@ -0,0 +1,16 @@
++class CreateFeatures < ActiveRecord::Migration
++  def self.up
++    create_table :features do |t|
++      t.string :name
++      t.text :description
++      t.references :milestone
++      t.date :completion_date
++
++      t.timestamps
++    end
++  end
++
++  def self.down
++    drop_table :features
++  end
++end
+diff --git a/db/migrate/20080930174948_story_add_feature_reference.rb b/db/migrate/20080930174948_story_add_feature_reference.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..8ae0ade7908ebb9cf0abd17402c80402429f86b2
+--- /dev/null
++++ b/db/migrate/20080930174948_story_add_feature_reference.rb
+@@ -0,0 +1,11 @@
++class StoryAddFeatureReference < ActiveRecord::Migration
++  def self.up
++    change_table :stories do |t|
++      t.references :feature
++    end
++  end
++
++  def self.down
++    remove_column :stories, :feature_id
++  end
++end
+diff --git a/db/migrate/20080930181248_iteration_add_feature_references.rb b/db/migrate/20080930181248_iteration_add_feature_references.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..884a59e4b2dfbef270201b416d4e908f6453b083
+--- /dev/null
++++ b/db/migrate/20080930181248_iteration_add_feature_references.rb
+@@ -0,0 +1,13 @@
++class IterationAddFeatureReferences < ActiveRecord::Migration
++  def self.up
++    change_table :iterations do |t|
++      t.references :milestone
++      t.references :feature
++    end
++  end
++
++  def self.down
++    remove_column :iterations, :feature_id
++    remove_column :iterations, :milestone
++  end
++end
+diff --git a/public/stylesheets/application.css b/public/stylesheets/application.css
+index a99d8e599bda588fc577d360b78f374cc87ff338..3c50976ab7b034a65cb93bc85462837d39affde1 100644
+--- a/public/stylesheets/application.css
++++ b/public/stylesheets/application.css
+@@ -617,3 +617,6 @@ ul.collapsed {
+ .recently_changed {
+   background-color: #ffe822;
+   color: #660000; }
++
++.form_client {
++  margin-bottom: 1em; }
+diff --git a/public/stylesheets/sass/application.sass b/public/stylesheets/sass/application.sass
+index 421709d8a058b3aa2c76368484acee011a3a61a0..8d65733a1bd203b329501092d41d568ef9708def 100644
+--- a/public/stylesheets/sass/application.sass
++++ b/public/stylesheets/sass/application.sass
+@@ -779,3 +779,6 @@ ul
+ .recently_changed
+   :background-color = !_yellow
+   :color = !_red
++
++.form_client
++  :margin-bottom 1em
+diff --git a/spec/controllers/features_controller_spec.rb b/spec/controllers/features_controller_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..98084f4e608e680f502fbda73da8facab5006482
+--- /dev/null
++++ b/spec/controllers/features_controller_spec.rb
+@@ -0,0 +1,180 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe FeaturesController do
++  before(:each) do
++    @user ||= mock_model(User)
++    @project ||= mock_model(Project)
++    @milestone ||= mock_model(Milestone, :project => @project)
++    controller.stub!(:current_user).and_return(@user)
++    controller.stub!(:developer?).and_return(true)
++  end
++
++  def mock_feature(stubs={})
++    @mock_feature ||= mock_model(Feature, stubs)
++  end
++  
++  describe "responding to GET index" do
++
++    it "should expose all features as @features" do
++      Feature.should_receive(:find).with(:all).and_return([mock_feature])
++      get :index
++      assigns[:features].should == [mock_feature]
++    end
++
++    describe "with mime type of xml" do
++  
++      it "should render all features as xml" do
++        request.env["HTTP_ACCEPT"] = "application/xml"
++        Feature.should_receive(:find).with(:all).and_return(features = mock("Array of Features"))
++        features.should_receive(:to_xml).and_return("generated XML")
++        get :index
++        response.body.should == "generated XML"
++      end
++    
++    end
++
++  end
++
++  describe "responding to GET show" do
++
++    it "should expose the requested feature as @feature" do
++      Feature.should_receive(:find).with("37").and_return(mock_feature)
++      get :show, :id => "37"
++      assigns[:feature].should equal(mock_feature)
++    end
++    
++    describe "with mime type of xml" do
++
++      it "should render the requested feature as xml" do
++        request.env["HTTP_ACCEPT"] = "application/xml"
++        Feature.should_receive(:find).with("37").and_return(mock_feature)
++        mock_feature.should_receive(:to_xml).and_return("generated XML")
++        get :show, :id => "37"
++        response.body.should == "generated XML"
++      end
++
++    end
++    
++  end
++
++  describe "responding to GET new" do
++  
++    it "should expose a new feature as @feature" do
++      Feature.should_receive(:new).and_return(mock_feature)
++      get :new
++      assigns[:feature].should equal(mock_feature)
++    end
++
++  end
++
++  describe "responding to GET edit" do
++  
++    it "should expose the requested feature as @feature" do
++      Feature.should_receive(:find).with("37").and_return(mock_feature)
++      get :edit, :id => "37"
++      assigns[:feature].should equal(mock_feature)
++    end
++
++  end
++
++  describe "responding to POST create" do
++
++    describe "with valid params" do
++      
++      it "should expose a newly created feature as @feature" do
++        Feature.should_receive(:new).with({'these' => 'params'}).and_return(mock_feature(:save => true))
++        post :create, :feature => {:these => 'params'}
++        assigns(:feature).should equal(mock_feature)
++      end
++
++      it "should redirect to the created feature" do
++        Feature.stub!(:new).and_return(mock_feature(:save => true))
++        post :create, :feature => {}
++        response.should redirect_to(feature_url(mock_feature))
++      end
++      
++    end
++    
++    describe "with invalid params" do
++
++      it "should expose a newly created but unsaved feature as @feature" do
++        Feature.stub!(:new).with({'these' => 'params'}).and_return(mock_feature(:save => false))
++        post :create, :feature => {:these => 'params'}
++        assigns(:feature).should equal(mock_feature)
++      end
++
++      it "should re-render the 'new' template" do
++        Feature.stub!(:new).and_return(mock_feature(:save => false))
++        post :create, :feature => {}
++        response.should render_template('new')
++      end
++      
++    end
++    
++  end
++
++  describe "responding to PUT udpate" do
++
++    describe "with valid params" do
++
++      it "should update the requested feature" do
++        Feature.should_receive(:find).with("37").and_return(mock_feature)
++        mock_feature.should_receive(:update_attributes).with({'these' => 'params'})
++        put :update, :id => "37", :feature => {:these => 'params'}
++      end
++
++      it "should expose the requested feature as @feature" do
++        Feature.stub!(:find).and_return(mock_feature(:update_attributes => true))
++        put :update, :id => "1"
++        assigns(:feature).should equal(mock_feature)
++      end
++
++      it "should redirect to the feature" do
++        Feature.stub!(:find).and_return(mock_feature(:update_attributes => true))
++        put :update, :id => "1"
++        response.should redirect_to(feature_url(mock_feature))
++      end
++
++    end
++    
++    describe "with invalid params" do
++
++      it "should update the requested feature" do
++        Feature.should_receive(:find).with("37").and_return(mock_feature)
++        mock_feature.should_receive(:update_attributes).with({'these' => 'params'})
++        put :update, :id => "37", :feature => {:these => 'params'}
++      end
++
++      it "should expose the feature as @feature" do
++        Feature.stub!(:find).and_return(mock_feature(:update_attributes => false))
++        put :update, :id => "1"
++        assigns(:feature).should equal(mock_feature)
++      end
++
++      it "should re-render the 'edit' template" do
++        Feature.stub!(:find).and_return(mock_feature(:update_attributes => false))
++        put :update, :id => "1"
++        response.should render_template('edit')
++      end
++
++    end
++
++  end
++
++  describe "responding to DELETE destroy" do
++
++    it "should destroy the requested feature" do
++      Feature.should_receive(:find).with("37").and_return(mock_feature)
++      mock_feature.should_receive(:destroy)
++      delete :destroy, :id => "37"
++    end
++  
++    it "should redirect to the features list" do
++      Feature.stub!(:find).and_return(mock_feature(:destroy => true))
++      delete :destroy, :id => "1"
++      response.should redirect_to(features_url)
++    end
++
++  end
++
++end
+diff --git a/spec/controllers/features_routing_spec.rb b/spec/controllers/features_routing_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..d89eb1c1de0c82195c9bc0ec8f66c8947769d03b
+--- /dev/null
++++ b/spec/controllers/features_routing_spec.rb
+@@ -0,0 +1,61 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe FeaturesController do
++  describe "route generation" do
++
++    it "should map { :controller => 'features', :action => 'index' } to /features" do
++      route_for(:controller => "features", :action => "index").should == "/features"
++    end
++  
++    it "should map { :controller => 'features', :action => 'new' } to /features/new" do
++      route_for(:controller => "features", :action => "new").should == "/features/new"
++    end
++  
++    it "should map { :controller => 'features', :action => 'show', :id => 1 } to /features/1" do
++      route_for(:controller => "features", :action => "show", :id => 1).should == "/features/1"
++    end
++  
++    it "should map { :controller => 'features', :action => 'edit', :id => 1 } to /features/1/edit" do
++      route_for(:controller => "features", :action => "edit", :id => 1).should == "/features/1/edit"
++    end
++  
++    it "should map { :controller => 'features', :action => 'update', :id => 1} to /features/1" do
++      route_for(:controller => "features", :action => "update", :id => 1).should == "/features/1"
++    end
++  
++    it "should map { :controller => 'features', :action => 'destroy', :id => 1} to /features/1" do
++      route_for(:controller => "features", :action => "destroy", :id => 1).should == "/features/1"
++    end
++  end
++
++  describe "route recognition" do
++
++    it "should generate params { :controller => 'features', action => 'index' } from GET /features" do
++      params_from(:get, "/features").should == {:controller => "features", :action => "index"}
++    end
++  
++    it "should generate params { :controller => 'features', action => 'new' } from GET /features/new" do
++      params_from(:get, "/features/new").should == {:controller => "features", :action => "new"}
++    end
++  
++    it "should generate params { :controller => 'features', action => 'create' } from POST /features" do
++      params_from(:post, "/features").should == {:controller => "features", :action => "create"}
++    end
++  
++    it "should generate params { :controller => 'features', action => 'show', id => '1' } from GET /features/1" do
++      params_from(:get, "/features/1").should == {:controller => "features", :action => "show", :id => "1"}
++    end
++  
++    it "should generate params { :controller => 'features', action => 'edit', id => '1' } from GET /features/1;edit" do
++      params_from(:get, "/features/1/edit").should == {:controller => "features", :action => "edit", :id => "1"}
++    end
++  
++    it "should generate params { :controller => 'features', action => 'update', id => '1' } from PUT /features/1" do
++      params_from(:put, "/features/1").should == {:controller => "features", :action => "update", :id => "1"}
++    end
++  
++    it "should generate params { :controller => 'features', action => 'destroy', id => '1' } from DELETE /features/1" do
++      params_from(:delete, "/features/1").should == {:controller => "features", :action => "destroy", :id => "1"}
++    end
++  end
++end
+diff --git a/spec/controllers/milestones_controller_spec.rb b/spec/controllers/milestones_controller_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..a1fca90733723872144ff443b1bdc2ca9fc6437b
+--- /dev/null
++++ b/spec/controllers/milestones_controller_spec.rb
+@@ -0,0 +1,186 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe MilestonesController do
++  before(:each) do 
++    @user = mock_model(User)
++    @project ||= mock_model(Project)
++    controller.stub!(:current_user).and_return(@user)
++    controller.stub!(:developer?).and_return(true)
++    Project.stub!(:find).and_return(@project)
++  end
++
++  def mock_milestone(stubs={})
++    stubs.merge!({:project_id => @project.id})
++    @mock_milestone ||= mock_model(Milestone, stubs)
++  end
++  
++  describe "responding to GET index" do
++    
++    before(:each) do
++      @project.stub!(:milestones).and_return([mock_milestone])
++    end
++
++    it "should expose all project milestones as @milestones" do
++      @project.should_receive(:milestones).and_return([mock_milestone])
++      get :index, :project_id => @project.id
++      assigns[:milestones].should == [mock_milestone]
++    end
++
++    describe "with mime type of xml" do
++  
++      it "should render all milestones as xml" do
++        request.env["HTTP_ACCEPT"] = "application/xml"
++        @project.should_receive(:milestones).and_return(milestones = mock("Array of Milestones"))
++        milestones.should_receive(:to_xml).and_return("generated XML")
++        get :index, :project_id => @project.id
++        response.body.should == "generated XML"
++      end
++    
++    end
++
++  end
++
++  describe "responding to GET show" do
++
++    it "should expose the requested milestone as @milestone" do
++      Milestone.should_receive(:find).with("37").and_return(mock_milestone)
++      get :show, :id => "37"
++      assigns[:milestone].should equal(mock_milestone)
++    end
++    
++    describe "with mime type of xml" do
++
++      it "should render the requested milestone as xml" do
++        request.env["HTTP_ACCEPT"] = "application/xml"
++        Milestone.should_receive(:find).with("37").and_return(mock_milestone)
++        mock_milestone.should_receive(:to_xml).and_return("generated XML")
++        get :show, :id => "37"
++        response.body.should == "generated XML"
++      end
++
++    end
++    
++  end
++
++  describe "responding to GET new" do
++  
++    it "should expose a new milestone as @milestone" do
++      Milestone.should_receive(:new).and_return(mock_milestone)
++      get :new
++      assigns[:milestone].should equal(mock_milestone)
++    end
++
++  end
++
++  describe "responding to GET edit" do
++  
++    it "should expose the requested milestone as @milestone" do
++      Milestone.should_receive(:find).with("37").and_return(mock_milestone)
++      get :edit, :id => "37"
++      assigns[:milestone].should equal(mock_milestone)
++    end
++
++  end
++
++  describe "responding to POST create" do
++
++    describe "with valid params" do
++      
++      it "should expose a newly created milestone as @milestone" do
++        Milestone.should_receive(:new).with({'these' => 'params'}).and_return(mock_milestone(:save => true))
++        post :create, :milestone => {:these => 'params'}
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
++      it "should redirect to the created milestone" do
++        Milestone.stub!(:new).and_return(mock_milestone(:save => true))
++        post :create, :milestone => {}
++        response.should redirect_to(milestone_url(mock_milestone))
++      end
++      
++    end
++    
++    describe "with invalid params" do
++
++      it "should expose a newly created but unsaved milestone as @milestone" do
++        Milestone.stub!(:new).with({'these' => 'params'}).and_return(mock_milestone(:save => false))
++        post :create, :milestone => {:these => 'params'}
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
++      it "should re-render the 'new' template" do
++        Milestone.stub!(:new).and_return(mock_milestone(:save => false))
++        post :create, :milestone => {}
++        response.should render_template('new')
++      end
++      
++    end
++    
++  end
++
++  describe "responding to PUT udpate" do
++
++    describe "with valid params" do
++
++      it "should update the requested milestone" do
++        Milestone.should_receive(:find).with("37").and_return(mock_milestone)
++        mock_milestone.should_receive(:update_attributes).with({'these' => 'params'})
++        put :update, :id => "37", :milestone => {:these => 'params'}
++      end
++
++      it "should expose the requested milestone as @milestone" do
++        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
++        put :update, :id => "1"
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
++      it "should redirect to the milestone" do
++        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
++        put :update, :id => "1"
++        response.should redirect_to(milestone_url(mock_milestone))
++      end
++
++    end
++    
++    describe "with invalid params" do
++
++      it "should update the requested milestone" do
++        Milestone.should_receive(:find).with("37").and_return(mock_milestone)
++        mock_milestone.should_receive(:update_attributes).with({'these' => 'params'})
++        put :update, :id => "37", :milestone => {:these => 'params'}
++      end
++
++      it "should expose the milestone as @milestone" do
++        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => false))
++        put :update, :id => "1"
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
++      it "should re-render the 'edit' template" do
++        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => false))
++        put :update, :id => "1"
++        response.should render_template('edit')
++      end
++
++    end
++
++  end
++
++  describe "responding to DELETE destroy" do
++
++
++    it "should destroy the requested milestone" do
++      Milestone.should_receive(:find).with("37").and_return(mock_milestone)
++      mock_milestone.should_receive(:destroy)
++      delete :destroy, :id => "37"
++    end
++  
++    it "should redirect to the milestones list" do
++      Milestone.stub!(:find).and_return(mock_milestone(:destroy => true))
++      delete :destroy, :id => "1", :project_id => @project.id
++      response.should redirect_to(project_milestones_url(@project))
++    end
++
++  end
++
++end
+diff --git a/spec/controllers/milestones_routing_spec.rb b/spec/controllers/milestones_routing_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..018d0896e0e0a861bc08cd6c9c527a685c62a03a
+--- /dev/null
++++ b/spec/controllers/milestones_routing_spec.rb
+@@ -0,0 +1,61 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe MilestonesController do
++  describe "route generation" do
++
++    it "should map { :controller => 'milestones', :action => 'index' } to /milestones" do
++      route_for(:controller => "milestones", :action => "index").should == "/milestones"
++    end
++  
++    it "should map { :controller => 'milestones', :action => 'new' } to /milestones/new" do
++      route_for(:controller => "milestones", :action => "new").should == "/milestones/new"
++    end
++  
++    it "should map { :controller => 'milestones', :action => 'show', :id => 1 } to /milestones/1" do
++      route_for(:controller => "milestones", :action => "show", :id => 1).should == "/milestones/1"
++    end
++  
++    it "should map { :controller => 'milestones', :action => 'edit', :id => 1 } to /milestones/1/edit" do
++      route_for(:controller => "milestones", :action => "edit", :id => 1).should == "/milestones/1/edit"
++    end
++  
++    it "should map { :controller => 'milestones', :action => 'update', :id => 1} to /milestones/1" do
++      route_for(:controller => "milestones", :action => "update", :id => 1).should == "/milestones/1"
++    end
++  
++    it "should map { :controller => 'milestones', :action => 'destroy', :id => 1} to /milestones/1" do
++      route_for(:controller => "milestones", :action => "destroy", :id => 1).should == "/milestones/1"
++    end
++  end
++
++  describe "route recognition" do
++
++    it "should generate params { :controller => 'milestones', action => 'index' } from GET /milestones" do
++      params_from(:get, "/milestones").should == {:controller => "milestones", :action => "index"}
++    end
++  
++    it "should generate params { :controller => 'milestones', action => 'new' } from GET /milestones/new" do
++      params_from(:get, "/milestones/new").should == {:controller => "milestones", :action => "new"}
++    end
++  
++    it "should generate params { :controller => 'milestones', action => 'create' } from POST /milestones" do
++      params_from(:post, "/milestones").should == {:controller => "milestones", :action => "create"}
++    end
++  
++    it "should generate params { :controller => 'milestones', action => 'show', id => '1' } from GET /milestones/1" do
++      params_from(:get, "/milestones/1").should == {:controller => "milestones", :action => "show", :id => "1"}
++    end
++  
++    it "should generate params { :controller => 'milestones', action => 'edit', id => '1' } from GET /milestones/1;edit" do
++      params_from(:get, "/milestones/1/edit").should == {:controller => "milestones", :action => "edit", :id => "1"}
++    end
++  
++    it "should generate params { :controller => 'milestones', action => 'update', id => '1' } from PUT /milestones/1" do
++      params_from(:put, "/milestones/1").should == {:controller => "milestones", :action => "update", :id => "1"}
++    end
++  
++    it "should generate params { :controller => 'milestones', action => 'destroy', id => '1' } from DELETE /milestones/1" do
++      params_from(:delete, "/milestones/1").should == {:controller => "milestones", :action => "destroy", :id => "1"}
++    end
++  end
++end
+diff --git a/spec/fixtures/features.yml b/spec/fixtures/features.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..d619ed25126e3c3beea75e83aa76faee957e195f
+--- /dev/null
++++ b/spec/fixtures/features.yml
+@@ -0,0 +1,13 @@
++# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
++
++add_authentication:
++  name: Create authentication system
++  description: Admin should be authenticated and authorized to do admin stuff
++  milestone: admin_view
++  completion_date: 2008-09-30
++
++add_login:
++  name: Users should be able to login to the site
++  description: Login to the site
++  milestone: admin_view
++  completion_date: nil
+diff --git a/spec/fixtures/milestones.yml b/spec/fixtures/milestones.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..647c153fea053bcbd808241a1c3a15a73781525c
+--- /dev/null
++++ b/spec/fixtures/milestones.yml
+@@ -0,0 +1,15 @@
++# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
++
++admin_view:
++  project: tuskit
++  name: Create Admin Interface
++  description: Admin needs a place to enter data
++  deadline: 2008-09-30
++  completion_date: 2008-09-29
++
++developer_view:
++  project: tuskit
++  name: Create Developer Interface
++  description: Developer needs a place to enter data
++  deadline: 2008-09-30
++  completion_date: null
+diff --git a/spec/helpers/features_helper_spec.rb b/spec/helpers/features_helper_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..9b74bed48c266eafd58f855a94916e65dfc6ab71
+--- /dev/null
++++ b/spec/helpers/features_helper_spec.rb
+@@ -0,0 +1,11 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe FeaturesHelper do
++  
++  #Delete this example and add some real ones or delete this file
++  it "should be included in the object returned by #helper" do
++    included_modules = (class << helper; self; end).send :included_modules
++    included_modules.should include(FeaturesHelper)
++  end
++  
++end
+diff --git a/spec/helpers/milestones_helper_spec.rb b/spec/helpers/milestones_helper_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..b708d70798e6e6f76ae35464ef5bcdeb2db209bd
+--- /dev/null
++++ b/spec/helpers/milestones_helper_spec.rb
+@@ -0,0 +1,11 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe MilestonesHelper do
++  
++  #Delete this example and add some real ones or delete this file
++  it "should be included in the object returned by #helper" do
++    included_modules = (class << helper; self; end).send :included_modules
++    included_modules.should include(MilestonesHelper)
++  end
++  
++end
+diff --git a/spec/models/feature_spec.rb b/spec/models/feature_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..51221742417c9131f101acb09d6380ee40a51b2b
+--- /dev/null
++++ b/spec/models/feature_spec.rb
+@@ -0,0 +1,25 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe Feature do
++  before(:each) do
++    @milestone = mock_model(Milestone)
++    @valid_attributes = {
++      :name => "value for name",
++      :description => "value for description",
++      :milestone => @milestone,
++      :completion_date => Date.today
++    }
++  end
++
++  it "should create a new instance given valid attributes" do
++    Feature.create!(@valid_attributes)
++  end
++
++  it "should have name" do
++    @valid_attributes.merge!({:name => nil})
++    feature = Feature.new(@valid_attributes)
++    feature.should_not be_valid
++    feature.save.should be_false
++    feature.errors.should_not be_empty
++  end
++end
+diff --git a/spec/models/milestone_spec.rb b/spec/models/milestone_spec.rb
+new file mode 100644
+index 0000000000000000000000000000000000000000..ee1d6066506036e2c192769c659977a88376a3c2
+--- /dev/null
++++ b/spec/models/milestone_spec.rb
+@@ -0,0 +1,40 @@
++require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
++
++describe Milestone do
++  before(:each) do
++    @project = mock_model(Project)
++    @valid_attributes = {
++      :project => @project,
++      :name => "value for name",
++      :description => "value for description",
++      :deadline => Date.today
++    }
++  end
++
++  it "should create a new instance given valid attributes" do
++    Milestone.create!(@valid_attributes)
++  end
++
++  it "should have a name" do
++    @valid_attributes.merge!({:name => nil})
++    milestone = Milestone.new(@valid_attributes)
++    milestone.should_not be_valid
++    milestone.save.should be_false
++    milestone.errors.should_not be_empty
++  end
++
++  describe Milestone.current do
++    fixtures :projects, :milestones
++
++    it "should return first unclosed milestone" do
++      Milestone.current.should == milestones(:developer_view)
++    end
++
++    it "should return nil there is no unclosed milestones" do
++      ms = milestones(:developer_view) 
++      ms.completion_date = Date.today
++      ms.save
++      Milestone.current.should be_nil 
++    end
++  end
++end
+-- 
+1.5.6.1
+
+

@@ -1,0 +1,578 @@
+From 4e57215e27e83a1842f2123bed8a72c8ee6b4d01 Mon Sep 17 00:00:00 2001
+From: Dmitry Mozzherin <dmozzherin@gmail.com>
+Date: Tue, 30 Sep 2008 23:28:00 -0400
+Subject: work on milestones
+
+---
+ app/controllers/milestones_controller.rb       |    5 ++-
+ app/views/agile_tasks/_agile_task.html.haml    |   18 ++++++------
+ app/views/iterations/_iteration.html.haml      |   10 +++---
+ app/views/iterations/index.html.haml           |   12 ++++----
+ app/views/meetings/_meeting.html.haml          |   10 +++---
+ app/views/milestones/_milestone.html.haml      |   23 +++++++++++++++++
+ app/views/milestones/edit.html.erb             |   28 ---------------------
+ app/views/milestones/edit.html.haml            |    3 ++
+ app/views/milestones/index.html.erb            |   26 -------------------
+ app/views/milestones/index.html.haml           |   21 +++++++++++++++
+ app/views/milestones/new.html.erb              |   27 --------------------
+ app/views/milestones/new.html.haml             |    3 ++
+ app/views/milestones/show.html.erb             |   23 -----------------
+ app/views/stories/_story.html.haml             |    8 +++---
+ public/javascripts/application.js              |    7 ++++-
+ public/stylesheets/application.css             |    9 ++++++-
+ public/stylesheets/sass/application.sass       |    8 +++++-
+ spec/controllers/milestones_controller_spec.rb |   32 +++++++++++++++++++++++-
+ 18 files changed, 134 insertions(+), 139 deletions(-)
+ create mode 100644 app/views/milestones/_milestone.html.haml
+ delete mode 100644 app/views/milestones/edit.html.erb
+ create mode 100644 app/views/milestones/edit.html.haml
+ delete mode 100644 app/views/milestones/index.html.erb
+ create mode 100644 app/views/milestones/index.html.haml
+ delete mode 100644 app/views/milestones/new.html.erb
+ create mode 100644 app/views/milestones/new.html.haml
+ delete mode 100644 app/views/milestones/show.html.erb
+
+diff --git a/app/controllers/milestones_controller.rb b/app/controllers/milestones_controller.rb
+index 7956e3defc66ce7a0f7e9448e431af5bfbca9676..7093aae8b19658fa8abad861c20ab54253c5142b 100644
+--- a/app/controllers/milestones_controller.rb
++++ b/app/controllers/milestones_controller.rb
+@@ -45,9 +45,9 @@ class MilestonesController < ApplicationController
+   # POST /milestones.xml
+   def create
+     @milestone = Milestone.new(params[:milestone])
+-
++    @milestone.deadline = nil unless params[:show_deadline]
+     respond_to do |format|
+-      if @milestone.save
++      if developer? && @milestone.save
+         flash[:notice] = 'Milestone was successfully created.'
+         format.html { redirect_to(@milestone) }
+         format.xml  { render :xml => @milestone, :status => :created, :location => @milestone }
+@@ -62,6 +62,7 @@ class MilestonesController < ApplicationController
+   # PUT /milestones/1.xml
+   def update
+     @milestone = Milestone.find(params[:id])
++    @milestone.deadline = nil unless params[:show_deadline]
+ 
+     respond_to do |format|
+       if @milestone.update_attributes(params[:milestone])
+diff --git a/app/views/agile_tasks/_agile_task.html.haml b/app/views/agile_tasks/_agile_task.html.haml
+index 4a06ed963d197f02eea9dfbe87f958b5839e2c8f..c639d22fc56554bfd031f24e797a1c817bbcf4ce 100644
+--- a/app/views/agile_tasks/_agile_task.html.haml
++++ b/app/views/agile_tasks/_agile_task.html.haml
+@@ -1,17 +1,17 @@
+ - form_for(agile_task) do |f|
+-  .form_client
++  .input_field
+     = f.hidden_field :story_id, :value => story.id
+-  /.form_client
++  /.input_field
+   /  %b Tracker ticket
+   /  %br/
+   /  = f.text_field :tracker_ticket_id
+   /
+-  /.form_client
++  /.input_field
+   /  %b Tracker ticket submitter
+   /  %br/
+   /  = f.text_field :tracker_ticket_submitter
+   /
+-  .form_client
++  .input_field
+     - if !agile_task.completion_date
+       == <input type="checkbox" name="task_completed" id="task_completed" value = "1" /><input type="hidden" name="task_completed" value = "0" />
+       %label{:for => "task_completed"} 
+@@ -23,21 +23,21 @@
+       %label{:for => "task_not_completed"} 
+         %b Make not completed)
+ 
+-  .form_client
++  .input_field
+     %b Name
+     %br/
+     = f.text_field :name, :class => "long"
+ 
+-  .form_client
++  .input_field
+     = f.check_box :bug
+     %label{:for => "agile_task_bug"} 
+       %b Is it a bug fix?
+ 
+ 
+-  .form_client
++  .input_field
+     = drawer("task_users", "Add/Delete Task Owners", developers_list(story, agile_task), task_developers(agile_task), agile_task.task_owners.empty?)
+ 
+-  .form_client
++  .input_field
+     %b Notes
+     %br/
+     = f.text_area :notes, :class => "big"
+@@ -47,5 +47,5 @@
+     .help_info Estimation of time in hours required to finish the task
+     = f.text_field :task_units, :class => "numeric_entry"
+ 
+-  .form_client
++  .input_field
+     = f.submit button
+diff --git a/app/views/iterations/_iteration.html.haml b/app/views/iterations/_iteration.html.haml
+index 89ab26937eed2953e043d30fdf3410d44ba8f8bb..1c29abf39cbae0cb37ec1ab8f3146d5166ef3482 100644
+--- a/app/views/iterations/_iteration.html.haml
++++ b/app/views/iterations/_iteration.html.haml
+@@ -1,24 +1,24 @@
+ - form_for(iteration) do |f|
+   
+   = f.hidden_field :project_id, :value => @project.id
+-  .form_client
++  .input_field
+     %b Objectives
+     %br/
+     = f.text_area :objectives
+-  .form_client
++  .input_field
+     %b Start date
+     %br/
+     = f.date_select :start_date
+     = iteration.start_date.strftime "%a" if iteration.start_date
+-  .form_client
++  .input_field
+     %b End date
+     %br/
+     = f.date_select :end_date
+     = iteration.end_date.strftime "%a" if iteration.end_date
+-  .form_client
++  .input_field
+     %b Work units
+     %br/
+     = f.text_field :work_units
+-  .form_client
++  .input_field
+     = f.submit button
+ 
+diff --git a/app/views/iterations/index.html.haml b/app/views/iterations/index.html.haml
+index e77534d408e9fafe8be1cda9550064a023911917..3e8e49f79c951df8ce397261cc57e590156f36df 100644
+--- a/app/views/iterations/index.html.haml
++++ b/app/views/iterations/index.html.haml
+@@ -5,14 +5,14 @@
+ = link_to 'Add iteration', new_project_iteration_url(@project)
+ 
+ - if !@iterations.empty?
+-  %table{:class => 'data bordered'}
++  %table.data.bordered
+     %thead
+       %tr
+-        %th Dates
+-        %th Objectives
+-        %th Work units est
+-        %th W.u. done
+-        %th{:colspan => "2"} Action
++        %th.top Dates
++        %th.top Objectives
++        %th.top Work units est
++        %th.top W.u. done
++        %th.top{:colspan => "2"} Action
+ 
+     %tbody
+       - @iterations.each do |iteration|
+diff --git a/app/views/meetings/_meeting.html.haml b/app/views/meetings/_meeting.html.haml
+index a5cf2fda4132c84c85e034abdf927fd1c3c80088..8895443159a1c9decea2b4d454a5d073c5961c39 100644
+--- a/app/views/meetings/_meeting.html.haml
++++ b/app/views/meetings/_meeting.html.haml
+@@ -2,12 +2,12 @@
+   
+   = f.hidden_field :iteration_id, :value => iteration.id
+ 
+-  .form_client
++  .input_field
+     %b Name
+     %br/
+     = f.text_field :name
+ 
+-  .form_client
++  .input_field
+     %b Meeting date
+     %br/
+     = f.date_select :meeting_date
+@@ -19,14 +19,14 @@
+         %input{:type => "checkbox", :name => "users[]", :id => "users_" + participant.user.id.to_s, :value => participant.user.id, :checked => meeting.meeting_participants.map { |mp| mp.user }.include?(participant.user)}   
+         %label{:for => "users_" + participant.user.id.to_s } 
+           = participant.user.full_name
+-  .form_client
++  .input_field
+     %b Length (hours)
+     %br/
+     = f.text_field :length
+ 
+-  .form_client
++  .input_field
+     %b Notes
+     %br/
+     = f.text_area :notes, :class => "big"
+-  .form_client
++  .input_field
+     = f.submit button
+diff --git a/app/views/milestones/_milestone.html.haml b/app/views/milestones/_milestone.html.haml
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d5b794e04caa59779247f38cd12e496e396c5a5
+--- /dev/null
++++ b/app/views/milestones/_milestone.html.haml
+@@ -0,0 +1,23 @@
++
++- form_for(@milestone) do |f|
++  = f.error_messages
++
++  = f.hidden_field :project, :value => @project.id
++  .input_field
++    = f.label :name
++    %br/
++    = f.text_field :name 
++  .input_field
++    = f.label :description
++    %br/
++    = f.text_area :description
++  .input_field  
++    = check_box_tag :show_deadline, 1, @milestone.deadline
++    Has a Deadline?
++  .input_field  
++    #deadline_field.input_field.hidden_div
++      = f.label :deadline
++      %br/
++      = f.date_select :deadline
++  .input_field
++    = f.submit "Create"
+diff --git a/app/views/milestones/edit.html.erb b/app/views/milestones/edit.html.erb
+deleted file mode 100644
+index a6176fc2ea1cac62a3d35edcfb455c8d6e740d8f..0000000000000000000000000000000000000000
+--- a/app/views/milestones/edit.html.erb
++++ /dev/null
+@@ -1,28 +0,0 @@
+-<h1>Editing milestone</h1>
+-
+-<% form_for(@milestone) do |f| %>
+-  <%= f.error_messages %>
+-
+-  <p>
+-    <%= f.label :project %><br />
+-    <%= f.text_field :project %>
+-  </p>
+-  <p>
+-    <%= f.label :name %><br />
+-    <%= f.text_field :name %>
+-  </p>
+-  <p>
+-    <%= f.label :description %><br />
+-    <%= f.text_area :description %>
+-  </p>
+-  <p>
+-    <%= f.label :deadline %><br />
+-    <%= f.date_select :deadline %>
+-  </p>
+-  <p>
+-    <%= f.submit "Update" %>
+-  </p>
+-<% end %>
+-
+-<%= link_to 'Show', @milestone %> |
+-<%= link_to 'Back', milestones_path %>
+diff --git a/app/views/milestones/edit.html.haml b/app/views/milestones/edit.html.haml
+new file mode 100644
+index 0000000000000000000000000000000000000000..ba65f133ab1b4a756dca0897c76f923bd3e524a8
+--- /dev/null
++++ b/app/views/milestones/edit.html.haml
+@@ -0,0 +1,3 @@
++%h1 Editing milestone
++
++= render :partial => 'milestone', :locals => {:milestone => @milestone, :project => @project, :button => "Update" }
+diff --git a/app/views/milestones/index.html.erb b/app/views/milestones/index.html.erb
+deleted file mode 100644
+index 5cba7deb35873c08f6db136c29f90ee5ea9ee875..0000000000000000000000000000000000000000
+--- a/app/views/milestones/index.html.erb
++++ /dev/null
+@@ -1,26 +0,0 @@
+-<h1>Listing milestones</h1>
+-
+-<table>
+-  <tr>
+-    <th>Project</th>
+-    <th>Name</th>
+-    <th>Description</th>
+-    <th>Deadline</th>
+-  </tr>
+-
+-<% for milestone in @milestones %>
+-  <tr>
+-    <td><%=h milestone.project %></td>
+-    <td><%=h milestone.name %></td>
+-    <td><%=h milestone.description %></td>
+-    <td><%=h milestone.deadline %></td>
+-    <td><%= link_to 'Show', milestone %></td>
+-    <td><%= link_to 'Edit', edit_milestone_path(milestone) %></td>
+-    <td><%= link_to 'Destroy', milestone, :confirm => 'Are you sure?', :method => :delete %></td>
+-  </tr>
+-<% end %>
+-</table>
+-
+-<br />
+-
+-<%= link_to 'New milestone', new_milestone_path %>
+diff --git a/app/views/milestones/index.html.haml b/app/views/milestones/index.html.haml
+new file mode 100644
+index 0000000000000000000000000000000000000000..75777d7ee201fa8961a65b64b8acbdd18ba40269
+--- /dev/null
++++ b/app/views/milestones/index.html.haml
+@@ -0,0 +1,21 @@
++%h1 Listing milestone
++%br/
++= link_to 'New milestone', new_project_milestone_path(@project)
++
++%table.data.bordered
++  %thead 
++  %tr
++    %th.top Name
++    %th.top Description
++    %th.top Deadline
++    %th.top{:colspan => 2} Actions
++  %tbody
++    - for milestone in @milestones
++      %tr
++        %td&= milestone.name
++        %td&= milestone.description
++        %td&= milestone.deadline
++        %td= link_to 'Edit', edit_milestone_path(milestone)
++        %td= link_to 'Destroy', milestone, :confirm => 'Are you sure?', :method => :delete
++%br/
++
+diff --git a/app/views/milestones/new.html.erb b/app/views/milestones/new.html.erb
+deleted file mode 100644
+index e48005c57d8505166d26ba118c88c0be294a0455..0000000000000000000000000000000000000000
+--- a/app/views/milestones/new.html.erb
++++ /dev/null
+@@ -1,27 +0,0 @@
+-<h1>New milestone</h1>
+-
+-<% form_for(@milestone) do |f| %>
+-  <%= f.error_messages %>
+-
+-  <p>
+-    <%= f.label :project %><br />
+-    <%= f.text_field :project %>
+-  </p>
+-  <p>
+-    <%= f.label :name %><br />
+-    <%= f.text_field :name %>
+-  </p>
+-  <p>
+-    <%= f.label :description %><br />
+-    <%= f.text_area :description %>
+-  </p>
+-  <p>
+-    <%= f.label :deadline %><br />
+-    <%= f.date_select :deadline %>
+-  </p>
+-  <p>
+-    <%= f.submit "Create" %>
+-  </p>
+-<% end %>
+-
+-<%= link_to 'Back', milestones_path %>
+diff --git a/app/views/milestones/new.html.haml b/app/views/milestones/new.html.haml
+new file mode 100644
+index 0000000000000000000000000000000000000000..3536f799c49ca45acc035643ed0a6961f7120b1f
+--- /dev/null
++++ b/app/views/milestones/new.html.haml
+@@ -0,0 +1,3 @@
++%h1 New milestone
++
++= render :partial => 'milestone', :locals => {:milestone => @milestone, :project => @project, :button => "Create" }
+diff --git a/app/views/milestones/show.html.erb b/app/views/milestones/show.html.erb
+deleted file mode 100644
+index ea396151d03091e37de87557ddd11a8dbf96fba8..0000000000000000000000000000000000000000
+--- a/app/views/milestones/show.html.erb
++++ /dev/null
+@@ -1,23 +0,0 @@
+-<p>
+-  <b>Project:</b>
+-  <%=h @milestone.project %>
+-</p>
+-
+-<p>
+-  <b>Name:</b>
+-  <%=h @milestone.name %>
+-</p>
+-
+-<p>
+-  <b>Description:</b>
+-  <%=h @milestone.description %>
+-</p>
+-
+-<p>
+-  <b>Deadline:</b>
+-  <%=h @milestone.deadline %>
+-</p>
+-
+-
+-<%= link_to 'Edit', edit_milestone_path(@milestone) %> |
+-<%= link_to 'Back', milestones_path %>
+diff --git a/app/views/stories/_story.html.haml b/app/views/stories/_story.html.haml
+index 193a8fa9ecaa019e17694108b5e8fd4d7a3534a8..a34d1e46843b66a892e2b82f8c493796e168866a 100644
+--- a/app/views/stories/_story.html.haml
++++ b/app/views/stories/_story.html.haml
+@@ -2,19 +2,19 @@
+ 
+   = f.hidden_field :iteration_id, :value => iteration.id
+ 
+-  .form_client
++  .input_field
+     %b Name
+     %br/
+     = f.text_field :name, :class => "long"
+ 
+-  .form_client
++  .input_field
+     %b Description
+     %br/
+     = f.text_area :description, :class => "big"
+ 
+-  .form_client
++  .input_field
+     %br/
+     Work units est
+     = f.text_field :work_units_est, :class => "numeric_entry"
+-  .form_client
++  .input_field
+     = f.submit button
+diff --git a/public/javascripts/application.js b/public/javascripts/application.js
+index 693a640640141f0c68ebbd9a06a27c027aaf26d0..c34004b5daf08d631cc6a9e800dc8b5ae3f0444f 100644
+--- a/public/javascripts/application.js
++++ b/public/javascripts/application.js
+@@ -26,7 +26,12 @@ $(function() {
+ 
+   // Set info messages dissapear after 5 seconds
+   $('#flash').animate({opacity: 1.0}, 5000).hide('slow')
+-  
++ 
++
++  $('#show_deadline').bind("click", function(e) {
++    $(this).attr("checked") ? $('#deadline_field').show() : $('#deadline_field').hide();
++  });
++
+   //behavior of iteration page: /iterations/1/stories
+   if (is_iteration_page) {
+ 
+diff --git a/public/stylesheets/application.css b/public/stylesheets/application.css
+index 3c50976ab7b034a65cb93bc85462837d39affde1..cb3b4f6b9deaebe2d96bb25071807075b304449b 100644
+--- a/public/stylesheets/application.css
++++ b/public/stylesheets/application.css
+@@ -41,6 +41,10 @@ label.title {
+   font-size: 1.1em;
+   font-weight: bold; }
+ 
++label {
++  font-size: 1.1em;
++  font-weight: bold; }
++
+ form {
+   margin: 0;
+   padding: 0; }
+@@ -618,5 +622,8 @@ ul.collapsed {
+   background-color: #ffe822;
+   color: #660000; }
+ 
+-.form_client {
++.input_field {
+   margin-bottom: 1em; }
++
++.hidden_div {
++  display: none; }
+diff --git a/public/stylesheets/sass/application.sass b/public/stylesheets/sass/application.sass
+index 8d65733a1bd203b329501092d41d568ef9708def..671c50a8c60181a43a2df4d93253a84c6b8b300a 100644
+--- a/public/stylesheets/sass/application.sass
++++ b/public/stylesheets/sass/application.sass
+@@ -56,6 +56,9 @@ label.title
+   :font-size 1.1em
+   :font-weight bold
+ 
++label
++  :font-size 1.1em
++  :font-weight bold
+ 
+ form
+   :margin 0
+@@ -780,5 +783,8 @@ ul
+   :background-color = !_yellow
+   :color = !_red
+ 
+-.form_client
++.input_field
+   :margin-bottom 1em
++
++.hidden_div
++  :display none
+diff --git a/spec/controllers/milestones_controller_spec.rb b/spec/controllers/milestones_controller_spec.rb
+index a1fca90733723872144ff443b1bdc2ca9fc6437b..a73d8f16b5275d231948c5a818133885ad290637 100644
+--- a/spec/controllers/milestones_controller_spec.rb
++++ b/spec/controllers/milestones_controller_spec.rb
+@@ -12,6 +12,8 @@ describe MilestonesController do
+   def mock_milestone(stubs={})
+     stubs.merge!({:project_id => @project.id})
+     @mock_milestone ||= mock_model(Milestone, stubs)
++    @mock_milestone.stub!(:deadline=).with(nil)
++    @mock_milestone
+   end
+   
+   describe "responding to GET index" do
+@@ -87,7 +89,7 @@ describe MilestonesController do
+     describe "with valid params" do
+       
+       it "should expose a newly created milestone as @milestone" do
+-        Milestone.should_receive(:new).with({'these' => 'params'}).and_return(mock_milestone(:save => true))
++        Milestone.should_receive(:new).with({"these" => 'params'}).and_return(mock_milestone(:save => true))
+         post :create, :milestone => {:these => 'params'}
+         assigns(:milestone).should equal(mock_milestone)
+       end
+@@ -98,6 +100,20 @@ describe MilestonesController do
+         response.should redirect_to(milestone_url(mock_milestone))
+       end
+       
++      it "should not reassign deadline if there is show_deadline parameter" do
++        Milestone.stub!(:new).and_return(mock_milestone(:save => true))
++        mock_milestone.should_not_receive(:deadline=)
++        post :create, :milestone => {:these => "params"}, :show_deadline => 1
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
++      it "should reassign deadline if there is no show_deadline parameter" do
++        Milestone.stub!(:new).and_return(mock_milestone(:save => true))
++        mock_milestone.should_receive(:deadline=)
++        post :create, :milestone => {:these => "params"} #, :show_deadline => 1
++        assigns(:milestone).should equal(mock_milestone)
++      end
++      
+     end
+     
+     describe "with invalid params" do
+@@ -140,6 +156,20 @@ describe MilestonesController do
+         response.should redirect_to(milestone_url(mock_milestone))
+       end
+ 
++      it "should not reassign deadline if there is show_deadline parameter" do
++        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
++        mock_milestone.should_not_receive(:deadline=)
++        post :update, :id => mock_milestone.id, :milestone => {:these => "params"}, :show_deadline => 1
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
++      it "should reassign deadline if there is no show_deadline parameter" do
++        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
++        mock_milestone.should_receive(:deadline=)
++        post :update, :id => mock_milestone.id, :milestone => {:these => "params"} #, :show_deadline => 1
++        assigns(:milestone).should equal(mock_milestone)
++      end
++
+     end
+     
+     describe "with invalid params" do
+-- 
+1.5.6.1
+
+
