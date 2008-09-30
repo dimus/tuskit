@@ -103,9 +103,9 @@
         - @meetings.each do |meeting|
           %tr
             %td= link_to format_date(meeting.meeting_date), edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to h meeting.name, edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to h meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to h participants(meeting), edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to h(meeting.name), edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
+            %td= link_to h(participants(meeting)), edit_iteration_meeting_path(@iteration, meeting)
             %td= link_to 'edit', edit_iteration_meeting_path(@iteration, meeting)
             %td= link_to 'delete', iteration_meeting_url(@iteration, meeting), :confirm => 'Are you sure?', :method => :delete
 
