@@ -1,0 +1,21 @@
+%h1 Listing milestone
+%br/
+= link_to 'New milestone', new_project_milestone_path(@project)
+
+%table.data.bordered
+  %thead 
+  %tr
+    %th.top Name
+    %th.top Description
+    %th.top Deadline
+    %th.top{:colspan => 2} Actions
+  %tbody
+    - for milestone in @milestones
+      %tr
+        %td&= milestone.name
+        %td&= milestone.description
+        %td&= milestone.deadline
+        %td= link_to 'Edit', edit_milestone_path(milestone)
+        %td= link_to 'Destroy', milestone, :confirm => 'Are you sure?', :method => :delete
+%br/
+

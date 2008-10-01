@@ -12,6 +12,8 @@ describe MilestonesController do
   def mock_milestone(stubs={})
     stubs.merge!({:project_id => @project.id})
     @mock_milestone ||= mock_model(Milestone, stubs)
+    @mock_milestone.stub!(:deadline=).with(nil)
+    @mock_milestone
   end
   
   describe "responding to GET index" do
@@ -87,7 +89,7 @@ describe MilestonesController do
     describe "with valid params" do
       
       it "should expose a newly created milestone as @milestone" do
-        Milestone.should_receive(:new).with({'these' => 'params'}).and_return(mock_milestone(:save => true))
+        Milestone.should_receive(:new).with({"these" => 'params'}).and_return(mock_milestone(:save => true))
         post :create, :milestone => {:these => 'params'}
         assigns(:milestone).should equal(mock_milestone)
       end
@@ -96,6 +98,20 @@ describe MilestonesController do
         Milestone.stub!(:new).and_return(mock_milestone(:save => true))
         post :create, :milestone => {}
         response.should redirect_to(milestone_url(mock_milestone))
+      end
+      
+      it "should not reassign deadline if there is show_deadline parameter" do
+        Milestone.stub!(:new).and_return(mock_milestone(:save => true))
+        mock_milestone.should_not_receive(:deadline=)
+        post :create, :milestone => {:these => "params"}, :show_deadline => 1
+        assigns(:milestone).should equal(mock_milestone)
+      end
+
+      it "should reassign deadline if there is no show_deadline parameter" do
+        Milestone.stub!(:new).and_return(mock_milestone(:save => true))
+        mock_milestone.should_receive(:deadline=)
+        post :create, :milestone => {:these => "params"} #, :show_deadline => 1
+        assigns(:milestone).should equal(mock_milestone)
       end
       
     end
@@ -138,6 +154,20 @@ describe MilestonesController do
         Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
         put :update, :id => "1"
         response.should redirect_to(milestone_url(mock_milestone))
+      end
+
+      it "should not reassign deadline if there is show_deadline parameter" do
+        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
+        mock_milestone.should_not_receive(:deadline=)
+        post :update, :id => mock_milestone.id, :milestone => {:these => "params"}, :show_deadline => 1
+        assigns(:milestone).should equal(mock_milestone)
+      end
+
+      it "should reassign deadline if there is no show_deadline parameter" do
+        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
+        mock_milestone.should_receive(:deadline=)
+        post :update, :id => mock_milestone.id, :milestone => {:these => "params"} #, :show_deadline => 1
+        assigns(:milestone).should equal(mock_milestone)
       end
 
     end

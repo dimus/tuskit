@@ -26,7 +26,12 @@ $(function() {
 
   // Set info messages dissapear after 5 seconds
   $('#flash').animate({opacity: 1.0}, 5000).hide('slow')
-  
+ 
+
+  $('#show_deadline').bind("click", function(e) {
+    $(this).attr("checked") ? $('#deadline_field').show() : $('#deadline_field').hide();
+  });
+
   //behavior of iteration page: /iterations/1/stories
   if (is_iteration_page) {
 

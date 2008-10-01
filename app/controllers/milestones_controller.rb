@@ -45,9 +45,9 @@ class MilestonesController < ApplicationController
   # POST /milestones.xml
   def create
     @milestone = Milestone.new(params[:milestone])
-
+    @milestone.deadline = nil unless params[:show_deadline]
     respond_to do |format|
-      if @milestone.save
+      if developer? && @milestone.save
         flash[:notice] = 'Milestone was successfully created.'
         format.html { redirect_to(@milestone) }
         format.xml  { render :xml => @milestone, :status => :created, :location => @milestone }
@@ -62,6 +62,7 @@ class MilestonesController < ApplicationController
   # PUT /milestones/1.xml
   def update
     @milestone = Milestone.find(params[:id])
+    @milestone.deadline = nil unless params[:show_deadline]
 
     respond_to do |format|
       if @milestone.update_attributes(params[:milestone])

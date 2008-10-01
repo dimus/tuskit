@@ -5,14 +5,14 @@
 = link_to 'Add iteration', new_project_iteration_url(@project)
 
 - if !@iterations.empty?
-  %table{:class => 'data bordered'}
+  %table.data.bordered
     %thead
       %tr
-        %th Dates
-        %th Objectives
-        %th Work units est
-        %th W.u. done
-        %th{:colspan => "2"} Action
+        %th.top Dates
+        %th.top Objectives
+        %th.top Work units est
+        %th.top W.u. done
+        %th.top{:colspan => "2"} Action
 
     %tbody
       - @iterations.each do |iteration|

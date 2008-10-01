@@ -41,6 +41,10 @@ label.title {
   font-size: 1.1em;
   font-weight: bold; }
 
+label {
+  font-size: 1.1em;
+  font-weight: bold; }
+
 form {
   margin: 0;
   padding: 0; }
@@ -618,5 +622,8 @@ ul.collapsed {
   background-color: #ffe822;
   color: #660000; }
 
-.form_client {
+.input_field {
   margin-bottom: 1em; }
+
+.hidden_div {
+  display: none; }
