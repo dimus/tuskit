@@ -15,12 +15,12 @@
     -@users.each do |user|
       -count += 1
       %tr{:id => "user_#{user.id}"}
-        %td= count
-        %td= user.full_name
-        %td= user.login
-        %td= user.email
-        %td= user.phone
-        %td= user.groups.map{|r| r.name}.join(', ')
+        %td&= count
+        %td&= user.full_name
+        %td&= user.login
+        %td&= user.email
+        %td&= user.phone
+        %td&= user.groups.map{|r| r.name}.join(', ')
         %td 
           = link_to "Edit", edit_user_url(user)
           ,

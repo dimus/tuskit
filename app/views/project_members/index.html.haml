@@ -22,11 +22,11 @@
             - @project_members.each do |pm|
               %tr
                 %td
-                  = pm.user.full_name
+                  &= pm.user.full_name
                 %td
                   = link_to((pm.send_iteration_report ? "yes" : "no"), project_member_url(pm.id, :project_member => {:send_iteration_report => pm.send_iteration_report ? 0 : 1}), :method => :put)
                 %td
-                  = pm.user.groups.map {|g| g.name}.join(", ")
+                  &= pm.user.groups.map {|g| g.name}.join(", ")
                 %td
                   = link_to "delete", project_member_path(pm), :method => :delete
       %td{ :style => "vertical-align:middle;" }
@@ -48,6 +48,6 @@
                 %td
                   %input{:id => "users_#{u.id}", :name => "users[]", :value => u.id, :type => "checkbox" }/
                 %td
-                  = u.full_name
+                  &= u.full_name
                 %td
-                  = u.groups.map {|g| g.name}.join(", ")
+                  &= u.groups.map {|g| g.name}.join(", ")
