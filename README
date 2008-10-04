@@ -1,6 +1,6 @@
 == Tusk*It
 
-Is is an issue/bug tracker with Agile twist.
+Is is an issue/bug tracker with an Agile twist.
 
 It is a web application written in Ruby on Rails
 
@@ -11,9 +11,7 @@ time on overhead introduced by Agile methodologies and still enjoy all the benet
 
 == Install
 
-- Download tar.gz or zip file and uncompress it
-
-- Install as any other RoR application and cd to the tuskit directory
+- Download tar.gz or zip file uncompress it and cd to tuskit directory
 
 - Copy config/database.yml.example to config.database.yml and change settings
 
@@ -23,9 +21,9 @@ time on overhead introduced by Agile methodologies and still enjoy all the benet
 
 - run ./script/server
 
-- point your browser at http://0.0.0.0:3000
+- point your browser to http://0.0.0.0:3000
 
-- login and start using it
+- login to you admin account and start using it
 
 
 
