@@ -1,22 +1,31 @@
-== Welcome to TuskIt
+== Tusk*It
 
-An issue tracker with Agile twist.
-
-
-== What is it for?
-
-TuskIt is written for small agile teams who want to automate their work and make it more productive
+Is is an issue/bug tracker with Agile twist.
 
 It is a web application written in Ruby on Rails
 
+== What is it for?
 
-== Features
+Tusk*It is written for small teams who want to automate their work, spend less
+time on overhead introduced by Agile methodologies and still enjoy all the benethits of Agile practices.
 
-- TuskIt allow to organize Planning game meetings between developers and customers.
+== Install
 
-- It makes it easy to plan and track progress of an iteration
+- Download tar.gz or zip file and uncompress it
 
-== Planned features
+- Install as any other RoR application and cd to the tuskit directory
+
+- Copy config/database.yml.example to config.database.yml and change settings
+
+- Copy config/config.yml.example to config.yml and change settings
+
+- run ./script/admin_create
+
+- run ./script/server
+
+- point your browser at http://0.0.0.0:3000
+
+- login and start using it
 
 
 
