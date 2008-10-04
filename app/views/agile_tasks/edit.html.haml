@@ -2,7 +2,4 @@
 
 = error_messages_for :agile_task
 
-- if @agile_task.updated_by
-  .help_info== The task is created by #{User.find_by_login(@agile_task.created_by).full_name}, updated by  #{User.find_by_login(@agile_task.updated_by).full_name}.
-
 = render :partial => 'agile_task', :locals => {:story => @story, :agile_task => @agile_task, :button => "Update" }

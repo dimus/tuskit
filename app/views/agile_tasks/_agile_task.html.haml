@@ -1,49 +1,48 @@
 - form_for(agile_task) do |f|
   .input_field
     = f.hidden_field :story_id, :value => story.id
-  /.input_field
-  /  %b Tracker ticket
-  /  %br/
-  /  = f.text_field :tracker_ticket_id
-  /
-  /.input_field
-  /  %b Tracker ticket submitter
-  /  %br/
-  /  = f.text_field :tracker_ticket_submitter
-  /
+  
+  -#
+    .input_field
+      %b Tracker ticket
+      %br/
+      = f.text_field :tracker_ticket_id
+    
+    .input_field
+      %b Tracker ticket submitter
+      %br/
+      = f.text_field :tracker_ticket_submitter
+  
   .input_field
     - if !agile_task.completion_date
       == <input type="checkbox" name="task_completed" id="task_completed" value = "1" /><input type="hidden" name="task_completed" value = "0" />
-      %label{:for => "task_completed"} 
+      %label.inline{:for => "task_completed"} 
         %b Completed
     - else
       %b Completion date:
       = f.date_select :completion_date
       == (<input type="checkbox" name="task_not_completed" id="task_not_completed" value = "1" /><input type="hidden" name="task_not_completed" value = "0" />
-      %label{:for => "task_not_completed"} 
+      %label.inline{:for => "task_not_completed"} 
         %b Make not completed)
 
   .input_field
-    %b Name
-    %br/
+    = f.label :name
     = f.text_field :name, :class => "long"
 
   .input_field
     = f.check_box :bug
-    %label{:for => "agile_task_bug"} 
-      %b Is it a bug fix?
-
+    = f.label :bug, "Is it a bug fix?", :class => "inline" 
+      
 
   .input_field
     = drawer("task_users", "Add/Delete Task Owners", developers_list(story, agile_task), task_developers(agile_task), agile_task.task_owners.empty?)
 
   .input_field
-    %b Notes
-    %br/
+    = f.label :notes
     = f.text_area :notes, :class => "big"
 
-  %div
-    %label{:class => "title", :for => "agile_task_task_units" } Task units
+  .input_field
+    = f.label :task_units
     .help_info Estimation of time in hours required to finish the task
     = f.text_field :task_units, :class => "numeric_entry"
 

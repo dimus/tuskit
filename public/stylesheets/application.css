@@ -43,7 +43,11 @@ label.title {
 
 label {
   font-size: 1.1em;
-  font-weight: bold; }
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.2em; }
+  label.inline {
+    display: inline; }
 
 form {
   margin: 0;
@@ -110,7 +114,7 @@ textarea {
   width: 40em;
   height: 4em; }
   textarea.big {
-    width: 40em;
+    width: 69em;
     height: 15em; }
 
 .info-div {
@@ -192,6 +196,8 @@ table {
       table.data tr.even_row {
         background: #e0f2da; }
       table.data tr.task_active {
+        background-color: #efd7b5; }
+      table.data tr.project_active {
         background-color: #efd7b5; }
   table.valign_top {
     vertical-align: top; }

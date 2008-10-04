@@ -1,19 +1,30 @@
-%table
-  %tr
-    %th Name
-    %td= form.text_field :name 
-  %tr
-    %th Description
-    %td= form.text_field :description 
-  %tr
-    %th Start Date
-    %td= form.date_select(:start_date) 
-  %tr
-    %th Iteration Length
-    %td
-      = form.text_field :iteration_length, :size => 2 
-      days
-  %tr
-    %th Send Progress Reports
-    %td= form.check_box :progress_reports 
-  %tr
+- form_for(project) do |f|
+
+  .input_field
+    = f.label :name
+    = f.text_field :name 
+  
+  .input_field
+    = f.label :description
+    = f.text_field :description 
+  
+  .input_field
+    = f.label :start_date
+    = f.date_select(:start_date) 
+  
+  .input_field
+    = f.label :iteration_length
+    = f.text_field :iteration_length, :size => 2 
+    days
+  
+  .input_field
+    = f.check_box :progress_reports
+    = f.label :progress_reports, "Send Progress Reports", :class => "inline"
+  
+  .input_field
+    = submit_tag button       
+
+    - if button == "Update"
+      = "&nbsp;" * 10 
+      = link_to 'Delete', project_url(@project), :confirm => 'Are you sure?', :method => :delete
+  

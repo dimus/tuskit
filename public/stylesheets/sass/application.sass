@@ -59,6 +59,11 @@ label.title
 label
   :font-size 1.1em
   :font-weight bold
+  :display block
+  :margin-bottom 0.2em
+
+  &.inline
+    :display inline
 
 form
   :margin 0
@@ -142,7 +147,7 @@ textarea
   :height 4em
 
   &.big
-    :width 40em
+    :width 69em
     :height 15em
 
 .info-div
@@ -245,6 +250,9 @@ table
         :background #e0f2da
 
       &.task_active
+        :background-color = !_orange
+      
+      &.project_active
         :background-color = !_orange
 
   &.valign_top

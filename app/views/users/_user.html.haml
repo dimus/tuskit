@@ -1,26 +1,35 @@
-%table
-  %tr 
-    %th Login
-    %td= form.text_field :login 
-  %tr 
-    %th First Name
-    %td= form.text_field :first_name 
-  %tr 
-    %th Last Name
-    %td= form.text_field :last_name 
-  %tr 
-    %th Email
-    %td= form.text_field :email 
-  %tr 
-    %th Password
-    %td= form.password_field :password   
-  %tr 
-    %th Confirm Password
-    %td= form.password_field :password_confirmation 
-%br/
-%h4>Check all roles which apply:</h4>
-- Group.find(:all).each do |group|
-  %input{:type => "checkbox", :name => "groups[]", :id => "groups_#{group.id}", :value => group.id, :checked => (user && user.groups.include?(group))}/
-  %label{:for => "groups_#{group.id}"}
-    = group.name
-%p= submit_tag 'Save'
+- form_for(user) do |f|
+
+  .input_field 
+    = f.label :login
+    = f.text_field :login 
+
+  .input_field 
+    = f.label :first_name
+    = f.text_field :first_name 
+  
+  .input_field 
+    = f.label :last_name
+    = f.text_field :last_name 
+  
+  .input_field 
+    = f.label :email
+    = f.text_field :email 
+  
+  .input_field 
+    = f.label :password
+    = f.password_field :password   
+  
+  .input_field 
+    = f.label :confirm_password
+    = f.password_field :password_confirmation 
+
+  %br/
+  %h4r Check all roles which apply:
+  - Group.find(:all).each do |group|
+    %input{:type => "checkbox", :name => "groups[]", :id => "groups_#{group.id}", :value => group.id, :checked => (user && user.groups.include?(group))}/
+    %label.inline{:for => "groups_#{group.id}"}
+      = group.name
+  
+  .input_field
+    = submit_tag 'Save'

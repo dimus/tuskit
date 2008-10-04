@@ -3,30 +3,28 @@
   = f.hidden_field :iteration_id, :value => iteration.id
 
   .input_field
-    %b Name
-    %br/
+    = f.label :name
     = f.text_field :name
 
   .input_field
-    %b Meeting date
-    %br/
+    = f.label :meeting_date
     = f.date_select :meeting_date
 
   %fieldset.subsection
     %legend.subsectio Participants
     - @iteration.project.project_members.each do |participant|
       %div{:style => "margin: 0; padding: 0;"}
-        %input{:type => "checkbox", :name => "users[]", :id => "users_" + participant.user.id.to_s, :value => participant.user.id, :checked => meeting.meeting_participants.map { |mp| mp.user }.include?(participant.user)}   
-        %label{:for => "users_" + participant.user.id.to_s } 
+        %input.inline{:type => "checkbox", :name => "users[]", :id => "users_" + participant.user.id.to_s, :value => participant.user.id, :checked => meeting.meeting_participants.map { |mp| mp.user }.include?(participant.user)}   
+        %label.inline{:for => "users_" + participant.user.id.to_s } 
           = participant.user.full_name
+  
   .input_field
-    %b Length (hours)
-    %br/
-    = f.text_field :length
+    = f.label :length, "Length (hours)"
+    = f.text_field :length, :size => 2
 
   .input_field
-    %b Notes
-    %br/
+    = f.label :notes
     = f.text_area :notes, :class => "big"
+  
   .input_field
     = f.submit button

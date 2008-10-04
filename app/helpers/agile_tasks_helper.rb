@@ -4,7 +4,7 @@ module AgileTasksHelper
     developers_list = ''
     story.project.developers.each do |d|
       developers_list += "<input type=\"checkbox\" name=\"user_ids[]\" id=\"user_ids_#{d.user.id}\" value=\"#{d.user.id}\" " + checked?(task.task_owners.map {|o| o.user_id}.include?(d.user_id)) + " />
-    	<label for=\"user_ids_#{d.user.id}\">#{d.user.full_name}
+    	<label for=\"user_ids_#{d.user.id}\" class=\"inline\">#{d.user.full_name}
     	</label><br />"
     end
     developers_list

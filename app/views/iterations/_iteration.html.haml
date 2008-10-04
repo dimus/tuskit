@@ -1,24 +1,25 @@
 - form_for(iteration) do |f|
   
   = f.hidden_field :project_id, :value => @project.id
+  
   .input_field
-    %b Objectives
-    %br/
+    = f.label :objectives
     = f.text_area :objectives
+  
   .input_field
-    %b Start date
-    %br/
+    = f.label :start_date
     = f.date_select :start_date
     = iteration.start_date.strftime "%a" if iteration.start_date
+  
   .input_field
-    %b End date
-    %br/
+    = f.label :end_date
     = f.date_select :end_date
     = iteration.end_date.strftime "%a" if iteration.end_date
+  
   .input_field
-    %b Work units
-    %br/
+    = f.label :work_units
     = f.text_field :work_units
+  
   .input_field
     = f.submit button
 

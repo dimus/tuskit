@@ -6,7 +6,7 @@
     %meta{ :content => "en-us", "http-equiv" => "Content-Language" }/
     %title
       Tusk•It:
-      = CUSTOM['general']['site_title']
+      &= CUSTOM['general']['site_title']
     %meta{ :name => "ROBOTS", :content => "ALL" }/
     %meta{ :content => "no", "http-equiv" => "imagetoolbar" }/
     %meta{ :name => "MSSmartTagsPreventParsing", :content => "true" }/
@@ -37,7 +37,7 @@
                 #info
                   - if current_user != :false
                     == User:&nbsp;&nbsp;#{current_user[:login] rescue nil}
-                    \&nbsp;&nbsp;&nbsp;&nbsp;|
+                    &nbsp;&nbsp;&nbsp;&nbsp;|
                     - if  !current_user.groups.blank?
                       - current_user.groups.each do |group|
                         = link_to group.name.capitalize, eval("url_" + group.name)
@@ -45,7 +45,7 @@
                     = link_to "Logout", session_url(1), :method => :delete
                 %br{ :clear => "all" }/
                 #title
-                  = page_title
+                  &= page_title if current_user != :false
                   %br/
                   = @current_subtab
         / end of logodiv

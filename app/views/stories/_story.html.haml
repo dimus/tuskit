@@ -3,18 +3,16 @@
   = f.hidden_field :iteration_id, :value => iteration.id
 
   .input_field
-    %b Name
-    %br/
+    = f.label :name
     = f.text_field :name, :class => "long"
 
   .input_field
-    %b Description
-    %br/
+    = f.label :description
     = f.text_area :description, :class => "big"
 
   .input_field
-    %br/
-    Work units est
+    = f.label :work_units_est, "Work units"
     = f.text_field :work_units_est, :class => "numeric_entry"
+
   .input_field
     = f.submit button

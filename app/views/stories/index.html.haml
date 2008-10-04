@@ -1,8 +1,7 @@
-- iteration_label = @iteration == @iteration.project.current_iteration ? "Current Iteration" : "Old Iteration"
-- iteration_label = "Future Iteration" if @iteration.start_date >= Date.today
+- iteration_label = @iteration == @iteration.project.current_iteration ? "Current Iteration" : (@iteration.end_date < Date.today ? "Old Iteration" : "Future Iteration")
 - days_left = @iteration.current? ? " (#{@iteration.days_left} #{@iteration.days_left == 1 ? "day" : "days"} left)" : ""
 %h1 
-  = h("#{iteration_label} #{dates_interval(@iteration.start_date, @iteration.end_date)}#{days_left}")
+  &== #{iteration_label} #{dates_interval(@iteration.start_date, @iteration.end_date)}#{days_left}
 
 = link_to 'Edit', edit_project_iteration_url(@iteration.project,@iteration)
 = "|"
@@ -14,19 +13,17 @@
   = "|"
   = link_to 'Next Iteration', iteration_stories_url(@next_iteration)
 
-
-
 %p
   %b Objectives:
-  = @iteration.objectives.strip == "" ? "N/A" : h(@iteration.objectives)
+  &= @iteration.objectives.strip == "" ? "N/A" : @iteration.objectives
 %p
   %b Work units:
   Limit: 
-  %b= h @iteration.work_units
+  %b&= @iteration.work_units
   , Planned: 
-  %b= h @iteration.work_units_planned
+  %b&= @iteration.work_units_planned
   , Done: 
-  %b= h @iteration.work_units_real
+  %b&= @iteration.work_units_real
 
 = burndown_chart(@iteration.burndown, @iteration.work_units_planned)
 = velocity_chart(@project.velocity, @iteration.id)
@@ -45,13 +42,29 @@
           %tr
             %td{:style => "width:8em"}= story_completion(story)
             %td{:style => "width:25em"}
-              %b= h story.name
-            %td{:style => "width:5em"}==  (#{h story.work_units_est} w.u.) 
+              %b&= story.name
+            %td{:style => "width:5em"}&==  (#{story.work_units_est} w.u.) 
             %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
             %td{:style => "width:7em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
-            %td{:style => "width:1em"}= link_to "<", story_url(story, "story[iteration_id]" => @previous_iteration.id), :method => "put", :confirm => "Story will be moved to the previous iteration" if @previous_iteration
-            %td{:style => "width:0em"}= "iteration" if @previous_iteration || @next_iteration
-            %td{:style => "width:1em"}= link_to ">", story_url(story, "story[iteration_id]" => @next_iteration.id), :method => "put", :confirm => "Story will be moved to the next iteration" if @next_iteration
+
+            / allow to move story for current/future iterations
+            - is_prev = @previous_iteration && @previous_iteration.end_date >= Date.today
+            - is_next = @iteration.end_date >= Date.today
+            - if is_prev || is_next
+              - msg = "Story will be moved to the previous iteration"
+              %td{:style => "width:1em"}= link_to "&lt;", story_url(story, "story[iteration_id]" => @previous_iteration.id), :method => "put", :confirm => msg, :title => msg if is_prev
+              - msg = is_prev && is_next ? "prev/next" : (is_next ? "next" : "prev")
+              - msg = "to&nbsp;#{msg}&nbsp;iter."
+              %td{:style => "width:0em"}= msg
+              - if is_next
+                %td{:style => "width:1em"}
+                  - if @next_iteration
+                    - msg = "Story will be moved to the next iteration."
+                    = link_to "&gt;", story_url(story, "story[iteration_id]" => @next_iteration.id), :method => "put", :confirm => msg, :title => msg 
+                  - else
+                    - msg = "Cannot move story yet. Create new iteration first."
+                    = link_to '<span style ="color:#999;">&gt;</span>', "javascript:alert('#{msg}')", :title => msg
+      
       - show_style = @collapse_iteration ? "display:none;" : "display:block"
       .agile_tasks{:style => show_style}
         = link_to "<strong>Add task</strong>", new_story_agile_task_url(story)
