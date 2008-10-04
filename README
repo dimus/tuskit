@@ -7,15 +7,19 @@ It is a web application written in Ruby on Rails
 == What is it for?
 
 Tusk*It is written for small teams who want to automate their work, spend less
-time on overhead introduced by Agile methodologies and still enjoy all the benethits of Agile practices.
+time on overhead introduced by Agile methodologies and still enjoy all the benefits of Agile practices.
 
 == Install
 
-- Download tar.gz or zip file uncompress it and cd to tuskit directory
+- Download tar.gz or zip file, uncompress it, and cd to tuskit directory
 
 - Copy config/database.yml.example to config.database.yml and change settings
 
 - Copy config/config.yml.example to config.yml and change settings
+
+- run rake db:create:all
+
+- run rake db:migrate
 
 - run ./script/admin_create
 
