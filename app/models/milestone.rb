@@ -4,7 +4,7 @@ class Milestone < ActiveRecord::Base
 
   validates_presence_of :name
 
-  def self.current
-    Milestone.find(:first, :conditions => "completion_date is null")
+  def current?
+    self == Milestone.find(:first, :conditions => "completion_date is null")
   end
 end

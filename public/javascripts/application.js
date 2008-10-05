@@ -19,7 +19,7 @@ $(function() {
   var is_iteration_page = (path[1] == "iterations" && path[3] == "stories");
   
   // Set focus on login text input for login
-  $("input#login,input#user_login,input#agile_task_name,input#story_name").focus();
+  $("input#login,input#user_login,input#agile_task_name,input#story_name,input#milestone_name,input#feature_name").focus();
 
   // Set zebra style for data tables
   $('table.data tbody tr:nth-child(even)').addClass('even_row');

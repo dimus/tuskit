@@ -18,6 +18,10 @@ class Project < ActiveRecord::Base
   def current_iteration 
     self.iterations.select {|i| i.current?}.sort_by(&:start_date).first
   end
+
+  def current_milestone
+    self.milestones.select {|m| m.current?}.sort_by(&:created_at).first
+  end
   
   def current_iteration_resource
     current_iteration.id rescue nil

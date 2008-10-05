@@ -6,6 +6,10 @@
     = f.label :name
     = f.text_field :name, :class => "long"
 
+  - if iteration.project.current_milestone && !iteration.project.current_milestone.features.blank?
+    .input_field
+      = drawer("task_users", "Add/Delete Task Owners", 'one', 'two', false)
+
   .input_field
     = f.label :description
     = f.text_area :description, :class => "big"

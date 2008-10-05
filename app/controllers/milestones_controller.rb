@@ -37,10 +37,12 @@ class MilestonesController < ApplicationController
     respond_to do |format|
       if developer? && @milestone.save
         flash[:notice] = 'Milestone was successfully created.'
-        format.html { redirect_to project_milestones_url(@milestone.project) }
+        format.html { redirect_to project_milestones_url(@project) }
         format.xml  { render :xml => @milestone, :status => :created, :location => @milestone }
       else
-        format.html { render :action => "new" }
+        format.html do 
+          render :action => "new"
+        end
         format.xml  { render :xml => @milestone.errors, :status => :unprocessable_entity }
       end
     end
@@ -84,6 +86,7 @@ protected
   end
 
   def project_find
-    @project = params[:project_id] ? Project.find(params[:project_id]) : nil
+    project_id = params[:project_id] || params[:milestone][:project_id] rescue nil
+    @project = project_id ? Project.find(project_id) : nil
   end
 end
