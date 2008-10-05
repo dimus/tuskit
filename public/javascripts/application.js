@@ -38,7 +38,7 @@ $(function() {
     function collapse (collapse) {
       var msg = collapse ? "Expand Stories" : "Collapse Stories"
       collapse ? $('.agile_tasks').hide("slide",{},200) : $('.agile_tasks').show("slide",{},200);
-      $('#toggle_stories a strong').text(msg);
+      $('#toggle_stories a').text(msg);
     }
 
     function saveCollapseState(collapse) {
@@ -63,7 +63,7 @@ $(function() {
     //Toggle stories view
     $('#toggle_stories').bind("click", 
       function(e){
-        if ($('#toggle_stories a strong').text() == "Expand Stories" && is_iteration_page) {
+        if ($('#toggle_stories a').text() == "Expand Stories" && is_iteration_page) {
           collapse(false);
           saveCollapseState("false");
         } else {

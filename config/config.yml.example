@@ -1,5 +1,5 @@
 general:
-  site_title: 
+  site_title: <My Site> 
 
 mailer:
   email_from: from@example.com

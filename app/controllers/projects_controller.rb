@@ -1,5 +1,4 @@
 class ProjectsController < ApplicationController
-  layout "user"
   
   # GET /projects
   # GET /projects.xml

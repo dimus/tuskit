@@ -1,24 +1,50 @@
-- form_for(@milestone) do |f|
+- form_for(milestone) do |f|
   = f.error_messages
 
-  = f.hidden_field :project_id, :value => @project.id
+  = f.hidden_field :project_id, :value => project.id
   
   .input_field
     = f.label :name
     = f.text_field :name 
+  
+  .input_field  
+    = check_box_tag :show_deadline, 1, milestone.deadline
+    Has a Deadline?
+  
+  .input_field
+    - classes_data = "input_field" + (milestone.deadline ? "" : " hidden_div")
+    #deadline_field{ :class => classes_data}
+      = f.label :deadline
+      = f.date_select :deadline
 
   .input_field
     = f.label :description
     = f.text_area :description
   
-  .input_field  
-    = check_box_tag :show_deadline, 1, @milestone.deadline
-    Has a Deadline?
-  
-  .input_field  
-    #deadline_field.input_field.hidden_div
-      = f.label :deadline
-      = f.date_select :deadline
+  %fieldset.subsection
+    %legend.subsection Features
+    
+    = link_to "Add feature", new_milestone_feature_url(milestone), :class => "navigation"
+
+    - unless @milestone.features.blank?
+      %table.data.bordered
+        %thead
+        %tr
+          %th.top{:style => "width:30em"} Name
+          %th.top{:style => "width:3em"} Done?
+          %th.top{:colspan => 2} Actions
+        %tbody
+          - for feature in @milestone.features
+            %tr
+              %td= link_to h(feature.name), edit_milestone_feature_url(milestone, feature)
+              - msg = "no"
+              - new_completion_date = Date.today
+              - if feature.completion_date
+                - msg = "yes"
+                - new_completion_date = nil
+              %td= link_to msg, milestone_feature_url(milestone, feature, "feature[completion_date]" => new_completion_date), :method => :put, :class => "navigation"
+              %td= link_to "edit", edit_milestone_feature_url(milestone, feature), :class => "navigation"
+              %td= link_to "delete", milestone_feature_url(milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
   
   .input_field
-    = f.submit "Create"
+    = f.submit button

@@ -1,5 +1,4 @@
 class ProjectMembersController < ApplicationController
-  layout "user"
   
   # GET /project_members
   # GET /project_members.xml

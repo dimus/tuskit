@@ -1,0 +1,14 @@
+- form_for(feature) do |f|
+  = f.error_messages
+  = f.hidden_field :milestone_id, :value => milestone.id
+  
+  .input_field
+    = f.label :name
+    = f.text_field :name, :class => "long"
+  
+  .input_field
+    = f.label :description
+    = f.text_area :description, :class => "big"
+  
+  .input_field
+    = f.submit button

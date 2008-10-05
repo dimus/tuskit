@@ -13,9 +13,9 @@ time on overhead introduced by Agile methodologies and still enjoy all the benef
 
 - Download tar.gz or zip file, uncompress it, and cd to tuskit directory
 
-- Copy config/database.yml.example to config.database.yml and change settings
+- Copy ./config/database.yml.example to ./config/database.yml and change settings
 
-- Copy config/config.yml.example to config.yml and change settings
+- Copy ./config/config.yml.example to ./config/config.yml and change settings
 
 - run rake db:create:all
 

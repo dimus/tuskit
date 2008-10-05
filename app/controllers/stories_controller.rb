@@ -1,5 +1,5 @@
 class StoriesController < ApplicationController
-  layout "user"
+
   # GET /stories
   # GET /stories.xml
   def index

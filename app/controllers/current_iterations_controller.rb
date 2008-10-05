@@ -1,5 +1,4 @@
 class CurrentIterationsController < ApplicationController
-  layout "user"
   
   # GET /active_projects.xml
   def index

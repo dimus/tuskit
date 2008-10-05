@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  layout 'user'
+  
   def index
     page = params[:page] || 1 rescue 1
     @project = Project.find(params[:project_id])

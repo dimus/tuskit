@@ -1,5 +1,4 @@
 class AgileTasksController < ApplicationController
-  layout "user"
 
   # GET /agile_tasks
   # GET /agile_tasks.xml

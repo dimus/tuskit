@@ -1,21 +1,19 @@
 %h1 Listing milestone
-%br/
-= link_to 'New milestone', new_project_milestone_path(@project)
+= link_to 'Add milestone', new_project_milestone_path(@project), :class => "navigation"
 
-%table.data.bordered
-  %thead 
-  %tr
-    %th.top Name
-    %th.top Description
-    %th.top Deadline
-    %th.top{:colspan => 2} Actions
-  %tbody
-    - for milestone in @milestones
-      %tr
-        %td&= milestone.name
-        %td&= milestone.description
-        %td&= milestone.deadline
-        %td= link_to 'Edit', edit_milestone_path(milestone)
-        %td= link_to 'Destroy', milestone, :confirm => 'Are you sure?', :method => :delete
-%br/
-
+- unless @milestones.blank?
+  %table.data.bordered
+    %thead 
+    %tr
+      %th.top Name
+      %th.top Description
+      %th.top Deadline
+      %th.top{:colspan => 2} Actions
+    %tbody
+      - for milestone in @milestones
+        %tr
+          %td= link_to h(milestone.name), edit_project_milestone_url(@project,milestone)
+          %td= link_to h(milestone.description), edit_project_milestone_url(@project,milestone)
+          %td= link_to h(milestone.deadline), edit_project_milestone_url(@project,milestone)
+          %td= link_to 'edit', edit_project_milestone_url(@project,milestone), :class => "navigation"
+          %td= link_to 'delete', project_milestone_url(@project, milestone), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"

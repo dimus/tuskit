@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :milestones
+  map.resources :milestones, :has_many => [:features]
 
   map.resources :features
 

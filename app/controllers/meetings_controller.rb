@@ -1,5 +1,5 @@
 class MeetingsController < ApplicationController
-  layout "user"
+  
   # GET /meetings
   # GET /meetings.xml
   def index

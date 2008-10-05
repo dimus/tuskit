@@ -1,5 +1,5 @@
 class IterationsController < ApplicationController
-  layout "user"
+  
   # GET /iterations
   # GET /iterations.xml
   def index

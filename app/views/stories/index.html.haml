@@ -3,15 +3,15 @@
 %h1 
   &== #{iteration_label} #{dates_interval(@iteration.start_date, @iteration.end_date)}#{days_left}
 
-= link_to 'Edit', edit_project_iteration_url(@iteration.project,@iteration)
+= link_to 'Edit', edit_project_iteration_url(@iteration.project,@iteration), :class => "navigation"
 = "|"
-= link_to 'All Iterations', project_iterations_path(@iteration.project)
+= link_to 'All Iterations', project_iterations_path(@iteration.project), :class => "navigation"
 - if @previous_iteration
   = "|"
-  = link_to 'Prev. Iteraion', iteration_stories_url(@previous_iteration)
+  = link_to 'Prev. Iteraion', iteration_stories_url(@previous_iteration), :class => "navigation"
 - if @next_iteration
   = "|"
-  = link_to 'Next Iteration', iteration_stories_url(@next_iteration)
+  = link_to 'Next Iteration', iteration_stories_url(@next_iteration), :class => "navigation"
 
 %p
   %b Objectives:
@@ -31,10 +31,10 @@
 %fieldset.subsection
   %legend.subsection Stories/Tasks
   %div{:style => "margin-bottom:1em"}
-    %span= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration)
+    %span= link_to 'Add story', new_iteration_story_path(@iteration), :class => "navigation"
     |
-    - collapse_stories_msg = @collapse_iteration ? '<strong>Expand Stories</strong>' : '<strong>Collapse Stories</strong>'
-    %span#toggle_stories.hide_stories= link_to collapse_stories_msg, "#toggle"
+    - collapse_stories_msg = @collapse_iteration ? 'Expand Stories' : 'Collapse Stories'
+    %span#toggle_stories.hide_stories= link_to collapse_stories_msg, "#toggle", :class => "navigation"
   - @stories.each do |story|
     .story{:id => "story_" + story.id.to_s}
       .story_title
@@ -44,15 +44,15 @@
             %td{:style => "width:25em"}
               %b&= story.name
             %td{:style => "width:5em"}&==  (#{story.work_units_est} w.u.) 
-            %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story)
-            %td{:style => "width:7em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?"
+            %td{:style => "width:3em"}= link_to "edit", edit_iteration_story_url(@iteration, story), :class => "navigation"
+            %td{:style => "width:7em"}= link_to "delete", iteration_story_url(@iteration, story), :method => "delete", :confirm => "Are you sure?", :class => "navigation"
 
             / allow to move story for current/future iterations
             - is_prev = @previous_iteration && @previous_iteration.end_date >= Date.today
             - is_next = @iteration.end_date >= Date.today
             - if is_prev || is_next
               - msg = "Story will be moved to the previous iteration"
-              %td{:style => "width:1em"}= link_to "&lt;", story_url(story, "story[iteration_id]" => @previous_iteration.id), :method => "put", :confirm => msg, :title => msg if is_prev
+              %td{:style => "width:1em"}= link_to "&lt;", story_url(story, "story[iteration_id]" => @previous_iteration.id), :method => "put", :confirm => msg, :title => msg, :class => "navigation" if is_prev
               - msg = is_prev && is_next ? "prev/next" : (is_next ? "next" : "prev")
               - msg = "to&nbsp;#{msg}&nbsp;iter."
               %td{:style => "width:0em"}= msg
@@ -60,14 +60,14 @@
                 %td{:style => "width:1em"}
                   - if @next_iteration
                     - msg = "Story will be moved to the next iteration."
-                    = link_to "&gt;", story_url(story, "story[iteration_id]" => @next_iteration.id), :method => "put", :confirm => msg, :title => msg 
+                    = link_to "&gt;", story_url(story, "story[iteration_id]" => @next_iteration.id), :method => "put", :confirm => msg, :title => msg, :class => "navigation" 
                   - else
                     - msg = "Cannot move story yet. Create new iteration first."
-                    = link_to '<span style ="color:#999;">&gt;</span>', "javascript:alert('#{msg}')", :title => msg
+                    = link_to '<span style ="color:#999;">&gt;</span>', "javascript:alert('#{msg}')", :title => msg, :class => "navigation"
       
       - show_style = @collapse_iteration ? "display:none;" : "display:block"
       .agile_tasks{:style => show_style}
-        = link_to "<strong>Add task</strong>", new_story_agile_task_url(story)
+        = link_to "Add task", new_story_agile_task_url(story), :class => "navigation"
         - if !story.agile_tasks.empty?
           %table{:class => "data bordered"}
             %thead
@@ -88,11 +88,11 @@
                 %td{:style => "width:2em;"}= link_to_task((task.completion_date ? 'yes' : '-'), task)
                 %td= link_to_task task_owners(task), task
                 %td{:style => "width:2em;"}= link_to_task((task.task_units ? h(task.task_units) : '-'), task)
-                %td= link_to_task('edit', task)
-                %td= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?"
+                %td= link_to 'edit', edit_story_agile_task_url(story, task), :class => "navigation"
+                %td= link_to 'delete', story_agile_task_url(story, task), :method => "delete", :confirm => "Are you sure?", :class => "navigation"
 
   %div{:style => "margin-bottom:1em"}
-    %span= link_to '<strong>Add story</strong>', new_iteration_story_path(@iteration)
+    %span= link_to 'Add story', new_iteration_story_path(@iteration), :class => "navigation"
     %p
       %b Work units:
       Limit: 
@@ -104,7 +104,7 @@
 
 %fieldset.subsection
   %legend.subsection Meetings
-  = link_to 'Add meeting', new_iteration_meeting_path(@iteration) 
+  = link_to 'Add meeting', new_iteration_meeting_path(@iteration), :class => "navigation"
   
   - if !@meetings.empty?
     %table{:class => "data bordered"}
@@ -122,6 +122,6 @@
             %td= link_to h(meeting.name), edit_iteration_meeting_path(@iteration, meeting)
             %td= link_to meeting.length * meeting.meeting_participants.size, edit_iteration_meeting_path(@iteration, meeting)
             %td= link_to h(participants(meeting)), edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to 'edit', edit_iteration_meeting_path(@iteration, meeting)
-            %td= link_to 'delete', iteration_meeting_url(@iteration, meeting), :confirm => 'Are you sure?', :method => :delete
+            %td= link_to 'edit', edit_iteration_meeting_path(@iteration, meeting), :class => "navigation"
+            %td= link_to 'delete', iteration_meeting_url(@iteration, meeting), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
 
