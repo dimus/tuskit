@@ -14,23 +14,24 @@
     = "|"
     = link_to 'Next Iteration', iteration_stories_url(@next_iteration), :class => "navigation"
 
-%p
-  %b Objectives:
-  &= @iteration.objectives.strip == "" ? "N/A" : @iteration.objectives
-%p
-  %b Work units:
-  Limit: 
-  %b&= @iteration.work_units
-  , Planned: 
-  %b&= @iteration.work_units_planned
-  , Done: 
-  %b&= @iteration.work_units_real
+%fieldset.subsection
+  %legend.subsection Objectives
+  :textile
+    #{@iteration.objectives.strip == "" ? "N/A" : @iteration.objectives}
 
 = burndown_chart(@iteration.burndown, @iteration.work_units_planned)
 = velocity_chart(@project.velocity, @iteration.id)
 
 %fieldset.subsection
   %legend.subsection Stories/Tasks
+  %div
+    %b Work units:
+    Limit: 
+    %b&= @iteration.work_units
+    , Planned: 
+    %b&= @iteration.work_units_planned
+    , Done: 
+    %b&= @iteration.work_units_real
   %div{:style => "margin-bottom:1em"}
     %span= link_to 'Add story', new_iteration_story_path(@iteration), :class => "navigation"
     |

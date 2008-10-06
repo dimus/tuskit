@@ -1,18 +1,11 @@
 %h1 Milestone 
 
-
 %p
   = link_to 'Edit', edit_project_milestone_url(@project, @milestone), :class => "navigation"
 
 %p
   %label.inline Title:
   = @milestone.name
-
-%fieldset.subsection
-  %legend.subsection Description
-  :textile
-    #{@milestone.description.strip == "" ? "N/A" : h(@milestone.description)}
-
 
 %fieldset.subsection
   %legend.subsection Features
@@ -37,5 +30,9 @@
             %td= link_to msg, milestone_feature_url(@milestone, feature, "feature[completion_date]" => new_completion_date), :method => :put, :class => "navigation"
             %td= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
             %td= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
-
   
+%fieldset.subsection
+  %legend.subsection Description
+  :textile
+    #{@milestone.description.strip == "" ? "N/A" : h(@milestone.description)}
+
