@@ -229,27 +229,32 @@ table {
   padding: 0; }
 
 div.drawer_closed {
-  background: #eee url("/images/triangle.gif") no-repeat .45em .45em;
-  border-bottom: 1px solid #bbb; }
+  background-color: #dcf5d4;
+  background-image: url("/images/triangle.gif");
+  background-repeat: no-repeat;
+  background-position: .45em .45em;
+  border-bottom: 1px solid #45704d; }
 div.drawer_open {
-  background: #ccc url("/images/triangle_open.gif") no-repeat .45em .45em;
+  background-color: #cbe4c3;
+  background-image: url("/images/triangle_open.gif");
+  background-repeat: no-repeat;
+  background-position: .45em .45em;
   padding: 0.2em 0em 0.2em 1.6em;
-  border-left: 1px solid #bbb; }
+  border-left: 1px solid #45704d;
+  border-bottom: 1px solid #a9c2a1; }
 div.drawer_content {
-  background: #eee;
+  background: #dcf5d4;
   padding: .5em .5em .5em .5em;
   margin: 0;
   margin-bottom: 2px;
   color: #111;
   font-size: 98%;
-  display: none;
-  border-bottom: 1px solid #bbb;
-  border-left: 1px solid #bbb; }
+  border-bottom: 1px solid #45704d;
+  border-left: 1px solid #45704d; }
   div.drawer_content input {
     font-size: 91%; }
   div.drawer_content label {
-    color: #333;
-    text-decoration: underline; }
+    color: #333; }
   div.drawer_content p {
     padding: .3em .3em .3em .3em;
     margin: 0 0 0 .8em; }

@@ -1,6 +1,12 @@
 class FeaturesController < ApplicationController
   
   before_filter :project_milestone_find
+  
+  # GET /stories
+  # GET /stories.xml
+  def index
+    @features = @milestone.features
+  end
 
   # GET /features/new
   # GET /features/new.xml

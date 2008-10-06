@@ -6,7 +6,6 @@ class AgileTasksController < ApplicationController
     @agile_tasks = AgileTask.find(:all)
 
     respond_to do |format|
-      #format.html # index.html.erb
       format.xml  { render :xml => @agile_tasks }
     end
   end
@@ -17,7 +16,6 @@ class AgileTasksController < ApplicationController
     @agile_task = AgileTask.find(params[:id])
 
     respond_to do |format|
-      #format.html # show.html.erb
       format.xml  { render :xml => @agile_task }
     end
   end

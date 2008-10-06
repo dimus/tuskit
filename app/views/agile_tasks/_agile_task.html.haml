@@ -32,11 +32,24 @@
   .input_field
     = f.check_box :bug
     = f.label :bug, "Is it a bug fix?", :class => "inline" 
-      
 
   .input_field
-    = drawer("task_users", "Add/Delete Task Owners", developers_list(story, agile_task), task_developers(agile_task), agile_task.task_owners.empty?)
-
+    - is_open = agile_task.task_owners.empty? ? true : false
+    .drawer{:class => is_open ? "drawer_open" : "drawer_closed"}
+      Add/Remove task owners
+      .drawer_closed_data{:class => is_open ? "hidden_div" : ""}
+        - if agile_task.owners.blank?
+          Click to select task owners
+        - else
+          %ul
+            - for owner in agile_task.owners
+              %li= owner.full_name
+    .drawer_content{:class => is_open ? "" : "hidden_div"}
+      - for developer in @project.developers
+        = check_box_tag "user_ids[]", developer.id, agile_task.owners.include?(developer), :id => "user_ids_" + developer.id.to_s
+        %label.inline{:for => "user_ids_" + developer.id.to_s}= developer.full_name
+        %br/
+  
   .input_field
     = f.label :notes
     = f.text_area :notes, :class => "big"

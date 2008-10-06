@@ -1,0 +1,41 @@
+%h1 Milestone 
+
+
+%p
+  = link_to 'Edit', edit_project_milestone_url(@project, @milestone), :class => "navigation"
+
+%p
+  %label.inline Title:
+  = @milestone.name
+
+%fieldset.subsection
+  %legend.subsection Description
+  :textile
+    #{@milestone.description.strip == "" ? "N/A" : h(@milestone.description)}
+
+
+%fieldset.subsection
+  %legend.subsection Features
+  = link_to "Add feature", new_milestone_feature_url(@milestone), :class => "navigation"
+
+  - unless @milestone.features.blank?
+    %table.data.bordered
+      %thead
+      %tr
+        %th.top{:style => "width:30em"} Name
+        %th.top{:style => "width:3em"} Done?
+        %th.top{:colspan => 2} Actions
+      %tbody
+        - for feature in @milestone.features
+          %tr
+            %td= link_to h(feature.name), edit_milestone_feature_url(@milestone, feature)
+            - msg = "no"
+            - new_completion_date = Date.today
+            - if feature.completion_date
+              - msg = "yes"
+              - new_completion_date = nil
+            %td= link_to msg, milestone_feature_url(@milestone, feature, "feature[completion_date]" => new_completion_date), :method => :put, :class => "navigation"
+            %td= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
+            %td= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
+
+  

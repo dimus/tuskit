@@ -7,8 +7,22 @@
     = f.text_field :name, :class => "long"
 
   - if iteration.project.current_milestone && !iteration.project.current_milestone.features.blank?
+
     .input_field
-      = drawer("task_users", "Add/Delete Task Owners", 'one', 'two', false)
+      .drawer{:class => "drawer_closed"}
+        Select a feature for the story
+        .drawer_closed_data
+          - if story.features
+            %ul
+            - for feature in story.features
+              %li= feature.name
+          - else 
+            Click to select a feature
+      .drawer_content{:class => "hidden_div"}
+        - for feature in story.project.current_milestone.features
+          = check_box_tag "story[feature_ids][]", feature.id, (!story.features.blank? && story.features.include?(feature)), :id => "feature_ids_" + feature.id.to_s
+          %label.inline{:for => "feature_ids_" + feature.id.to_s}= feature.name
+          %br/
 
   .input_field
     = f.label :description

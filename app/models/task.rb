@@ -3,7 +3,7 @@ end
 
 class AgileTask < Task
   belongs_to :story
-  has_many :task_owners, :dependent => :destroy
+  has_many :task_owners, :include => :user, :dependent => :destroy
   
   validates_presence_of :story_id
   validates_presence_of :name
@@ -18,6 +18,10 @@ class AgileTask < Task
   
   def tracker
     project.tracker
+  end
+
+  def owners
+    self.task_owners.map {|t| User.find(t.user_id)}
   end
 
   def validate 

@@ -73,26 +73,10 @@ $(function() {
       }
     );
   }
+
+  //Toggle drawer
+  $('.drawer').bind("click", function(e){
+    $(this).toggleClass("drawer_open").toggleClass("drawer_closed").children().toggleClass("hidden_div").end().next().toggleClass("hidden_div");
+  });
+
 });
-
-
-function toggleDrawer(drawerId){
-    drawer=document.getElementById(drawerId + '_drawer');
-    drawerText=document.getElementById(drawerId + '_drawer_text');
-    elementContent=document.getElementById(drawerId + '_drawer_content');
-    if (elementContent.style.display=='block') {
-        drawer.className='drawer_closed';
-        elementContent.style.display='none';
-        if (drawerText){
-            drawerText.style.display='block';
-            drawerText.style.padding='1em';}
-        } else {
-        drawer.className='drawer_open';
-        elementContent.style.display='block';
-        if (drawerText){
-            drawerText.style.display='none';
-            drawerText.style.padding='0';
-            }
-        }
-}
-

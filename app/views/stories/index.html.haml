@@ -3,15 +3,16 @@
 %h1 
   &== #{iteration_label} #{dates_interval(@iteration.start_date, @iteration.end_date)}#{days_left}
 
-= link_to 'Edit', edit_project_iteration_url(@iteration.project,@iteration), :class => "navigation"
-= "|"
-= link_to 'All Iterations', project_iterations_path(@iteration.project), :class => "navigation"
-- if @previous_iteration
+%p
+  = link_to 'Edit', edit_project_iteration_url(@iteration.project,@iteration), :class => "navigation"
   = "|"
-  = link_to 'Prev. Iteraion', iteration_stories_url(@previous_iteration), :class => "navigation"
-- if @next_iteration
-  = "|"
-  = link_to 'Next Iteration', iteration_stories_url(@next_iteration), :class => "navigation"
+  = link_to 'All Iterations', project_iterations_path(@iteration.project), :class => "navigation"
+  - if @previous_iteration
+    = "|"
+    = link_to 'Prev. Iteraion', iteration_stories_url(@previous_iteration), :class => "navigation"
+  - if @next_iteration
+    = "|"
+    = link_to 'Next Iteration', iteration_stories_url(@next_iteration), :class => "navigation"
 
 %p
   %b Objectives:

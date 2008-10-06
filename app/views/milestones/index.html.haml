@@ -1,4 +1,4 @@
-%h1 Listing milestone
+%h1 Milestones
 = link_to 'Add milestone', new_project_milestone_path(@project), :class => "navigation"
 
 - unless @milestones.blank?
@@ -12,8 +12,8 @@
     %tbody
       - for milestone in @milestones
         %tr
-          %td= link_to h(milestone.name), edit_project_milestone_url(@project,milestone)
-          %td= link_to h(milestone.description), edit_project_milestone_url(@project,milestone)
-          %td= link_to h(milestone.deadline), edit_project_milestone_url(@project,milestone)
+          %td= link_to h(milestone.name), milestone_features_url(milestone)
+          %td= link_to h(milestone.description), milestone_features_url(milestone)
+          %td= link_to h(milestone.deadline), milestone_features_url(milestone)
           %td= link_to 'edit', edit_project_milestone_url(@project,milestone), :class => "navigation"
           %td= link_to 'delete', project_milestone_url(@project, milestone), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"

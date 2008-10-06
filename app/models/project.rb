@@ -64,7 +64,7 @@ class Project < ActiveRecord::Base
     
     project_members.each do |pm|
       groups = pm.user.memberships.map {|m| m.group}
-      developers << pm if groups.include? dev_group 
+      developers << pm.user if groups.include? dev_group 
     end
     developers
   end

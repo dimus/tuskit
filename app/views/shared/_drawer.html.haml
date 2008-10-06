@@ -1,0 +1,7 @@
+- drawer_state = is_open ? "drawer_open" : "drawer_closed"
+.drawer{:class => drawer_state}
+  = title
+  .drawer_closed_data{:class => is_open ? "hidden_div" : ""}
+    = render :partial => closed_partial, :locals => { :data => data }
+.drawer_content{:class => is_open ? "" : "hidden_div"}
+  = render :partial => opened_partial, :locals => {:data => data}
