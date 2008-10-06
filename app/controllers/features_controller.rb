@@ -32,7 +32,7 @@ class FeaturesController < ApplicationController
     respond_to do |format|
       if @feature.save
         flash[:notice] = 'Feature was successfully created.'
-        format.html { redirect_to edit_project_milestone_url(@project, @milestone) }
+        format.html { redirect_to milestone_features_url(@milestone) }
         format.xml  { render :xml => @feature, :status => :created, :location => @feature }
       else
         format.html { render :action => "new" }
@@ -49,7 +49,7 @@ class FeaturesController < ApplicationController
     respond_to do |format|
       if @feature.update_attributes(params[:feature])
         flash[:notice] = 'Feature was successfully updated.'
-        format.html { redirect_to edit_project_milestone_url(@project, @milestone) }
+        format.html { redirect_to milestone_features_url(@milestone) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -65,7 +65,7 @@ class FeaturesController < ApplicationController
     @feature.destroy
 
     respond_to do |format|
-      format.html { redirect_to(features_url) }
+      format.html { redirect_to milestone_features_url(@milestone) }
       format.xml  { head :ok }
     end
   end

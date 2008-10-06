@@ -1,11 +1,10 @@
 class StoriesController < ApplicationController
+  before_filter :project_iteration_find 
 
   # GET /stories
   # GET /stories.xml
   def index
-    @iteration = Iteration.find(params[:iteration_id])
     @meetings = @iteration.meetings.sort_by(&:meeting_date).reverse
-    @project = @iteration.project
     @project.copy_incomplete_stories_to_current_iteration
     @stories = @iteration.stories_prepare
     all_iters = @project.iterations.reverse
@@ -32,8 +31,6 @@ class StoriesController < ApplicationController
   # GET /stories/new
   # GET /stories/new.xml
   def new
-    @iteration = Iteration.find(params[:iteration_id])
-    @project = @iteration.project
     @story = Story.new
 
     respond_to do |format|
@@ -45,15 +42,12 @@ class StoriesController < ApplicationController
   # GET /stories/1/edit
   def edit
     @story = Story.find(params[:id])
-    @iteration = @story.iteration
-    @project = @iteration.project
   end
 
   # POST /stories
   # POST /stories.xml
   def create
     @story = Story.new(params[:story])
-
     respond_to do |format|
       if developer?
         if @story.save
@@ -112,5 +106,11 @@ class StoriesController < ApplicationController
 protected
   def init
     @current_subtab = "Iterations"
+  end
+  
+  def project_iteration_find
+    iteration_id = params[:iteration_id] || params[:story][:iteration_id] rescue nil
+    @iteration = iteration_id ? Iteration.find(iteration_id) : nil
+    @project = @iteration.project
   end
 end
