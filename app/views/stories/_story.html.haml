@@ -6,7 +6,7 @@
     = f.label :name
     = f.text_field :name, :class => "long"
 
-  - if iteration.project.current_milestone && !iteration.project.current_milestone.features.blank?
+  - if iteration.project.current_milestone #&& !iteration.project.current_milestone.features.blank?
 
     .input_field
       .drawer{:class => "drawer_closed"}
