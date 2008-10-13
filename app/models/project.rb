@@ -20,7 +20,7 @@ class Project < ActiveRecord::Base
   end
 
   def current_milestone
-    self.milestones.select {|m| m.current?}.sort_by(&:created_at).first
+    self.milestones.select {|m| m.completion_date == nil }.sort_by(&:created_at).first
   end
   
   def current_iteration_resource

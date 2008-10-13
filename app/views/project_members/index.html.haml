@@ -1,7 +1,5 @@
 %h1
-  Project "
-  = @project.name
-  ": Members
+  Project Members
 - form_for(:project_members, :url => project_members_path) do |f|
   = f.hidden_field :project_id, :value => @project.id
   %table.valign_top

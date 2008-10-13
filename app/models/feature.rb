@@ -6,4 +6,20 @@ class Feature < ActiveRecord::Base
   has_many :stories, :through => :implementations
 
   validates_presence_of :name
+  
+  def stories_prepared
+    active = []
+    finished = []
+    unfinished = []
+    for story in self.stories
+      if story.completion_date
+        finished << story
+      elsif story.active?
+        active << story
+      else
+        unfinished << story
+      end
+    end
+    active + unfinished + finished.sort_by(&:completion_date)
+  end
 end

@@ -158,39 +158,39 @@ textarea
   :width 50em
   :padding 1em
 
-.story
+.folder
   :padding 0
   :padding-bottom 1em
   :margin 0
   :margin-bottom 1em
   :background-color #e5e5e5
 
-.story_title
+.folder_title
   :background-color #CBE4C3
   :border-top 1px solid #aaa
   :border-bottom 1px solid #aaa
 
-.story_button
+.folder_item_button
   :padding 0.25em
   :border 1px solid grey
   :border-right 1px solid grey
 
-.story_todo
+.folder_item_todo
   :background-color #f44
   :color white
 
-.story_to_close
+.folder_item_to_close
   :background-color yellow
   :color black
 
-.story_done
+.folder_item_done
   :background-color green
   :color white
 
 table
   :margin-top 1.5em
 
-  &.story_info
+  &.folder_info
     :padding 0
     :margin 0
     :margin-left 0.3em
@@ -232,12 +232,9 @@ table
       &.even_row
         :background #e0f2da
 
-      &.task_active
+      &.item_active
         :background-color = !_orange
       
-      &.project_active
-        :background-color = !_orange
-
   &.valign_top
     :vertical-align top
 
@@ -256,13 +253,13 @@ table
   &.no_border
     :border 0
 
-.agile_tasks
+.folder_content
   :display none
   :padding-left 2em
 
-.task_incomplete
+.item_incomplete
 
-.task_complete
+.item_complete
   :text-decoration line-through
 
 .help_info

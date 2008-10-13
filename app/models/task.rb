@@ -7,6 +7,10 @@ class AgileTask < Task
   
   validates_presence_of :story_id
   validates_presence_of :name
+
+  def active?
+    !(self.task_owners.blank? || self.completion_date)
+  end
   
   def iteration
     story.iteration

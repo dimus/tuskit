@@ -11,26 +11,37 @@
   %legend.subsection Features
   = link_to "Add feature", new_milestone_feature_url(@milestone), :class => "navigation"
 
-  - unless @milestone.features.blank?
-    %table.data.bordered
-      %thead
-      %tr
-        %th.top{:style => "width:30em"} Name
-        %th.top{:style => "width:3em"} Done?
-        %th.top{:colspan => 2} Actions
-      %tbody
-        - for feature in @milestone.features
+  - for feature in @milestone.features
+    .folder
+      .folder_title
+        %table.folder_info
           %tr
-            %td= link_to h(feature.name), edit_milestone_feature_url(@milestone, feature)
-            - msg = "no"
-            - new_completion_date = Date.today
-            - if feature.completion_date
-              - msg = "yes"
-              - new_completion_date = nil
-            %td= link_to msg, milestone_feature_url(@milestone, feature, "feature[completion_date]" => new_completion_date), :method => :put, :class => "navigation"
+            %td= feature_completion(feature)
+            %td
+              %strong&= feature.name
             %td= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
             %td= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
-  
+      .folder_content{:style => "display: block"}
+        - unless feature.stories.blank?
+          %table{:class => "data bordered"}
+            %thead
+              %tr
+                %th Completed
+                %th Name
+                %th
+                  \~w.u.
+
+            %tbody
+            - feature.stories_prepared.each do |story|
+              - story_class = "item_incomplete"
+              - story_class = "item_active" if story.active?
+              - story_class = "item_complete" if story.completion_date
+                
+              %tr{:class => story_class}
+                %td&= format_date(story.completion_date)
+                %td&= story.name
+                %td&= story.work_units_est/story.implementations.size
+          
 %fieldset.subsection
   %legend.subsection Description
   :textile

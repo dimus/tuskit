@@ -18,7 +18,7 @@
         %tbody
           - @iterations.each do |iteration|
             - daily_load_style = iteration.daily_load > 8 ? "color:red; font-weight: bold;" : "" rescue ""
-            %tr.project_active
+            %tr.item_active
               %td{:style => "font-weight: bold;font-size: 1.1em"}= link_to_stories(iteration.project.name,iteration)
               %td.daily_load= link_to_stories(sprintf("%d.2/day", iteration.daily_load), iteration, :style => daily_load_style)
               %td= link_to_stories(iteration.days_left.to_s, iteration)

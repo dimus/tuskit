@@ -77,7 +77,7 @@ namespace :db do
             task_owners = potential_owners[0..[1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,3].shuffle[0]]
             
             task_owners.each do |member|
-              TaskOwner.create :user_id => member.user.id, :agile_task_id => tsk.id
+              TaskOwner.create :user_id => member.id, :agile_task_id => tsk.id
             end
           end
         end

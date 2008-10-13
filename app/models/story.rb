@@ -10,6 +10,10 @@ class Story < ActiveRecord::Base
     iteration.project
   end
 
+  def active?
+    !self.agile_tasks.select {|t| t.active?}.blank?
+  end
+
   def completed
     self.completion_date != nil
   end
