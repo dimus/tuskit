@@ -7,4 +7,17 @@ class Milestone < ActiveRecord::Base
   def current?
     self == self.project.current_milestone
   end
+
+  def features_prepared
+    completed = []
+    incompleted = []
+    self.features.each do |f|
+      if f.completion_date
+        completed << f
+      else 
+        incompleted << f
+      end
+    end
+    incompleted + completed.sort_by(&:completion_date)
+  end
 end

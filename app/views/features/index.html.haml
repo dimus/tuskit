@@ -1,26 +1,32 @@
-%h1 Milestone 
+- msg = @milestone.current? ? "Current " : ""
+%h1 
+  = msg + "Milestone:"
+  &= @milestone.name
+  - if @milestone.deadline && @milestone.current?
+    = "(deadline on " + format_date(@milestone.deadline) + ")"
 
 %p
   = link_to 'Edit', edit_project_milestone_url(@project, @milestone), :class => "navigation"
-
-%p
-  %label.inline Title:
-  = @milestone.name
+  |
+  = link_to 'All milestones', project_milestones_url(@project), :class => "navigation"
 
 %fieldset.subsection
   %legend.subsection Features
-  = link_to "Add feature", new_milestone_feature_url(@milestone), :class => "navigation"
+  %div{:style => "margin-bottom:1em"}
+    = link_to "Add feature", new_milestone_feature_url(@milestone), :class => "navigation"
 
-  - for feature in @milestone.features
+  - for feature in @milestone.features_prepared
     .folder
       .folder_title
         %table.folder_info
           %tr
-            %td= feature_completion(feature)
-            %td
+            %td{:style => "width:5em"}= feature_completion(feature)
+            %td{:style => "width:30em"}
+              Feature: 
               %strong&= feature.name
-            %td= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
-            %td= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
+            %td{:style => "width:8em"}= "~" + feature.stories.inject(0) {|res,s| res += s.work_units_est}.round.to_s + " w.u. total"
+            %td{:style => "width:3em"}= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
+            %td{:style => "width:5em"}= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
       .folder_content{:style => "display: block"}
         - unless feature.stories.blank?
           %table{:class => "data bordered"}
@@ -38,7 +44,7 @@
               - story_class = "item_complete" if story.completion_date
                 
               %tr{:class => story_class}
-                %td&= format_date(story.completion_date)
+                %td&= story.completion_date ? format_date(story.completion_date) : "-"
                 %td&= story.name
                 %td&= story.work_units_est/story.implementations.size
           

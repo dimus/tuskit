@@ -1,7 +1,7 @@
 module DateHelpers
 
   def format_date(date,format='%m/%d/%y')
-    date.strftime(format) rescue ""
+    date.strftime(format)
   end
   
   def dates_interval(date1, date2)
