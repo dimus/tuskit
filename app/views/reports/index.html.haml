@@ -3,9 +3,9 @@
 - if @reports.blank?
   .div-info No reports generated yet
 - else
+  = will_paginate(@reports)
   %ul
     - @reports.each do |report|
-      - r = Hash.from_xml(report.report)['hash']
-      %li= link_to r['iteration'], project_report_url(@project, report.id)
+      %li.report= link_to dates_interval(report.start_date, report.end_date), project_report_url(@project, report)
 
   

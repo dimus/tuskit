@@ -24,7 +24,7 @@
             %td{:style => "width:30em"}
               Feature: 
               %strong&= feature.name
-            %td{:style => "width:8em"}= "~" + feature.stories.inject(0) {|res,s| res += s.work_units_est}.round.to_s + " w.u. total"
+            %td{:style => "width:8em"}=  sprintf("%.1f", feature.stories.inject(0) {|res,s| res += s.work_units_est/s.implementations.size}) + " w.u. total"
             %td{:style => "width:3em"}= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
             %td{:style => "width:5em"}= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
       .folder_content{:style => "display: block"}
@@ -35,18 +35,18 @@
                 %th Completed
                 %th Name
                 %th
-                  \~w.u.
+                  w.u.
 
             %tbody
-            - feature.stories_prepared.each do |story|
-              - story_class = "item_incomplete"
-              - story_class = "item_active" if story.active?
-              - story_class = "item_complete" if story.completion_date
-                
-              %tr{:class => story_class}
-                %td&= story.completion_date ? format_date(story.completion_date) : "-"
-                %td&= story.name
-                %td&= story.work_units_est/story.implementations.size
+              - feature.stories_prepared.each do |story|
+                - story_class = "item_incomplete"
+                - story_class = "item_active" if story.active?
+                - story_class = "item_complete" if story.completion_date
+                  
+                %tr{:class => story_class}
+                  %td&= story.completion_date ? format_date(story.completion_date) : "-"
+                  %td&= story.name
+                  %td&= sprintf("%.1f", story.work_units_est/story.implementations.size)
           
 %fieldset.subsection
   %legend.subsection Description

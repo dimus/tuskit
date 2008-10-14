@@ -11,10 +11,6 @@ class Project < ActiveRecord::Base
   
   validates_presence_of :name
  
-  def reports
-    self.iterations.select {|i| i.end_date < Date.today}.map {|i| i.report || Report.create(:iteration => i, :report => Report.generate(i))}
-  end
-
   def current_iteration 
     self.iterations.select {|i| i.current?}.sort_by(&:start_date).first
   end

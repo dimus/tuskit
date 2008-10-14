@@ -1,19 +1,20 @@
 class ReportsController < ApplicationController
-  
+  before_filter :find_project
+
   def index
-    page = params[:page] || 1 rescue 1
-    @project = Project.find(params[:project_id])
-    @reports = Report.find_by_sql(["select r.* from reports r join iterations i on i.id = r.iteration_id where i.project_id = ? and i.end_date < ? order by i.start_date desc", @project.id, Date.today])
+    page = params[:page] || 1
+    query = "select id, start_date, end_date from iterations where project_id = #{@project.id} and end_date < '#{Date.today.to_s}' order by start_date desc" 
+    @reports = Iteration.paginate_by_sql(query, :page => page)
     respond_to do |format|
       format.html
-      format.xml { render :xml => @reports.map {|report| report.report = Hash.from_xml(report.report)['hash'].to_xml; report} }
+      format.xml { render :xml => @reports.to_xml }
     end
   end
 
   def show
-    @project = Project.find(params[:project_id])
-    @report = Report.find(params[:id])
-    @r = Hash.from_xml(@report.report)['hash']
+    @report = Iteration.find(params[:id])
+    @milestone = Milestone.find(:first,:conditions => ["completion_date is null or completion_date > ?", Date.today.to_s], :order => "completion_date, id")
+    @milestone_stories =  @milestone.stories.select {|s| s.iteration = @report}
     respond_to do |format|
       format.html
       format.xml { render :xml => @r }
@@ -23,5 +24,10 @@ class ReportsController < ApplicationController
 protected
   def init
     @current_subtab = "Reports"
+  end
+
+  def find_project
+    project_id = params[:project_id]
+    @project = project_id ? Project.find(project_id) : nil
   end
 end

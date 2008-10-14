@@ -8,6 +8,14 @@ class Milestone < ActiveRecord::Base
     self == self.project.current_milestone
   end
 
+  def stories
+    stories = []
+    self.features.each do |feature|
+      stories << feature.stories
+    end
+    stories.flatten.uniq.sort_by(&:id)
+  end
+
   def features_prepared
     completed = []
     incompleted = []
