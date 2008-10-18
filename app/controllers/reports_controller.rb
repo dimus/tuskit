@@ -13,8 +13,8 @@ class ReportsController < ApplicationController
 
   def show
     @report = Iteration.find(params[:id])
-    @milestone = Milestone.find(:first,:conditions => ["completion_date is null or completion_date > ?", Date.today.to_s], :order => "completion_date, id")
-    @milestone_stories =  @milestone.stories.select {|s| s.iteration = @report}
+    @milestone = Milestone.find(:first,:conditions => ["project_id = ? and completion_date is null or completion_date > ?", @project.id, Date.today.to_s], :order => "completion_date, id")
+    @milestone_stories =  @milestone.stories.select {|s| s.iteration == @report && !s.completion_date.blank? }
     respond_to do |format|
       format.html
       format.xml { render :xml => @r }

@@ -1,8 +1,36 @@
-%h1= "Report " + dates_interval(@report.start_date, @report.end_date) 
+#report
+  %h1== Report for project "#{@project.name}"
+  %h2= "Period " + dates_interval(@report.start_date, @report.end_date)
+  .report_header
+    %table.data
+      %tr
+        %th{:colspan => 2, :style => "text-align: center"} Work Units
+        %th.top Objectives
+      %tr
+        %td== planned: #{@report.work_units_planned}
+        %td== finished: #{@report.work_units_real}
+        %td&= @report.objectives
+  / If there is a current milestone where features have stories organize stories from the iteration using milestone first
+  - unless @milestone_stories.blank?
+    %br/
+    %fieldset.subsection
+      %legend.subsection Milestone work 
+      - for feature in @milestone.features_prepared
+        - feature_stories = feature.stories_prepared.select {|s| @milestone_stories.include? s}
+        - unless feature_stories.blank?
+          .report_feature
+            %table{:style => "margin: 0"}
+              %tr
+                %td{:style => "width:5em; background-color: transparent"}= feature.completion_date ? format_date(feature.completion_date) : "-"
+                %td{:style => "width:25em"}&= feature.name
+                %td{:style => "width:10em"}= sprintf("This period: %.1f w.u.", feature_stories.inject(0) {|res,s| res += s.work_units_est/s.implementations.size})
+                %td{:style => "width:10em"}= sprintf("Total: %.1f w.u.", feature.total_work_units)
+          .report_feature_stories
+          - for story in feature_stories
+            .report_story
+              = story.completion_date ? format_date(story.completion_date) : "-"
+              &= story.name
+              &= story.work_units_est
 
-/If there is a current milestone where features have stories organize stories from the iteration using milestone first
-= debug @milestone
-- unless @milestone_stories.blank?
-  %h3== Work on Milestone "#{@milestone}"
-  
+    
 

@@ -22,4 +22,8 @@ class Feature < ActiveRecord::Base
     end
     active + unfinished + finished.sort_by(&:completion_date)
   end
+
+  def total_work_units
+    self.stories.inject(0) {|res, s| res += s.work_units_est }
+  end
 end

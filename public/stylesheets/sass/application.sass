@@ -4,6 +4,7 @@
 !_blue = #26507c
 !_red = #600
 !_yellow = #ffe822
+!_dark_yellow = #553e00
 !_orange = #efd7b5
 
 body
@@ -732,3 +733,32 @@ ul
 
 .hidden_div
   :display none
+
+// Report
+#report
+  :margin-top 1em
+  :border 1px dashed grey
+  :padding 1em
+  :background-color = !_yellow + #888
+
+  h1, h2, h3, h4, h5, h6
+    :color = !_dark_yellow
+  
+  & table
+    :border-collapse collapse
+    & th
+      :background-color = !_yellow - #222
+      :color = !_dark_yellow
+      :border-left = 1px solid (!_yellow - #666)
+      :border-bottom = 1px solid (!_yellow - #666)
+    
+    & td
+      :background-color = !_yellow
+      :padding 0.4em
+      :border-left = 1px solid (!_yellow - #444)
+
+  & .report_feature
+    :padding 0.3em
+    :padding-left 0.7em
+    :background-color = !_yellow - #222
+

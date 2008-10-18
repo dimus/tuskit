@@ -638,3 +638,26 @@ ul.collapsed {
 
 .hidden_div {
   display: none; }
+
+#report {
+  margin-top: 1em;
+  border: 1px dashed grey;
+  padding: 1em;
+  background-color: #ffffaa; }
+  #report h1, #report h2, #report h3, #report h4, #report h5, #report h6 {
+    color: #553e00; }
+  #report table {
+    border-collapse: collapse; }
+    #report table th {
+      background-color: #ddc600;
+      color: #553e00;
+      border-left: 1px solid #998200;
+      border-bottom: 1px solid #998200; }
+    #report table td {
+      background-color: #ffe822;
+      padding: 0.4em;
+      border-left: 1px solid #bba400; }
+  #report .report_feature {
+    padding: 0.3em;
+    padding-left: 0.7em;
+    background-color: #ddc600; }

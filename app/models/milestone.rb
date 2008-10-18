@@ -9,11 +9,11 @@ class Milestone < ActiveRecord::Base
   end
 
   def stories
-    stories = []
+    strs= []
     self.features.each do |feature|
-      stories << feature.stories
+      strs << feature.stories
     end
-    stories.flatten.uniq.sort_by(&:id)
+    strs.flatten.uniq.sort_by(&:id)
   end
 
   def features_prepared

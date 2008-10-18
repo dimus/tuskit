@@ -83,7 +83,7 @@
             %tbody
               - story.agile_tasks_sorted.each do |task|
                 - tr_class = task.active? ? "item_active" : "item_inactive"
-                - td_class = task.completion_date? ? "task_complete" : "item_incomplete"
+                - td_class = task.completion_date? ? "item_complete" : "item_incomplete"
                 %tr{:id => "task_" + task.id.to_s, :class => tr_class}
                   %td{:style => "width:35em;", :class => td_class}= link_to_task h(task.name), task
                   %td{:style => "width:2em;"}= link_to_task((task.bug? ? '<span style="color:red">yes</span>' : '-'), task)
