@@ -16,11 +16,11 @@ class Milestone < ActiveRecord::Base
     strs.flatten.uniq.sort_by(&:id)
   end
 
-  def features_prepared
+  def features_prepared(ref_date = Date.today)
     completed = []
     incompleted = []
     self.features.each do |f|
-      if f.completion_date
+      if f.completion_date && f.completion_date <= ref_date
         completed << f
       else 
         incompleted << f
