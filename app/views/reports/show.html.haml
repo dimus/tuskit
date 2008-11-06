@@ -22,10 +22,11 @@
               = feature.completion_date ? "(Completed on " + format_date(feature.completion_date) + ") ": ""
               = sprintf("(%.1f w.u.)", feature_stories.inject(0) {|res,s| res += s.work_units_est/s.implementations.size})
               /= sprintf(", total %.1f w.u.", feature.total_work_units)
-            %ul{:style => 'list-style-image: url("/images/tick.png")'}
+            %ul{:style => 'list-style-image: url("/images/tick.png")', :title => "Completed"}
               - for story in feature_stories
                 %li
-                  &== (#{story.work_units_est.to_s} w.u.)  #{story.name}
+                  %span{:style => "width:10em; color:red"}== (#{story.work_units_est.to_s} w.u.)  
+                  &= story.name
 
   %fieldset.subsection
     %legend.subsection Milestone status

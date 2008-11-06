@@ -37,7 +37,7 @@ $(function() {
 
     function collapse (collapse) {
       var msg = collapse ? "Expand Stories" : "Collapse Stories"
-      collapse ? $('.agile_tasks').hide("slide",{},200) : $('.agile_tasks').show("slide",{},200);
+      collapse ? $('.folder_content').hide("slide",{},200) : $('.folder_content').show("slide",{},200);
       $('#toggle_stories a').text(msg);
     }
 
