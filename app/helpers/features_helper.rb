@@ -3,7 +3,7 @@ module FeaturesHelper
   def feature_can_be_completed?(feature)
     return false if feature.stories.blank?
     feature.stories.each do |story|
-      return false if story.completed
+      return false unless story.completed
     end
     true
   end
