@@ -11,12 +11,12 @@
   - unless @milestone_stories.blank?
     %br/
     %fieldset.subsection
-      %legend.subsection Progress
+      %legend.subsection Milestone Progress
       %ul
         - for feature in @milestone.features_prepared(@report.end_date)
           - feature_stories = feature.stories_prepared.select {|s| @milestone_stories.include? s}# && !s.completion_date.blank?}
           - unless feature_stories.blank?
-            - icon_image, icon_title = feature.completion_date && feature.completion_date <= report.end_date ? ["/images/tick.png","Complete"] : ["/images/cog.png", "In progress"]          
+            - icon_image, icon_title = feature.completion_date && feature.completion_date <= @report.end_date ? ["/images/tick.png","Complete"] : ["/images/cog.png", "In progress"]          
             %li{:style => "list-style-image: url(#{icon_image})", :title => icon_title} 
               %strong= feature.name  
               = feature.completion_date ? "(Completed on " + format_date(feature.completion_date) + ") ": ""
