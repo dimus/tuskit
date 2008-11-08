@@ -16,7 +16,7 @@ class Milestone < ActiveRecord::Base
     strs.flatten.uniq.sort_by(&:id)
   end
 
-  def features_prepared(aref_date = Date.today)
+  def features_prepared(ref_date = Date.today)
     to_be_completed = [] 
     completed = []
     incompleted = []
