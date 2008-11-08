@@ -16,7 +16,7 @@ class Iteration < ActiveRecord::Base
     finished = []
     maybe_finished = []
     self.stories.each do |story|
-      completed_all_tasks = !story.agile_tasks.empty? && story.agile_tasks.select {|task| task.completion_date == nil}.empty?
+      completed_all_tasks = story.all_tasks_completed?
       if story.completed
         if !completed_all_tasks
           story.completed = false

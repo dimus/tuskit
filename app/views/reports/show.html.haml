@@ -27,13 +27,24 @@
                 %li
                   %span{:style => "width:10em; color:red"}== (#{story.work_units_est.to_s} w.u.)  
                   &= story.name
-
+  
+  - detached_stories =  @report.stories.select {|story| @milestone_stories.blank? || !@milestone_stories.include?(story)}
   %fieldset.subsection
-    %legend.subsection Milestone status
-    %h2== Milestone #{@milestone.name}
-    %ul
-      - for feature in @milestone.features_prepared(@report.end_date)
-        - icon_image, icon_title = feature.completion_date && feature.completion_date <= @report.end_date ? ["/images/tick.png","Complete"] : ["/images/cog.png", "In progress"]
-        %li{:style => "list-style-image: url(#{icon_image})", :title => icon_title}= feature.name
+    %legend.subsection Miscellaneous work
+    %ul{:style => 'list-style-image: url("/images/tick.png")', :title => "Completed"}
+      - detached_stories.each do |story|
+        %li
+          %span{:style => "width:10em; color:red"}== (#{story.work_units_est.to_s} w.u.)  
+          &= story.name
+      
+  
+  - if @milestone
+    %fieldset.subsection
+      %legend.subsection Milestone status
+      %h2== Milestone #{@milestone.name}
+      %ul
+        - for feature in @milestone.features_prepared(@report.end_date)
+          - icon_image, icon_title = feature.completion_date && feature.completion_date <= @report.end_date ? ["/images/tick.png","Complete"] : ["/images/cog.png", "In progress"]
+          %li{:style => "list-style-image: url(#{icon_image})", :title => icon_title}= feature.name
       
 

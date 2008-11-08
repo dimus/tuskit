@@ -69,7 +69,7 @@
       
       - show_style = @collapse_iteration ? "display:none;" : "display:block"
       .folder_content{:style => show_style}
-        = link_to "Add task", new_story_agile_task_url(story), :class => "navigation"
+        = link_to "Add task", new_story_agile_task_url(story), :class => "navigation" if @iteration.current?
         - if !story.agile_tasks.empty?
           %table{:class => "data bordered"}
             %thead

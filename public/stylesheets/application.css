@@ -156,6 +156,10 @@ textarea {
   background-color: #f44;
   color: white; }
 
+.folder_item_unfinished {
+  background-color: #dddddd;
+  color: #660000; }
+
 .folder_item_to_close {
   background-color: yellow;
   color: black; }

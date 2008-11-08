@@ -26,4 +26,8 @@ class Feature < ActiveRecord::Base
   def total_work_units
     self.stories.inject(0) {|res, s| res += s.work_units_est }
   end
+
+  def all_stories_completed?
+    !self.stories.blank? && self.stories.select {|story| story.completion_date == nil}.blank?
+  end
 end

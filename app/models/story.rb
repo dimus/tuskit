@@ -39,6 +39,10 @@ class Story < ActiveRecord::Base
     return false
   end
 
+  def all_tasks_completed?
+    !self.agile_tasks.blank? && self.agile_tasks.select {|task| task.completion_date == nil}.blank?
+  end
+
 
   def agile_tasks_sorted
     unowned_bugs = []

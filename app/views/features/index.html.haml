@@ -45,7 +45,7 @@
                   
                 %tr{:class => story_class}
                   %td&= story.completion_date ? format_date(story.completion_date) : "-"
-                  %td&= story.name
+                  %td= link_to h(story.name), iteration_stories_url(story.iteration, :anchor => "story_" + story.id.to_s)
                   %td&= sprintf("%.1f", story.work_units_est/story.implementations.size)
           
 %fieldset.subsection
