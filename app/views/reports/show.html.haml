@@ -11,7 +11,9 @@
   - unless @milestone_stories.blank?
     %br/
     %fieldset.subsection
-      %legend.subsection Milestone Progress
+      %legend.subsection 
+        Milestone Progress
+        = sprintf "(%.1f w.u.)", @milestone_stories.inject(0) {|res, story| res += story.work_units_est}
       %ul
         - for feature in @milestone.features_prepared(@report.end_date)
           - feature_stories = feature.stories_prepared.select {|s| @milestone_stories.include? s}# && !s.completion_date.blank?}
@@ -33,7 +35,9 @@
   
   - detached_stories =  @report.stories.select {|story| (@milestone_stories.blank? || !@milestone_stories.include?(story)) && story.completion_date}
   %fieldset.subsection
-    %legend.subsection Miscellaneous work
+    %legend.subsection 
+      Miscellaneous work
+      = sprintf "(%.1f w.u.)", detached_stories.inject(0) {|res,story| res += story.work_units_est}
     %ul{:style => 'list-style-image: url("/images/tick.png")', :title => "Completed"}
       - detached_stories.each do |story|
         %li

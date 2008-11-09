@@ -15,6 +15,11 @@ class Project < ActiveRecord::Base
     self.iterations.select {|i| i.current?}.sort_by(&:start_date).first
   end
 
+  def future_iterations
+    ci = self.current_iteration
+    self.iterations.select {|i| (i.current? || i.future?) && i != ci}.sort_by(&:start_date)
+  end
+
   def current_milestone
     self.milestones.select {|m| m.completion_date == nil }.sort_by(&:created_at).first
   end

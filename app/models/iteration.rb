@@ -64,9 +64,15 @@ class Iteration < ActiveRecord::Base
     end
   end
   
+  # Checks if the iteration is current iteration. Note that project can have only one current iteration, but iteration itself does not know about existance of other current iterations. 
   def current?
     today = Date.today
     start_date <= today && end_date >= today  
+  end
+  
+  # Checks if the iteration is from future. Project might have some current iterations listed as future iterations too because only one current iteration is current for a project.
+  def future?
+    !self.current? && self.end_date >= Date.today
   end
   
   def days_left

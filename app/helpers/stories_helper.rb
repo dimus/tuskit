@@ -38,7 +38,7 @@ module StoriesHelper
       link_text = '<span class="folder_item_button folder_item_done">Done</span>'
     elsif story_can_be_completed?(story):
       link_text = '<span class="folder_item_button folder_item_to_close">Done?</span>'
-    elsif story.iteration.current?
+    elsif story.iteration.current? || story.iteration.future?
       return "<span class=\"folder_item_button folder_item_todo\">To do</span>"
     else
       return "<span class=\"folder_item_button folder_item_todo\">Unfinished</span>"
