@@ -39,9 +39,9 @@ module StoriesHelper
     elsif story_can_be_completed?(story):
       link_text = '<span class="folder_item_button folder_item_to_close">Done?</span>'
     elsif story.iteration.current?
-      link_text = "<span class=\"folder_item_button folder_item_todo\">To do</span>"
+      return "<span class=\"folder_item_button folder_item_todo\">To do</span>"
     else
-      return "<span class=\"folder_item_button folder_item_unfinished\">Unfinished</span>"
+      return "<span class=\"folder_item_button folder_item_todo\">Unfinished</span>"
     end
     link_to link_text, iteration_story_url(story.iteration_id, story.id, :story => {:completion_date => story.completed ? nil : Date.today.to_s}), :method => :put, :confirm => story.completed ? "Mark '#{story.name}' as not completed?" : "Mark story '#{story.name}' as completed?"
   end

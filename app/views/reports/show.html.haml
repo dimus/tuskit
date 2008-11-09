@@ -28,7 +28,7 @@
                   %span{:style => "width:10em; color:red"}== (#{story.work_units_est.to_s} w.u.)  
                   = link_to h(story.name), iteration_stories_url(story.iteration, :anchor => "story_" + story.id.to_s)
   
-  - detached_stories =  @report.stories.select {|story| @milestone_stories.blank? || !@milestone_stories.include?(story)}
+  - detached_stories =  @report.stories.select {|story| (@milestone_stories.blank? || !@milestone_stories.include?(story)) && story.completion_date}
   %fieldset.subsection
     %legend.subsection Miscellaneous work
     %ul{:style => 'list-style-image: url("/images/tick.png")', :title => "Completed"}
