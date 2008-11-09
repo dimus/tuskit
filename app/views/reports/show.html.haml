@@ -19,14 +19,17 @@
             - icon_image, icon_title = feature.completion_date && feature.completion_date <= @report.end_date ? ["/images/tick.png","Complete"] : ["/images/cog.png", "In progress"]          
             %li{:style => "list-style-image: url(#{icon_image})", :title => icon_title} 
               %strong= link_to h(feature.name), milestone_features_url(feature.milestone)  
-              = feature.completion_date ? "(Completed on " + format_date(feature.completion_date) + ") ": ""
               = sprintf("(%.1f w.u.)", feature_stories.inject(0) {|res,s| res += s.work_units_est/s.implementations.size})
               /= sprintf(", total %.1f w.u.", feature.total_work_units)
             %ul{:style => 'list-style-image: url("/images/tick.png")', :title => "Completed"}
               - for story in feature_stories
                 %li
-                  %span{:style => "width:10em; color:red"}== (#{story.work_units_est.to_s} w.u.)  
-                  = link_to h(story.name), iteration_stories_url(story.iteration, :anchor => "story_" + story.id.to_s)
+                  %span{:style => "color:#a00"}
+                    - if story.implementations.size > 1
+                      = sprintf("(%.1f w.u./%s features)", story.work_units_est, story.implementations.size) 
+                    - else
+                      = sprintf("(%.1f w.u.)", story.work_units_est)
+                    = link_to h(story.name), iteration_stories_url(story.iteration, :anchor => "story_" + story.id.to_s)
   
   - detached_stories =  @report.stories.select {|story| (@milestone_stories.blank? || !@milestone_stories.include?(story)) && story.completion_date}
   %fieldset.subsection
@@ -34,14 +37,14 @@
     %ul{:style => 'list-style-image: url("/images/tick.png")', :title => "Completed"}
       - detached_stories.each do |story|
         %li
-          %span{:style => "width:10em; color:red"}== (#{story.work_units_est.to_s} w.u.)  
+          %span{:style => "width:10em; color:#a00"}== (#{story.work_units_est.to_s} w.u.)  
           = link_to h(story.name), iteration_stories_url(story.iteration, :anchor => "story_" + story.id.to_s)
       
   
   - if @milestone
     %fieldset.subsection
       %legend.subsection Milestone status
-      %h2== Milestone #{@milestone.name}
+      %h2= link_to "Milestone #{h(@milestone.name)}", milestone_features_url(@milestone)
       %ul
         - for feature in @milestone.features_prepared(@report.end_date)
           - icon_image, icon_title = feature.completion_date && feature.completion_date <= @report.end_date ? ["/images/tick.png","Complete"] : ["/images/cog.png", "In progress"]
