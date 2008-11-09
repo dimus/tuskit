@@ -71,6 +71,7 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if developer?
         if @story.update_attributes(params[:story])
+          @story.implementations.each {|impl| impl.destroy} unless params[:story].key? "feature_ids"
           format.html { redirect_to(iteration_stories_url(@story.iteration, :anchor => "story_" + @story.id.to_s)) }
           format.xml  { head :ok }
         else
