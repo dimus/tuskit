@@ -22,6 +22,10 @@ class Milestone < ActiveRecord::Base
     incompleted = []
     self.features.each do |f|
       completed_all_stories = f.all_stories_completed?
+      if f.completion_date && !completed_all_stories
+        f.completion_date = nil
+        f.save
+      end
       if f.completion_date && f.completion_date <= ref_date
         completed << f
       elsif completed_all_stories

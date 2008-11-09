@@ -30,4 +30,10 @@ class Feature < ActiveRecord::Base
   def all_stories_completed?
     !self.stories.blank? && self.stories.select {|story| story.completion_date == nil}.blank?
   end
+
+  # finds the completion date of the last completed story of the feature
+  def last_story_date
+    self.stories.select {|story| story.completion_date}.sort_by(&:completion_date).last.completion_date.to_s rescue nil
+  end
+
 end

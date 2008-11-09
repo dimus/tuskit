@@ -17,11 +17,9 @@ class Iteration < ActiveRecord::Base
     maybe_finished = []
     self.stories.each do |story|
       completed_all_tasks = story.all_tasks_completed?
-      if story.completed
-        if !completed_all_tasks
+      if story.completed && !completed_all_tasks
           story.completed = false
           story.save
-        end
       end
       if story.completed
         finished << story
