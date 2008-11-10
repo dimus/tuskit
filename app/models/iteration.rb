@@ -91,5 +91,9 @@ class Iteration < ActiveRecord::Base
     end
     data
   end
+
+  def report_recipients
+    self.project.project_members.select {|pm| pm.send_iteration_report && !pm.user.email.strip.blank?}.map {|pm| pm.user} 
+  end
   
 end
