@@ -8,6 +8,6 @@ class MailerReport < ActionMailer::Base
     recipients iteration.report_recipients.map {|r| r.email}.join(",")
     subject "Progress report for '#{iteration.project.name}' (#{MailerReport.dates_interval(iteration.start_date, iteration.end_date)})"
     from CUSTOM["mailer"]["email_from"]
-    body :report => iteration
+    body :iteration => iteration
   end
 end

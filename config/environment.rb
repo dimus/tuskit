@@ -56,4 +56,4 @@ APP_VERSION = "0.5+"
 
 CUSTOM = YAML.load(open(File.dirname(__FILE__) + '/config.yml').read)
 
-
+ActionMailer::Base.delivery_method = :sendmail

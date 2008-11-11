@@ -1,1 +1,6 @@
-test
+Report for project <%= @iteration.project.name %>
+
+Period  <%= MailerReport.dates_interval(@iteration.start_date, @iteration.end_date) %>
+
+Objectives:
+<%= @iteration.objectives.strip == "" ? "N/A" : @report.objectives %>

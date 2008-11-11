@@ -7,7 +7,7 @@
     :textile
       #{@report.objectives.strip == "" ? "N/A" : @report.objectives}
 
-  / If there is a current milestone where features have stories organize stories from the iteration using milestone first
+  / If there is a current milestone where features have stories, organize stories from the iteration using milestone first
   - unless @milestone_stories.blank?
     %br/
     %fieldset.subsection
