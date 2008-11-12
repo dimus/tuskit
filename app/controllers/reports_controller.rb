@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
 
   def index
     page = params[:page] || 1
-    query = "select id, start_date, end_date from iterations where project_id = #{@project.id} and end_date < '#{Date.today.to_s}' order by start_date desc" 
+    query = "select id, start_date, end_date from iterations where project_id = #{@project.id} and start_date < '#{Date.today.to_s}' order by start_date desc" 
     @reports = Iteration.paginate_by_sql(query, :page => page)
     respond_to do |format|
       format.html

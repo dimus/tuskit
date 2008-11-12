@@ -1,6 +1,8 @@
 general:
-  site_title: <My Site> 
+  site_title: <My Site> # This name will appear in a title of your site.
 
 mailer:
-  email_from: from@example.com
+  email_from: from@example.com # 'From' email address in tuskit emails
+  server: "http://localhost:3000" # Server name for urls in your email
+  
 

@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+OPTIONS = {
+  :environment => "development",
+  :mark_emailed_reports => false,
+}
+
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: ruby #{script_name} [options]"
+
+  opts.separator ""
+
+  opts.on("-e", "--environment=name", String,
+          "Specifies the environment to create the account under (test/development/production).",
+          "Default: development") { |OPTIONS[:environment]| }
+          
+          
+  opts.separator ""
+  
+  opts.on("-m", "--mark_emailed_reports",
+          "Marks processed reports as sent") { OPTIONS[:mark_emailed_reports] = true }
+          
+          
+  opts.separator ""
+  opts.on("-h", "--help",
+          "Show this help message.") { puts opts; exit }
+
+  opts.parse!
+end
+
+ENV["RAILS_ENV"] = OPTIONS[:environment]
+require File.dirname(__FILE__) + "/../../config/environment"
+
+projects=Project.find(:all, :conditions => ["progress_reports = 1"] )
+ 
+projects.each do |project|
+  iterations=project.iterations.select {|i| i.end_date < Date.today && !i.report_sent}
+  iterations.each do |iteration|
+    puts iteration
+    email=MailerReport.create_send_report(iteration)
+    #email.set_content_type "text/plain;"
+    #email.transfer_encoding = "7bit"
+    #email.mime_version = "1.0"
+    ReportMailer.deliver(email)
+    if OPTIONS[:mark_emailed_reports]
+      iteration.report_sent = true
+    end
+  end
+end
+

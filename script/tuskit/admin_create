@@ -25,7 +25,7 @@ ARGV.options do |opts|
 end
 
 ENV["RAILS_ENV"] = OPTIONS[:environment]
-require File.dirname(__FILE__) + "/../config/environment"
+require File.dirname(__FILE__) + "/../../config/environment"
 require 'user'
 
 begin

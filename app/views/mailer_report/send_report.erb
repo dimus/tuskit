@@ -1,6 +1,7 @@
-Report for project <%= @iteration.project.name %>
+Report for a project <%= @iteration.project.name %>
 
-Period  <%= MailerReport.dates_interval(@iteration.start_date, @iteration.end_date) %>
+Period:  <%= MailerReport.dates_interval(@iteration.start_date, @iteration.end_date) %>
 
-Objectives:
-<%= @iteration.objectives.strip == "" ? "N/A" : @report.objectives %>
+Report is located at <%= CUSTOM["mailer"]["server"] %>/projects/<%= @iteration.project_id %>/reports/<%= @iteration.id %>
+
+Login might be required
