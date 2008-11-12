@@ -23,18 +23,4 @@ describe Milestone do
     milestone.errors.should_not be_empty
   end
 
-  describe Milestone.current do
-    fixtures :projects, :milestones
-
-    it "should return first unclosed milestone" do
-      Milestone.current.should == milestones(:developer_view)
-    end
-
-    it "should return nil there is no unclosed milestones" do
-      ms = milestones(:developer_view) 
-      ms.completion_date = Date.today
-      ms.save
-      Milestone.current.should be_nil 
-    end
-  end
 end

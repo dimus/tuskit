@@ -6,6 +6,6 @@
   = will_paginate(@reports)
   %ul
     - @reports.each do |report|
-      %li.report= link_to dates_interval(report.start_date, report.end_date), project_report_url(@project, report)
+      %li.report= link_to dates_interval(report.start_date, report.end_date), project_report_url(@project, report), :style => (report == @project.current_iteration ? "color:red": nil)
 
   

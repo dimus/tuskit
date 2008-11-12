@@ -21,7 +21,7 @@ time on overhead introduced by Agile methodologies and still enjoy all the benef
 
 - run rake db:migrate
 
-- run ./script/admin_create
+- run ./script/tuskit/admin_create
 
 - run ./script/server
 

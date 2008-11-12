@@ -50,6 +50,8 @@ Rails::Initializer.run do |config|
   :secret => "82437892_kak_nyne_vzbiraetsya" }
   
   config.log_level = :fatal;
+  
+  config.gem "haml"
 end
 
 APP_VERSION = "0.5+"
