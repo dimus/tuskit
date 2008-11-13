@@ -53,7 +53,7 @@
     %fieldset.subsection
       %legend.subsection
         Milestone status
-        /= sprintf "(%.1f w.u.)", @milestone.work_units(@report.end_date)
+        = sprintf "(%.1f w.u.)", @milestone.work_units_real(@report.end_date)
       %h2= link_to "Milestone #{h(@milestone.name)}", milestone_features_url(@milestone)
       %ul
         - for feature in @milestone.features_prepared(@report.end_date)

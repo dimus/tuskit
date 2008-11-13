@@ -36,16 +36,9 @@ class Milestone < ActiveRecord::Base
     end
     to_be_completed + incompleted + completed.sort_by(&:completion_date)
   end
-
-  def work_units(wu_date = Date.today)
-    wu = 0
-    unless stories.blank?
-      wu = stories.inject(0) do |res,story| 
-        if story.completion_date && story.completion_date <= wu_date
-          res += story.work_units_est
-        end
-      end
-    end
-    wu || 0
+  
+  #calculates amount of units completed for this milestone
+  def work_units_real(wu_date = Date.today)
+    self.features.inject(0) {|f| f.work_units_real(wu_date)} || 0 rescue 0
   end
 end

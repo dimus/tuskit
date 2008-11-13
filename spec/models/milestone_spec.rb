@@ -22,5 +22,4 @@ describe Milestone do
     milestone.save.should be_false
     milestone.errors.should_not be_empty
   end
-
 end

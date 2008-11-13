@@ -24,7 +24,11 @@ class Feature < ActiveRecord::Base
   end
 
   def total_work_units
-    self.stories.inject(0) {|res, s| res += s.work_units_est }
+    self.stories.inject(0) {|res, s| res += s.work_units_est } || 0 rescue 0
+  end
+
+  def work_units_real(wu_date = Date.today)
+    self.stories.inject(0) {|res, s| res += s.work_units_est if (s.completion_date && s.completion_date <= wu_date) } || 0 rescue 0
   end
 
   def all_stories_completed?
