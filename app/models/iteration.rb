@@ -101,7 +101,7 @@ class Iteration < ActiveRecord::Base
   end
 
   def milestone
-    self.project.milestones.select {|m| !m.completion_date or m.completion_date > self.end_date}.sort_by(&:created_at).first
+    self.project.milestones.select {|m| !m.completion_date or m.completion_date > self.end_date}.sort_by(&:created_at).first rescue nil
   end
   
   # Returns previous iteration if exists, nil otherwise 
