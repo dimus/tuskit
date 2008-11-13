@@ -51,9 +51,9 @@ Rails::Initializer.run do |config|
   
   config.log_level = :fatal;
   
-  config.gem "haml"
-  config.gem "RedCloth"
-  config.gem "echoe"
+  #config.gem "haml"
+  #config.gem "RedCloth"
+  #config.gem "echoe"
 end
 
 APP_VERSION = "0.5+"
