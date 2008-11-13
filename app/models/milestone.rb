@@ -36,4 +36,8 @@ class Milestone < ActiveRecord::Base
     end
     to_be_completed + incompleted + completed.sort_by(&:completion_date)
   end
+
+  def work_units(date = Date.today)
+    stories.inject(0) {|res,story| res += story.work_units_est if (story.completion_date && story.completion_date <= date)} || 0
+  end
 end

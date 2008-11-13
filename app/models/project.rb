@@ -31,23 +31,21 @@ class Project < ActiveRecord::Base
   def copy_incomplete_stories_to_current_iteration
     ci = current_iteration
     if ci && !ci.old_stories_added?
-      old_incomplete_stories = self.stories.select {|story| story.iteration != ci && !story.completed} 
-      stories_to_move = old_incomplete_stories.select {|story| story.iteration.end_date < Date.today}
-      
-      stories_to_move.each do |story|
-        story_hash = Hash.from_xml(story.to_xml)["story"].merge({"iteration_id" => ci.id})
-        story_copy = Story.new(story_hash)
-        story_copy.save
-        story.agile_tasks.select {|t| t.completion_date == nil}.each do |task|
-          task.story_id = story_copy.id
-          task.save
+      iters = self.iterations.reverse
+      ci_index = iters.index ci
+      if ci_index > 0
+        prev_iteration = iters[ci_index - 1]
+        puts 'ddddd'
+        puts prev_iteration.stories
+        stories_to_move = prev_iteration.stories.select {|story| !story.completed}
+        stories_to_move.each do |story|
+          story_copy = Story.create(:name => story.name, :work_units_est => story.work_units_est, :iteration_id => prev_iteration.id)
+          story.iteration_id = ci.id
+          story.save
         end
       end
-      
-      if old_incomplete_stories.size == stories_to_move.size
-        ci.old_stories_added = true
-        ci.save
-      end
+      ci.old_stories_added = true
+      ci.save
     end
   end
   

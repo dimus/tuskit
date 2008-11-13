@@ -1,3 +1,7 @@
+= link_to "< previous", project_report_url(@project, @report_previous)  if @report_previous
+= "&nbsp;" * 5 if @report_previous && @report_next
+= link_to "next >", project_report_url(@project, @report_next)  if @report_next
+
 #report
   %h1== Report for project "#{@project.name}"
   %h2== Period #{dates_interval(@report.start_date, @report.end_date)}: achieved #{@report.work_units_real} work units out of #{@report.work_units_planned} planned
@@ -47,7 +51,9 @@
   
   - if @milestone
     %fieldset.subsection
-      %legend.subsection Milestone status
+      %legend.subsection
+        Milestone status
+        = sprintf "(%.1f w.u.)", @milestone.work_units(@report.end_date)
       %h2= link_to "Milestone #{h(@milestone.name)}", milestone_features_url(@milestone)
       %ul
         - for feature in @milestone.features_prepared(@report.end_date)

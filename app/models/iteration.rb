@@ -74,6 +74,10 @@ class Iteration < ActiveRecord::Base
   def future?
     !self.current? && self.end_date >= Date.today
   end
+
+  def past?
+    self.end_date < Date.today
+  end
   
   def days_left
     #amount of days left to the end of the iteration
@@ -94,6 +98,22 @@ class Iteration < ActiveRecord::Base
 
   def report_recipients
     self.project.project_members.select {|pm| pm.send_iteration_report && !pm.user.email.strip.blank?}.map {|pm| pm.user} 
+  end
+
+  def milestone
+    self.project.milestones.select {|m| !m.completion_date or m.completion_date > self.end_date}.sort_by(&:created_at).first
+  end
+  
+  # Returns previous iteration if exists, nil otherwise 
+  def previous
+    idx = project.iterations.index self
+    (idx == (project.iterations.size - 1)) ? nil : project.iterations[idx + 1]
+  end
+
+  # Returns next iteration if exists, nil otherwise
+  def next
+    idx = project.iterations.index self
+    idx == 0 ? nil : project.iterations[idx - 1]
   end
   
 end
