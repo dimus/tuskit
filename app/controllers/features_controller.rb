@@ -6,6 +6,10 @@ class FeaturesController < ApplicationController
   # GET /stories.xml
   def index
     @features = @milestone.features
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @features }
+    end
   end
 
   # GET /features/new

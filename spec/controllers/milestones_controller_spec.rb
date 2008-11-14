@@ -42,28 +42,6 @@ describe MilestonesController do
 
   end
 
-  describe "responding to GET show" do
-
-    it "should expose the requested milestone as @milestone" do
-      Milestone.should_receive(:find).with("37").and_return(mock_milestone)
-      get :show, :id => "37"
-      assigns[:milestone].should equal(mock_milestone)
-    end
-    
-    describe "with mime type of xml" do
-
-      it "should render the requested milestone as xml" do
-        request.env["HTTP_ACCEPT"] = "application/xml"
-        Milestone.should_receive(:find).with("37").and_return(mock_milestone)
-        mock_milestone.should_receive(:to_xml).and_return("generated XML")
-        get :show, :id => "37"
-        response.body.should == "generated XML"
-      end
-
-    end
-    
-  end
-
   describe "responding to GET new" do
   
     it "should expose a new milestone as @milestone" do
@@ -85,32 +63,33 @@ describe MilestonesController do
   end
 
   describe "responding to POST create" do
-
+    
     describe "with valid params" do
       
       it "should expose a newly created milestone as @milestone" do
         Milestone.should_receive(:new).with({"these" => 'params'}).and_return(mock_milestone(:save => true))
-        post :create, :milestone => {:these => 'params'}
+        post :create, :milestone => {'these' => 'params'}
         assigns(:milestone).should equal(mock_milestone)
       end
 
       it "should redirect to the created milestone" do
         Milestone.stub!(:new).and_return(mock_milestone(:save => true))
-        post :create, :milestone => {}
-        response.should redirect_to(milestone_url(mock_milestone))
+        mock_milestone.should_receive(:save).and_return mock_milestone
+        post :create, :milestone => {'these' => 'params'}, :project_id => @project.id
+        response.should redirect_to(project_milestones_url(@project))
       end
       
       it "should not reassign deadline if there is show_deadline parameter" do
         Milestone.stub!(:new).and_return(mock_milestone(:save => true))
         mock_milestone.should_not_receive(:deadline=)
-        post :create, :milestone => {:these => "params"}, :show_deadline => 1
+        post :create, :milestone => {:these => 'params'}, :show_deadline => 1
         assigns(:milestone).should equal(mock_milestone)
       end
 
       it "should reassign deadline if there is no show_deadline parameter" do
         Milestone.stub!(:new).and_return(mock_milestone(:save => true))
         mock_milestone.should_receive(:deadline=)
-        post :create, :milestone => {:these => "params"} #, :show_deadline => 1
+        post :create, :milestone => {:these => 'params'} #, :show_deadline => 1
         assigns(:milestone).should equal(mock_milestone)
       end
     end
@@ -136,6 +115,11 @@ describe MilestonesController do
   describe "responding to PUT udpate" do
 
     describe "with valid params" do
+      before do
+        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
+        mock_milestone.stub!(:save)
+        mock_milestone.stub!(:project).and_return(@project)            
+      end
 
       it "should update the requested milestone" do
         Milestone.should_receive(:find).with("37").and_return(mock_milestone)
@@ -144,7 +128,6 @@ describe MilestonesController do
       end
 
       it "should expose the requested milestone as @milestone" do
-        Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
         put :update, :id => "1"
         assigns(:milestone).should equal(mock_milestone)
       end
@@ -152,7 +135,7 @@ describe MilestonesController do
       it "should redirect to the milestone" do
         Milestone.stub!(:find).and_return(mock_milestone(:update_attributes => true))
         put :update, :id => "1"
-        response.should redirect_to(milestone_url(mock_milestone))
+        response.should redirect_to(project_milestones_url(@project))
       end
 
       it "should not reassign deadline if there is show_deadline parameter" do

@@ -4,7 +4,8 @@ describe FeaturesController do
   before(:each) do
     @user ||= mock_model(User)
     @project ||= mock_model(Project)
-    @milestone ||= mock_model(Milestone, :project => @project)
+    @milestone ||= mock_model(Milestone, :project => @project, :features => [mock_feature])
+    Milestone.stub!(:find).and_return(@milestone)
     controller.stub!(:current_user).and_return(@user)
     controller.stub!(:developer?).and_return(true)
   end
@@ -12,56 +13,45 @@ describe FeaturesController do
   def mock_feature(stubs={})
     @mock_feature ||= mock_model(Feature, stubs)
   end
-  
+    
   describe "responding to GET index" do
+    
+    before do
+      @features = [mock_feature]
+      @milestone.should_receive(:features).and_return(@features)
+    end
+    
+    it "should find @milestone and @project" do
+      Milestone.should_receive(:find).and_return(@milestone)
+      @milestone.should_receive(:project).and_return(@project)
+      get :index, :milestone_id => @milestone.id
+      assigns[:project].should == @project
+      assigns[:milestone].should == @milestone
+    end
 
-    it "should expose all features as @features" do
-      Feature.should_receive(:find).with(:all).and_return([mock_feature])
-      get :index
-      assigns[:features].should == [mock_feature]
+    it "should expose all features" do
+      get :index, :milestone_id => @milestone.id
+      assigns[:features].should == @features
     end
 
     describe "with mime type of xml" do
   
       it "should render all features as xml" do
         request.env["HTTP_ACCEPT"] = "application/xml"
-        Feature.should_receive(:find).with(:all).and_return(features = mock("Array of Features"))
-        features.should_receive(:to_xml).and_return("generated XML")
-        get :index
+        @features.should_receive(:to_xml).and_return("generated XML")
+        get :index, :milestone_id => @milestone.id
         response.body.should == "generated XML"
       end
     
     end
 
-  end
-
-  describe "responding to GET show" do
-
-    it "should expose the requested feature as @feature" do
-      Feature.should_receive(:find).with("37").and_return(mock_feature)
-      get :show, :id => "37"
-      assigns[:feature].should equal(mock_feature)
-    end
-    
-    describe "with mime type of xml" do
-
-      it "should render the requested feature as xml" do
-        request.env["HTTP_ACCEPT"] = "application/xml"
-        Feature.should_receive(:find).with("37").and_return(mock_feature)
-        mock_feature.should_receive(:to_xml).and_return("generated XML")
-        get :show, :id => "37"
-        response.body.should == "generated XML"
-      end
-
-    end
-    
   end
 
   describe "responding to GET new" do
   
     it "should expose a new feature as @feature" do
       Feature.should_receive(:new).and_return(mock_feature)
-      get :new
+      get :new, :milestone_id => @milestone.id
       assigns[:feature].should equal(mock_feature)
     end
 
@@ -71,7 +61,7 @@ describe FeaturesController do
   
     it "should expose the requested feature as @feature" do
       Feature.should_receive(:find).with("37").and_return(mock_feature)
-      get :edit, :id => "37"
+      get :edit, :id => "37", :milestone_id => @milestone.id
       assigns[:feature].should equal(mock_feature)
     end
 
@@ -82,15 +72,17 @@ describe FeaturesController do
     describe "with valid params" do
       
       it "should expose a newly created feature as @feature" do
-        Feature.should_receive(:new).with({'these' => 'params'}).and_return(mock_feature(:save => true))
-        post :create, :feature => {:these => 'params'}
+        Feature.should_receive(:new).with({'mock' => 'params'}).and_return(mock_feature(:milestone => @milestone))
+        mock_feature.should_receive(:save).and_return true
+        post :create, :feature => {'mock' => 'params'}, :milestone_id => @milestone.id
         assigns(:feature).should equal(mock_feature)
       end
 
       it "should redirect to the created feature" do
-        Feature.stub!(:new).and_return(mock_feature(:save => true))
-        post :create, :feature => {}
-        response.should redirect_to(feature_url(mock_feature))
+        Feature.stub!(:new).with('mock' => 'params').and_return(mock_feature)
+        mock_feature.should_receive(:save).and_return true
+        post :create, :feature => {'mock' => 'params'}, :milestone_id => @milestone.id
+        response.should redirect_to(milestone_features_url(@milestone))
       end
       
     end
@@ -98,13 +90,15 @@ describe FeaturesController do
     describe "with invalid params" do
 
       it "should expose a newly created but unsaved feature as @feature" do
-        Feature.stub!(:new).with({'these' => 'params'}).and_return(mock_feature(:save => false))
-        post :create, :feature => {:these => 'params'}
+        Feature.stub!(:new).with({'wrong' => 'params'}).and_return(mock_feature)
+        mock_feature.should_receive(:save).and_return false
+        post :create, :feature => {'wrong' => 'params'}
         assigns(:feature).should equal(mock_feature)
       end
 
       it "should re-render the 'new' template" do
-        Feature.stub!(:new).and_return(mock_feature(:save => false))
+        Feature.stub!(:new).and_return(mock_feature)
+        mock_feature.should_receive(:save).and_return false
         post :create, :feature => {}
         response.should render_template('new')
       end
@@ -119,20 +113,22 @@ describe FeaturesController do
 
       it "should update the requested feature" do
         Feature.should_receive(:find).with("37").and_return(mock_feature)
-        mock_feature.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => "37", :feature => {:these => 'params'}
+        mock_feature.should_receive(:update_attributes).with({'mock' => 'params'})
+        put :update, :id => "37", :feature => {:mock => 'params'}
       end
 
       it "should expose the requested feature as @feature" do
-        Feature.stub!(:find).and_return(mock_feature(:update_attributes => true))
-        put :update, :id => "1"
+        Feature.stub!(:find).and_return(mock_feature)
+        mock_feature.should_receive(:update_attributes).with({'mock' => 'params'})
+        put :update, :id => "1", :feature => {:mock => 'params'}
         assigns(:feature).should equal(mock_feature)
       end
 
       it "should redirect to the feature" do
-        Feature.stub!(:find).and_return(mock_feature(:update_attributes => true))
-        put :update, :id => "1"
-        response.should redirect_to(feature_url(mock_feature))
+        Feature.stub!(:find).and_return(mock_feature)
+        mock_feature.should_receive(:update_attributes).with({'mock' => 'params'}).and_return true        
+        put :update, :id => "1", :feature => {:mock => 'params'}, :milestone_id => @milestone.id
+        response.should redirect_to(milestone_features_url(@milestone))
       end
 
     end
@@ -146,13 +142,15 @@ describe FeaturesController do
       end
 
       it "should expose the feature as @feature" do
-        Feature.stub!(:find).and_return(mock_feature(:update_attributes => false))
+        Feature.stub!(:find).and_return(mock_feature)
+        mock_feature.should_receive(:update_attributes).and_return false        
         put :update, :id => "1"
         assigns(:feature).should equal(mock_feature)
       end
 
       it "should re-render the 'edit' template" do
-        Feature.stub!(:find).and_return(mock_feature(:update_attributes => false))
+        Feature.stub!(:find).and_return(mock_feature)
+        mock_feature.should_receive(:update_attributes).and_return false        
         put :update, :id => "1"
         response.should render_template('edit')
       end
@@ -170,9 +168,10 @@ describe FeaturesController do
     end
   
     it "should redirect to the features list" do
-      Feature.stub!(:find).and_return(mock_feature(:destroy => true))
-      delete :destroy, :id => "1"
-      response.should redirect_to(features_url)
+      Feature.stub!(:find).and_return(mock_feature)
+      mock_feature.should_receive(:destroy).and_return true
+      delete :destroy, :id => "1", :milestone_id => @milestone.id
+      response.should redirect_to(milestone_features_url(@milestone))
     end
 
   end

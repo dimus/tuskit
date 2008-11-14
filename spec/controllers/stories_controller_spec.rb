@@ -5,13 +5,15 @@ describe StoriesController do
   before(:each) do
     @user = mock_model(User)
     @project = mock_model(Project, :id => 1)
-    @story_old = mock_model(Story)
-    @story_old2 = mock_model(Story)
+    @feature = mock_model(Feature)
+    @implementation1 = mock_model(Implementation, :feature_id => @feature.id)
+    @story = mock_model(Story, :iteration => @iteration)
+    @story_old = mock_model(Story, :implementations => [@implementation1])
+    @story_old2 = mock_model(Story, :implementations => [@implementation1])
     @meeting = mock_model(Meeting, :meeting_date => Date.today, :name => 'Iteration Meeting')
     @meeting2 = mock_model(Meeting, :meeting_date => 20.days.ago, :name => 'Iteration Meeting')
     @iteration = mock_model(Iteration, :project => @project, :stories => [@story_old], :meetings => [@meeting])
     @iteration2 = mock_model(Iteration, :project => @project, :stories => [@story_old2], :meetings => [@meeting2])
-    @story = mock_model(Story, :iteration => @iteration)
     @story_old.stub!(:iteration).and_return(@iteration)
     @project.stub!(:iterations).and_return([@iteration,@iteration2])
     Story.stub!(:new).and_return(@story)
@@ -47,23 +49,28 @@ describe StoriesController do
 
   describe ".create" do
     before do
-      Story.should_receive(:new).and_return(@story)
+      Story.should_receive(:new).with('iteration_id' => @iteration.id, 'mock' => 'params').and_return(@story)
       controller.should_receive(:developer?).and_return(true)
       @story.should_receive(:save).and_return(true)
     end
     
     it "should create new story from parameters" do
-      post "create", :story => @params
+      post "create", :story => {:iteration_id => @iteration.id, :mock => 'params'}
+      assigns(:story).should == @story
     end
 
     it "should redirect to stories index" do
-      post "create", :story => @params
+      post "create", :story => {:iteration_id => @iteration.id, :mock => 'params'}, :iteration_id => @iteration.id
       response.should redirect_to(iteration_stories_url(@iteration, :anchor => "story_" + @story.id.to_s))
     end
   
   end
 
   describe ".update" do 
+    
+    before do
+      @implementation1.stub!(:destroy).and_return true
+    end
 
     before do
       Story.stub!(:find).and_return(@story_old)
@@ -97,16 +104,16 @@ describe StoriesController do
 
     it "should find story" do
       Story.should_receive(:find).and_return(@story_old)
-      delete "destroy", :id => @story_old.id
+      delete "destroy", :id => @story_old.id, :iteration_id => @iteration.id
     end
 
     it "should call destroy method" do
       @story_old.should_receive(:destroy)
-      delete "destroy", :id => @story_old.id
+      delete "destroy", :id => @story_old.id, :iteration_id => @iteration.id
     end
 
     it "should redirect to iteration stories" do
-      delete "destroy", :id => @story_old.id
+      delete "destroy", :id => @story_old.id, :iteration_id => @iteration.id
       response.should redirect_to(iteration_stories_url(@iteration))
     end
   end

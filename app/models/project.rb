@@ -35,8 +35,6 @@ class Project < ActiveRecord::Base
       ci_index = iters.index ci
       if ci_index > 0
         prev_iteration = iters[ci_index - 1]
-        puts 'ddddd'
-        puts prev_iteration.stories
         stories_to_move = prev_iteration.stories.select {|story| !story.completed}
         stories_to_move.each do |story|
           story_copy = Story.create(:name => story.name, :work_units_est => story.work_units_est, :iteration_id => prev_iteration.id)

@@ -51,7 +51,7 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if developer?
         if @story.save
-          format.html { redirect_to(iteration_stories_url(@story.iteration, :anchor => "story_" + @story.id.to_s)) }
+          format.html { redirect_to(iteration_stories_url(@iteration, :anchor => "story_" + @story.id.to_s)) }
           format.xml  { render :xml => @story, :status => :created, :location => @story }
         else
           format.html { render :action => "new" }
