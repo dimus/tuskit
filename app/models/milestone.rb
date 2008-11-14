@@ -39,6 +39,6 @@ class Milestone < ActiveRecord::Base
   
   #calculates amount of units completed for this milestone
   def work_units_real(wu_date = Date.today)
-    self.features.inject(0) {|f| f.work_units_real(wu_date)} || 0 rescue 0
+    self.features.inject(0) {|res,f| res += f.work_units_real(wu_date)} || 0 rescue 0
   end
 end

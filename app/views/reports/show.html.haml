@@ -1,6 +1,6 @@
 = link_to "< previous", project_report_url(@project, @report_previous)  if @report_previous
 = "&nbsp;" * 5 if @report_previous && @report_next
-= link_to "next >", project_report_url(@project, @report_next)  if @report_next
+= link_to "next >", project_report_url(@project, @report_next)  if @report_next && @report != @project.current_iteration
 
 #report
   %h1== Report for project "#{@project.name}"
