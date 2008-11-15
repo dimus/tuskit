@@ -1,53 +1,53 @@
-- msg = @milestone.current? ? "Current " : ""
+- msg = @milestone.current? ? 'Current ' : ''
 %h1 
-  = msg + "Milestone:"
+  = msg + 'Milestone: '
   &= @milestone.name
   - if @milestone.deadline && @milestone.current?
-    = "(deadline on " + format_date(@milestone.deadline) + ")"
+    = '(deadline on ' + format_date(@milestone.deadline) + ')'
 
 %p
-  = link_to 'Edit', edit_project_milestone_url(@project, @milestone), :class => "navigation"
+  = link_to 'Edit', edit_project_milestone_url(@project, @milestone), :class => 'navigation'
   |
-  = link_to 'All milestones', project_milestones_url(@project), :class => "navigation"
+  = link_to 'All milestones', project_milestones_url(@project), :class => 'navigation'
 
 %fieldset.subsection
   %legend.subsection Features
-  %div{:style => "margin-bottom:1em"}
-    = link_to "Add feature", new_milestone_feature_url(@milestone), :class => "navigation"
+  %div{:style => 'margin-bottom:1em'}
+    = link_to 'Add feature', new_milestone_feature_url(@milestone), :class => 'navigation'
 
   - for feature in @milestone.features_prepared
     .folder
       .folder_title
         %table.folder_info
           %tr
-            %td{:style => "width:5em"}= feature_completion(feature)
-            %td{:style => "width:30em"}
+            %td{:style => 'width:5em'}= feature_completion(feature)
+            %td{:style => 'width:30em'}
               Feature: 
               %strong&= feature.name
-            %td{:style => "width:8em"}=  sprintf("%.1f", feature.stories.inject(0) {|res,s| res += s.work_units_est/s.implementations.size}) + " w.u. total"
-            %td{:style => "width:3em"}= link_to "edit", edit_milestone_feature_url(@milestone, feature), :class => "navigation"
-            %td{:style => "width:5em"}= link_to "delete", milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => "navigation"
-      .folder_content{:style => "display: block"}
+            %td{:style => 'width:8em'}=  sprintf('%.1f', feature.stories.inject(0) {|res,s| res += s.work_units_est/s.implementations.size}) + ' w.u. total'
+            %td{:style => 'width:3em'}= link_to 'edit', edit_milestone_feature_url(@milestone, feature), :class => 'navigation'
+            %td{:style => 'width:5em'}= link_to 'delete', milestone_feature_url(@milestone, feature), :confirm => 'Are you sure?', :method => :delete, :class => 'navigation'
+      .folder_content{:style => 'display: block'}
         - unless feature.stories.blank?
-          %table{:class => "data bordered"}
+          %table{:class => 'data bordered'}
             %thead
               %tr
-                %th Completed
+                %th{:style => 'width:4em'} Completed
                 %th Name
-                %th w.u.
+                %th{:style => 'width:3em'} w.u.
             %tbody
               - feature.stories_prepared.each do |story|
-                - story_class = "item_incomplete"
-                - story_class = "item_active" if story.active?
-                - story_class = "item_complete" if story.completion_date
+                - story_class = 'item_incomplete'
+                - story_class = 'item_active' if story.active?
+                - story_class = 'item_complete' if story.completion_date
                   
                 %tr{:class => story_class}
                   %td&= story.completion_date ? format_date(story.completion_date) : "-"
-                  %td= link_to h(story.name), iteration_stories_url(story.iteration, :anchor => "story_" + story.id.to_s)
+                  %td= link_to h(story.name), iteration_stories_url(story.iteration, :anchor => 'story_' + story.id.to_s)
                   %td&= sprintf("%.1f", story.work_units_est/story.implementations.size)
           
 %fieldset.subsection
   %legend.subsection Description
   :textile
-    #{@milestone.description.strip == "" ? "N/A" : h(@milestone.description)}
+    #{@milestone.description.strip == '' ? 'N/A' : h(@milestone.description)}
 

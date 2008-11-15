@@ -9,7 +9,7 @@ describe "/project/1/milestones" do
     assigns[:milestone] = @milestone
   end
 
-  it "should render stories" do
+  it "should render" do
     render "/milestones/new.html.haml"
     response.should be_success
   end
