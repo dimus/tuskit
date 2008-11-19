@@ -1,24 +1,24 @@
 - @current_subtab ||= nil
 !!!
-%html{ "xml:lang" => "en", :lang => "en", :xmlns => "http://www.w3.org/1999/xhtml" }
+%html{ 'xml:lang' => 'en', :lang => 'en', :xmlns => 'http://www.w3.org/1999/xhtml' }
   %head
-    %meta{ :content => "text/html; charset=utf-8", "http-equiv" => "Content-type" }/
-    %meta{ :content => "en-us", "http-equiv" => "Content-Language" }/
+    %meta{ :content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-type' }/
+    %meta{ :content => 'en-us', 'http-equiv' => 'Content-Language' }/
     %title
       Tusk•It:
       &= CUSTOM['general']['site_title']
-    %meta{ :name => "ROBOTS", :content => "ALL" }/
-    %meta{ :content => "no", "http-equiv" => "imagetoolbar" }/
-    %meta{ :name => "MSSmartTagsPreventParsing", :content => "true" }/
-    %meta{ :name => "Keywords", :content => "__KEYWORDS__" }/
-    %meta{ :name => "Description", :content => "__DESCRIPTION__" }/
-    = stylesheet_link_tag "application.css"
-    = stylesheet_link_tag "admin" if page_type == 'admin'
-    = javascript_include_tag "jquery", "jquery.scrollto", "jquery.ui", "application"
+    %meta{ :name => 'ROBOTS', :content => 'ALL' }/
+    %meta{ :content => 'no', 'http-equiv' => 'imagetoolbar' }/
+    %meta{ :name => 'MSSmartTagsPreventParsing', :content => 'true' }/
+    %meta{ :name => 'Keywords', :content => '__KEYWORDS__' }/
+    %meta{ :name => 'Description', :content => '__DESCRIPTION__' }/
+    = stylesheet_link_tag 'application.css'
+    = stylesheet_link_tag 'admin' if page_type == 'admin'
+    = javascript_include_tag 'jquery', 'jquery.scrollto', 'jquery.ui', 'application'
     
     /  KLUDGE:: Win IE 5
     /  corrects the unsightly Flash of Unstyled Content. See http://www.bluerobot.com/web/css/fouc.asp for more info
-    %script{ :type => "text/javascript" }
+    %script{ :type => 'text/javascript' }
     /  END KLUDGE::
   
   %body#noname1
@@ -26,23 +26,23 @@
       #masthead
         #logodiv
           #logo_tuskit
-            Tusk•It
+            = link_to 'Tusk•It', '/'
           #logo_motto
-            Issue tracking with an Agile Twist
+            = link_to 'Issue tracking with an Agile Twist', '/'
           %table.layout
             %tr
-              %td{ :width => "230" }
-                %img{ :src => "/images/public/#{page_type}_logo.gif", :alt => "Logo name", :style => "width:230;height:120" }/
-              %td{ :valign => "top", :style => "padding-top: 10px; padding-left: 40px; background-position:top left; background-repeat:no-repeat;" }
+              %td{ :width => '230' }
+                %img{ :src => "/images/public/#{page_type}_logo.gif", :alt => 'Logo name', :style => 'width:230;height:120' }/
+              %td{ :valign => 'top', :style => 'padding-top: 10px; padding-left: 40px; background-position:top left; background-repeat:no-repeat;' }
                 #info
                   - if current_user != :false
                     == User:&nbsp;&nbsp;#{current_user[:login] rescue nil}
                     &nbsp;&nbsp;&nbsp;&nbsp;|
                     - if  !current_user.groups.blank?
                       - current_user.groups.each do |group|
-                        = link_to group.name.capitalize, eval("url_" + group.name)
+                        = link_to group.name.capitalize, eval('url_' + group.name)
                         |
-                    = link_to "Logout", session_url(1), :method => :delete
+                    = link_to 'Logout', session_url(1), :method => :delete
                 %br{ :clear => "all" }/
                 #title
                   &= page_title if current_user != :false
@@ -67,7 +67,7 @@
       / end of centerbox
       #centerbottom
         #centerbottominfo
-          %img{ :src => "/images/public/#{page_type}_bottomleft.gif", :height => "30", :alt => "bottomleft", :width => "300" }/
+          %img{ :src => "/images/public/#{page_type}_bottomleft.gif", :height => '30', :alt => 'bottomleft', :width => '300' }/
     /
       and of centerwrapper
-    = render :partial => "shared/footer"
+    = render :partial => 'shared/footer'

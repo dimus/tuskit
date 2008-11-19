@@ -1,10 +1,14 @@
 #footer
+  Powered by 
+  = link_to 'Tusk•It Project:', 'http://github.com/dimus/tuskit/tree/master'
+  
   (
   -if APP_VERSION
     =APP_VERSION
     |
   =  ENV['RAILS_ENV']
-  ) by TuskIt team. |
-  %a{:href => "http://validator.w3.org/check?uri=referer"} XHTML Valid
+  ) 
   |
-  %a{:href => "http://jigsaw.w3.org/css-validator/validator-uri.html"} CSS Valid
+  %a{:href => 'http://validator.w3.org/check?uri=referer'} XHTML Valid
+  |
+  %a{:href => 'http://jigsaw.w3.org/css-validator/validator-uri.html'} CSS Valid
