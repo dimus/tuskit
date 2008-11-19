@@ -56,7 +56,7 @@ Rails::Initializer.run do |config|
   #config.gem "echoe"
 end
 
-APP_VERSION = "0.5+"
+APP_VERSION = "0.6+"
 
 CUSTOM = YAML.load(open(File.dirname(__FILE__) + '/config.yml').read)
 
