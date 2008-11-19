@@ -1,9 +1,10 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe "/iterations" do
+describe "/reports" do
+
   before(:each) do
     @project = mock_model(Project, :name => 'project')
-    @iterations = 5.times.map do |i| 
+    @reports = 5.times.map do |i| 
       mock_model(Iteration, 
         :current? => false, 
         :start_date => (i * 20 - 10).days.ago, 
@@ -12,13 +13,15 @@ describe "/iterations" do
         :work_units => 199, 
         :work_units_real => 22)
     end
-    @iterations[0].stub!(:current).and_return true
+    @reports[0].stub!(:current?).and_return true
+    @project.stub!(:current_iteration).and_return(@reports[0])
     assigns[:project] = @project 
-    assigns[:iterations] = @iterations
+    assigns[:reports] = @reports
   end
 
   it "should render" do
-    render "/iterations/index.html.haml"
+    template.should_receive(:will_paginate).with(@reports)
+    render "/reports/index.html.haml"
     response.should be_success
   end
 
