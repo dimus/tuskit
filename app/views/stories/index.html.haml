@@ -73,7 +73,7 @@
       
       - show_style = @collapse_iteration ? "display:none;" : "display:block"
       .folder_content{:style => show_style}
-        = link_to "Add task", new_story_agile_task_url(story), :class => "navigation" if @iteration.current?
+        = link_to "Add task", new_story_agile_task_url(story), :class => "navigation" unless @iteration.past?
         - if story.agile_tasks.empty?
           = "This story and its tasks had been moved to the next iteration" if @iteration.past?
         - else
